@@ -21,50 +21,26 @@ public:
 	iterator();
 	iterator(const iterator&);
 	~iterator();
-
-	iterator& operator=(const iterator&);
-	bool operator==(const iterator&) const;
-	bool operator!=(const iterator&) const;
-	bool operator<(const iterator&) const; //optional
-	bool operator>(const iterator&) const; //optional
-	bool operator<=(const iterator&) const; //optional
-	bool operator>=(const iterator&) const; //optional
-
-	iterator& operator++();
-	iterator operator++(int); //optional
-	iterator& operator--(); //optional
-	iterator operator--(int); //optional
-	iterator& operator+=(size_type); //optional
-	iterator operator+(size_type) const; //optional
-	friend iterator operator+(size_type, const iterator&); //optional
-	iterator& operator-=(size_type); //optional            
-	iterator operator-(size_type) const; //optional
-	difference_type operator-(iterator) const; //optional
-
-	reference operator*() const;
-	pointer operator->() const;
-	reference operator[](size_type) const; //optional
 };
 
 template <class T, class Alloc = std::allocator<T> >
 class vector
 {
-private:
 public:
 	typedef T									value_type;
 	typedef Alloc								allocator_type;
+
 	typedef typename Alloc::reference			reference;
 	typedef typename Alloc::conts_reference		conts_reference;
 	typedef typename Alloc::pointer				pointer;
 	typedef typename Alloc::const_pointer		const_pointer;
 	typedef typename Alloc::difference_type 	difference_type;
     typedef typename Alloc::size_type 			size_type;
+	typedef std::ptrdiff_t						difference_type;
+	typedef size_t								size_type;
 
 	typedef vector_iterator<T>					iterator;
-	typedef const vector_iterator<T>			const_iterator;
-	typedef vector_iterator<T, true>			iterator;
-	typedef const vector_iterator<T, true>		const_iterator;
-
+	typedef std::reverse_iterator<iterator> 	reverse_iterator;
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type());
@@ -76,9 +52,23 @@ public:
 	vector (const vector& x);
 	~vector();
 
+	// iterators
+	iterator begin();
+	iterator end();
+	reverse_iterator rbegin();
+	reverse_iterator rend();
+
 	// capacity
 	// access
 	// modifiers
+	// operators
+protected:
+	iterator		_current;
+private:
+	pointer			_vector;
+	size_type		_size;
+	size_type		_capacity;
+	allocator_type	_alloc;
 };
 
 } // namespace ft
