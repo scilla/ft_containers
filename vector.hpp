@@ -10,14 +10,13 @@
 
 namespace ft
 {
-template <class T>
-class vector_iterator: public std::iterator<std::random_access_iterator_tag, T>
-{ 
+template <class T, bool reverse = false, class Alloc = std::allocator<T> >
+class vector_iterator { 
 public:
-	typedef typename T::difference_type		difference_type;
-	typedef typename T::value_type			value_type;
-	typedef typename T::reference			reference;
-	typedef typename T::pointer				pointer;
+	typedef typename Alloc::difference_type		difference_type;
+	typedef typename Alloc::value_type			value_type;
+	typedef typename Alloc::reference			reference;
+	typedef typename Alloc::pointer				pointer;
 	typedef std::random_access_iterator_tag	iterator_category; //or another tag
 
 	vector_iterator();
@@ -33,7 +32,7 @@ public:
 	typedef Alloc								allocator_type;
 
 	typedef typename Alloc::reference			reference;
-	typedef typename Alloc::conts_reference		conts_reference;
+	typedef typename Alloc::const_reference		const_reference;
 	typedef typename Alloc::pointer				pointer;
 	typedef typename Alloc::const_pointer		const_pointer;
 	typedef typename Alloc::difference_type 	difference_type;
