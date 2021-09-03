@@ -9,18 +9,18 @@
 
 namespace ft
 {
-template <class T, bool reverse = false>
+template <class T, bool reverse = false, class Alloc = std::allocator<T> >
 class vector_iterator { 
 public:
-	typedef typename T::difference_type		difference_type;
-	typedef typename T::value_type			value_type;
-	typedef typename T::reference			reference;
-	typedef typename T::pointer				pointer;
+	typedef typename Alloc::difference_type		difference_type;
+	typedef typename Alloc::value_type			value_type;
+	typedef typename Alloc::reference			reference;
+	typedef typename Alloc::pointer				pointer;
 	typedef std::random_access_iterator_tag	iterator_category; //or another tag
 
-	iterator();
-	iterator(const iterator&);
-	~iterator();
+	vector_iterator();
+	vector_iterator(const vector_iterator&);
+	~vector_iterator();
 };
 
 template <class T, class Alloc = std::allocator<T> >
@@ -31,19 +31,20 @@ public:
 	typedef Alloc								allocator_type;
 
 	typedef typename Alloc::reference			reference;
-	typedef typename Alloc::conts_reference		conts_reference;
+	typedef typename Alloc::const_reference		const_reference;
 	typedef typename Alloc::pointer				pointer;
 	typedef typename Alloc::const_pointer		const_pointer;
 	typedef typename Alloc::difference_type 	difference_type;
     typedef typename Alloc::size_type 			size_type;
-	typedef std::ptrdiff_t						difference_type;
-	typedef size_t								size_type;
+	// typedef std::ptrdiff_t						difference_type;
+	// typedef size_t								size_type;
 
 	typedef vector_iterator<T>					iterator;
 	typedef std::reverse_iterator<iterator> 	reverse_iterator;
 
 	// (con|des)tructors
-	explicit vector (const allocator_type& alloc = allocator_type());
+	explicit vector (const allocator_type& alloc = allocator_type()) {
+	};
 	explicit vector (unsigned int n, const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type());
 	template <class InputIterator>
