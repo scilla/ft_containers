@@ -10,8 +10,10 @@
 
 namespace ft
 {
-template <class T, bool reverse = false, class Alloc = std::allocator<T> >
-class vector_iterator { 
+template <class T>
+class vector_iterator: public iterator<T>
+{
+	/*
 public:
 	typedef typename Alloc::difference_type		difference_type;
 	typedef typename Alloc::value_type			value_type;
@@ -22,6 +24,7 @@ public:
 	vector_iterator();
 	vector_iterator(const vector_iterator&);
 	~vector_iterator();
+	*/
 };
 
 template <class T, class Alloc = std::allocator<T> >
@@ -45,24 +48,31 @@ public:
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):
-	_alloc(alloc),
-	_vector(NULL),
-	_size(0),
-	_capacity(0)
+					_alloc(alloc),
+					_vector(NULL),
+					_size(0),
+					_capacity(0)
 	{}
 	explicit vector (unsigned int n, const value_type& val = value_type(),
-						const allocator_type& alloc = allocator_type()):
-	_alloc(alloc),
-	_vector(NULL),
-	_size(0),
-	_capacity(0)
+					const allocator_type& alloc = allocator_type()):
+					_alloc(alloc),
+					_size(n),
+					_capacity(n) // SBAGLIATO
 	{
 		_vector = _alloc.allocate(n);
-		_capacity = n;
+		for (int i = 0; i < 0; i++) {
+			_vector[i] = val;
+		}
 	}
-	template <class InputIterator>
-	vector (InputIterator first, InputIterator last,
-			const allocator_type& alloc = allocator_type());
+	template <class inputType>
+	vector (inputType first, inputType last,
+			const allocator_type& alloc = allocator_type()):
+			_alloc(alloc)
+	{
+		_size = (last - first) / sizeof(inputType);
+		_capacity = _size; //SBAGLIATO
+		_vector = _alloc.allocate(_size);
+	}
 	vector (const vector& x);
 	~vector();
 
