@@ -1,5 +1,6 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
+#include "iterator.hpp"
 #include <functional>
 #include <iostream>
 #include <limits>
@@ -36,17 +37,29 @@ public:
 	typedef typename Alloc::const_pointer		const_pointer;
 	typedef typename Alloc::difference_type 	difference_type;
     typedef typename Alloc::size_type 			size_type;
-	// typedef std::ptrdiff_t						difference_type;
-	// typedef size_t								size_type;
+	//typedef std::ptrdiff_t						difference_type;
+	//typedef size_t								size_type;
 
 	typedef vector_iterator<T>					iterator;
-	typedef std::reverse_iterator<iterator> 	reverse_iterator;
+	typedef std::reverse_iterator<iterator>		reverse_iterator;
 
 	// (con|des)tructors
-	explicit vector (const allocator_type& alloc = allocator_type()) {
-	};
+	explicit vector (const allocator_type& alloc = allocator_type()):
+	_alloc(alloc),
+	_vector(NULL),
+	_size(0),
+	_capacity(0)
+	{}
 	explicit vector (unsigned int n, const value_type& val = value_type(),
-						const allocator_type& alloc = allocator_type());
+						const allocator_type& alloc = allocator_type()):
+	_alloc(alloc),
+	_vector(NULL),
+	_size(0),
+	_capacity(0)
+	{
+		_vector = _alloc.allocate(n);
+		_capacity = n;
+	}
 	template <class InputIterator>
 	vector (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type());
