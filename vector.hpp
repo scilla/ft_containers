@@ -7,24 +7,28 @@
 #include <memory>
 #include <string>
 #include <utility>
-
+#include <vector>
 namespace ft
 {
 template <class T>
 class vector_iterator: public iterator<T>
 {
-	/*
-public:
-	typedef typename Alloc::difference_type		difference_type;
-	typedef typename Alloc::value_type			value_type;
-	typedef typename Alloc::reference			reference;
-	typedef typename Alloc::pointer				pointer;
-	typedef std::random_access_iterator_tag	iterator_category; //or another tag
+	public:
+		typedef T												iterator_type;
+		typedef typename iterator_traits<T>::difference_type	difference_type;
+		typedef typename iterator_traits<T>::value_type			value_type;
+		typedef typename iterator_traits<T>::reference			reference;
+		typedef typename iterator_traits<T>::pointer			pointer;
+		typedef random_access_iterator_tag						iterator_category; //or another tag
 
-	vector_iterator();
-	vector_iterator(const vector_iterator&);
-	~vector_iterator();
-	*/
+		explicit	vector_iterator(): _ptr(NULL) {};
+		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
+		template<class U>
+		vector_iterator(const vector_iterator<U>& vect): { *this = vect; } 
+		~vector_iterator();
+		pointer		base() const { return _ptr; }
+	private:
+		pointer		_ptr;
 };
 
 template <class T, class Alloc = std::allocator<T> >
