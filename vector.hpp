@@ -96,11 +96,11 @@ public:
 		return(reverse_iterator(begin()));
 	};
 	const_iterator cbegin() const noexcept{
-		return(const_iterator(_vector))); //perchè definito in refcontainer?
+		return(const_iterator(_vector)));
 	};
 
 	const_iterator cend() const noexcept{
-		return(const_iterator(_vector + _size)); //perchè definito in refcontainer?
+		return(const_iterator(_vector + _size));
 	};
 	const_reverse_iterator crbegin() const noexcept
 	{
@@ -123,21 +123,98 @@ public:
 	void resize (size_type n, value_type val = value_type()) {
 		if(n < _size)
 		{
-			pointer temp = allocator.allocate(n);
+			pointer temp = allocator.allocate(n * 2);
 			for (unsigned int i = 0; i < n; i++)
 				temp[i] = _vector[i];
-			allocator.deallocate(_vector, _size);
+			allocator.deallocate(_vector, _capacity);
 			_vector = temp;
-			_size = _n;
+			_size = n;
+			_capacity = n * 2;
 		}
-		else if (n >= _size)
+		else if (n > _capacity)
 		{
-
+			pointer temp = allocator.allocate(n * 2)
+			int i = -1;
+			while(++i <= _size)
+				temp[i] = _vector[i];
+			while(++i < n * 2)
+				temp[i] = val;
+			allocator.deallocate(_vector, _capacity);
+			_vector = temp;
+			_size = n;
+			_capacity = n * 2;
 		}
 	};
 
+	size_type capacity() const{
+		return(_capacity);
+	};
+
+	bool empty() const{
+		return(_size == 0 ? true : false);
+	};
+
+	void reserve (size_type n){
+		if(n > _capacity)
+		{
+			pointer tmp = allocator.allocate(n * 2);
+			for(unsigned int i = 0; i < _size; i++)
+				tmp[i] = _vector[i];
+			allocator.deallocate(_vector));
+			_vector = tmp;
+			_capacity = n * 2;
+		}
+	};
+
+	void shrink_to_fit(){
+		if(_capacity > _size)
+		{
+			pointer tmp = allocator.allocate(_size);
+			for(int i = 0; i < _size; i++)
+				tmp[i] = _vector[i];
+			allocator.deallocate(_vector);
+			_vector = tmp;
+			_capacity = _size;
+		}
+	};
 
 	// access
+
+	reference operator[] (size_type n) {
+		return(reference(_vector + n));
+	};
+
+	const_reference operator[] (size_type n) const {
+		return(const_reference(_vector + n));
+	};
+
+	reference at (size_type n) {
+		return(reference(_vector + n));
+	};
+
+	const_reference at (size_type n) const {
+		return(const_reference(_vector + n));
+	};
+
+	reference front() {
+		return(reference(_vector));
+	};
+	
+	const_reference front() const {
+		return(const_reference(_vector));
+	};
+
+	reference back() {
+		return(reference(_vector + _size));
+	};
+
+	const_reference back() const {
+		return(const_reference(_vector + _size));
+	};
+	
+	value_type* data() noexcept;
+	const value_type* data() const noexcept;
+
 	// modifiers
 	// operators
 protected:
