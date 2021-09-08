@@ -47,8 +47,10 @@ public:
 	//typedef std::ptrdiff_t						difference_type;
 	//typedef size_t								size_type;
 
-	typedef vector_iterator<T>					iterator;
-	typedef std::reverse_iterator<iterator>		reverse_iterator;
+	typedef vector_iterator<T>							iterator;
+	typedef std::reverse_iterator<iterator>				reverse_iterator; //da correggere
+	typedef vector_iterator<const_pointer>				const_iterator;
+	typedef std::reverse_iterator<const_pointer>		const_reverse_iterator; //da correggere
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):
@@ -81,12 +83,60 @@ public:
 	~vector();
 
 	// iterators
-	iterator begin();
-	iterator end();
-	reverse_iterator rbegin();
-	reverse_iterator rend();
+	iterator begin() {
+		return(iterator(_vector));
+	};
+	iterator end(){
+		return(iterator(_vector + _size));
+	};
+	reverse_iterator rbegin(){
+		return(reverse_iterator(end()));
+	};
+	reverse_iterator rend(){
+		return(reverse_iterator(begin()));
+	};
+	const_iterator cbegin() const noexcept{
+		return(const_iterator(_vector))); //perchè definito in refcontainer?
+	};
+
+	const_iterator cend() const noexcept{
+		return(const_iterator(_vector + _size)); //perchè definito in refcontainer?
+	};
+	const_reverse_iterator crbegin() const noexcept
+	{
+		return(const_reverse_iterator(cbegin()));
+	};
+	const_reverse_iterator crend() const noexcept{
+		return(const_reverse_iterator(cend()));
+	};
 
 	// capacity
+
+	size_type size() const {
+		return(_size);
+	};
+
+	size_type max_size() const{
+		return(allocator.max_size());
+	};
+
+	void resize (size_type n, value_type val = value_type()) {
+		if(n < _size)
+		{
+			pointer temp = allocator.allocate(n);
+			for (unsigned int i = 0; i < n; i++)
+				temp[i] = _vector[i];
+			allocator.deallocate(_vector, _size);
+			_vector = temp;
+			_size = _n;
+		}
+		else if (n >= _size)
+		{
+
+		}
+	};
+
+
 	// access
 	// modifiers
 	// operators
