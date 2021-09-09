@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 namespace ft
 {
 template <class T>
@@ -217,9 +218,87 @@ public:
 	};
 	
 	// modifiers
+	template <class InputIterator>
+	void assign (InputIterator first, InputIterator last) {
+		clear();
+		_size = first - last;
+		_vector = _alloc.allocate(_size);
+		_capacity = _size;
+		for (size_t i = 0; first + i < last; i++)
+			_vector[i] = *(first + i);
+	};
+	void assign (size_type n, const value_type& val) {
+		clear();
+		_size = n;
+		_capacity = n;
+		_vector = _alloc.allocate(n);
+		for (size_t i = 0; i < n; i++)
+			_vector[i] = val;
+	};
+
+	void push_back (const value_type& val) {
+		if (_size == _capacity) {
+			pointer tmp = _alloc.allocate(_capacity*2);
+			_capacity *= 2;
+			for (size_t i = 0; i < _size; i++)
+				tmp[i] = _vector[i];
+			_alloc.deallocate(_vector);
+			_vector = tmp;
+		}
+		_vector[_size] = val;
+		_size++;
+	};
+
+	void pop_back() {
+		_size--;
+	}
+
+	iterator erase (iterator position){
+		_size--;
+		for (size_t i = 0; position + i + 1 != end(); i++)
+			*(position + i) = *(position + i + 1);
+		return position;
+	};
+
+	iterator erase (iterator first, iterator last){
+		size_type distance = std::distance(first, last);
+		for (size_t i = 0; first + i + distance != end(); i++)
+			*(first + i) = *(first + i + distance);
+		_size -= distance;
+		return first;
+	};
+
+	void swap (vector& x) {
+		std::swap(front(), x.front());
+		std::swap(_vector, x._vector);
+		std::swap(_size, x._size);
+		std::swap(_capacity, x._capacity);
+	};
+
+	iterator insert (iterator position, const value_type& val) {
+		(void)val;
+		return position;
+	};
+
+    void insert (iterator position, size_type n, const value_type& val){
+		(void)position;
+		(void)n;
+		(void)val;
+	};
+
+	template <class InputIterator>
+    void insert (iterator position, InputIterator first, InputIterator last);
+
+	void clear() {
+		_alloc.deallocate(_vector);
+		_size = 0;
+		_capacity = 0;
+		_vector = NULL;
+	};
 	// operators
 private:
 	allocator_type	_alloc;
+protected:
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;

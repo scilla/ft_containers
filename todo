@@ -1,2 +1,5 @@
 std::reverse_iterator > ft::reverse_iterator
 _capacity reale
+
+
+ottimizzare erase in caso di riallocazione
