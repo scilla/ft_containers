@@ -58,7 +58,7 @@ public:
 					_vector(NULL),
 					_size(0),
 					_capacity(0)
-	{}
+	{};
 	explicit vector (unsigned int n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()):
 					_alloc(alloc),
@@ -69,7 +69,7 @@ public:
 		for (int i = 0; i < 0; i++) {
 			_vector[i] = val;
 		}
-	}
+	};
 	template <class inputType>
 	vector (inputType first, inputType last,
 			const allocator_type& alloc = allocator_type()):
@@ -78,9 +78,18 @@ public:
 		_size = (last - first) / sizeof(inputType);
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
-	}
-	vector (const vector& x) {};
-	~vector() {};
+	};
+	vector (const vector& x):
+		_alloc(x.allocator_type()),
+		_vector(NULL),
+		_size(0),
+		_capacity(0)
+	{
+		*this = x;
+	};
+	~vector() {
+		_alloc.deallocate(_vector, _capacity);
+	};
 
 	// iterators
 	iterator begin() {
@@ -165,6 +174,15 @@ public:
 	};
 */
 	// access
+
+	reference operator= (reference alt) {
+		_alloc.deallocate(_vector);
+		_size = alt.size();
+		_capacity = _size;
+		_vector = _alloc.allocate(_size);
+		for (size_t i = 0; i < _size; i++)
+			_vector[i] = alt[i];
+	}
 
 	reference operator[] (size_type n) {
 		return(_vector + n);
