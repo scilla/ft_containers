@@ -81,7 +81,6 @@ public:
 		_vector = _alloc.allocate(_size);
 	};
 	vector (const vector& x):
-		_alloc(x.allocator_type()),
 		_vector(NULL),
 		_size(0),
 		_capacity(0)
@@ -117,15 +116,18 @@ public:
 	};
 
 	void resize (size_type n, value_type val = value_type()) {
+		
 		if(n < _size)
 		{
+			_size = n;
+			/*
 			pointer temp = _alloc.allocate(n * 2);
 			for (unsigned int i = 0; i < n; i++)
 				temp[i] = _vector[i];
 			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
-			_size = n;
 			_capacity = n * 2;
+			*/
 		}
 		else if (n > _capacity)
 		{
@@ -175,22 +177,22 @@ public:
 	};
 */
 	// access
-
-	reference operator= (reference alt) {
-		_alloc.deallocate(_vector);
+	vector& operator= (const vector& alt) {
+		_alloc.deallocate(_vector, _size);
 		_size = alt.size();
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
 		for (size_t i = 0; i < _size; i++)
 			_vector[i] = alt[i];
+		return *this;
 	}
 
 	reference operator[] (size_type n) {
-		return(_vector + n);
+		return(*(_vector + n));
 	};
 
 	const_reference operator[] (size_type n) const {
-		return(_vector + n);
+		return(*(_vector + n));
 	};
 
 	reference at (size_type n) {
@@ -202,7 +204,7 @@ public:
 	};
 
 	reference front() {
-		return(_vector);
+		return(*_vector);
 	};
 	
 	const_reference front() const {
@@ -238,11 +240,13 @@ public:
 
 	void push_back (const value_type& val) {
 		if (_size == _capacity) {
+			if (!_capacity)
+				_capacity = 1;
 			pointer tmp = _alloc.allocate(_capacity*2);
 			_capacity *= 2;
 			for (size_t i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			_alloc.deallocate(_vector);
+			_alloc.deallocate(_vector, _size);
 			_vector = tmp;
 		}
 		_vector[_size] = val;
@@ -269,7 +273,6 @@ public:
 	};
 
 	void swap (vector& x) {
-		std::swap(front(), x.front());
 		std::swap(_vector, x._vector);
 		std::swap(_size, x._size);
 		std::swap(_capacity, x._capacity);
@@ -281,13 +284,24 @@ public:
 	};
 
     void insert (iterator position, size_type n, const value_type& val){
-		(void)position;
-		(void)n;
-		(void)val;
+		size_type index = std::distance(begin(), position);
+		resize(_size + n);
+		for(size_t i = _size - 1; i >= index; i--)
+			_vector[i] = _vector[i - n];
+		for (size_t i = 0; i < n; i++)
+			_vector[index + i] = val;
 	};
 
 	template <class InputIterator>
-    void insert (iterator position, InputIterator first, InputIterator last);
+    void insert (iterator position, InputIterator first, InputIterator last) {
+		size_type dist = std::distance(first, last);
+		size_type index = std::distance(begin(), position);
+		resize(_size + dist);
+		for(size_t i = _size - 1; i >= index; i--)
+			_vector[i] = _vector[i - dist];
+		for (size_t i = 0; i < dist; i++)
+			_vector[index + i] = *(first + i);
+	}
 
 	void clear() {
 		_alloc.deallocate(_vector);

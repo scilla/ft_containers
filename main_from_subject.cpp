@@ -23,7 +23,8 @@ struct Buffer
 };
 
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+//#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+#define COUNT 21
 
 // template<typename T>
 // class MutantStack : public ft::stack<T>
@@ -57,22 +58,34 @@ int main(int argc, char** argv) {
 
 	ft::vector<std::string> vector_str;
 	ft::vector<int> vector_int;
+
 	// ft::stack<int> stack_int;
-	ft::vector<Buffer> vector_buffer;
+	// ft::vector<Buffer> vector_buffer;
 	// ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
 	// ft::map<int, int> map_int;
 
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	vector_buffer.push_back(Buffer());
-	// }
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_int.push_back(i);
+	}
 
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	const int idx = rand() % COUNT;
-	// 	vector_buffer[idx].idx = 5;
-	// }
-	// ft::vector<Buffer>().swap(vector_buffer);
+	ft::vector<int> vector_int2(vector_int);
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		if (!(i % 3))
+			vector_int[i] = 5;
+	}
+	
+	for (size_t i = 0; i < vector_int.size(); i++)
+		std::cout << vector_int[i] << std::endl;
+
+	std::cout << std::endl;
+
+	vector_int.swap(vector_int2);
+
+	for (size_t i = 0; i < vector_int.size(); i++)
+		std::cout << vector_int[i] << std::endl;
 
 	// try
 	// {
