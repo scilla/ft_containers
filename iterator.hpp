@@ -6,7 +6,6 @@
 #include <memory>
 #include <string>
 #include <utility>
-#include <iterator>
 
 namespace ft
 {
@@ -16,13 +15,13 @@ namespace ft
 	struct bidirectional_iterator_tag: public forward_iterator_tag {};
 	struct random_access_iterator_tag: public bidirectional_iterator_tag {};
 
-	template<class T>
+	template<class Iter>
 	struct iterator_traits {
-		typedef typename T::difference_type		difference_type;
-		typedef typename T::value_type			value_type;
-		typedef typename T::reference			reference;
-		typedef typename T::pointer				pointer;
-		typedef random_access_iterator_tag		iterator_category;
+		typedef typename Iter::difference_type		difference_type;
+		typedef typename Iter::value_type			value_type;
+		typedef typename Iter::pointer				pointer;
+		typedef typename Iter::reference			reference;
+		typedef typename Iter::iterator_category	iterator_category;
 	};
 
 	template<class T>
@@ -34,7 +33,7 @@ namespace ft
 		typedef random_access_iterator_tag	iterator_category;
 	};
 
-	template <class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& >
+	template <class T, class Category = random_access_iterator_tag, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& >
 	struct iterator {
 		typedef T			value_type;
 		typedef Distance	difference_type;
@@ -44,11 +43,13 @@ namespace ft
 	};
 
 	template<class Iterator>
-	class reverse_iterator: public iterator_traits<typename iterator_traits<Iterator>::iterator_category,
-					typename iterator_traits<Iterator>::value_type,
+	class reverse_iterator: public iterator<
 					typename iterator_traits<Iterator>::difference_type,
+					typename iterator_traits<Iterator>::iterator_category,
+					typename iterator_traits<Iterator>::value_type,
 					typename iterator_traits<Iterator>::pointer,
-					typename iterator_traits<Iterator>::reference>
+					typename iterator_traits<Iterator>::reference
+					>
 	{
 		protected:
 			Iterator current;

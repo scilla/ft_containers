@@ -24,7 +24,7 @@ class vector_iterator: public iterator<T>
 		explicit	vector_iterator(): _ptr(NULL) {};
 		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		template<class U>
-		vector_iterator(const vector_iterator<U>& vect): { *this = vect; } 
+		vector_iterator(const vector_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
 		~vector_iterator();
 		pointer		base() const { return _ptr; }
 	private:
@@ -47,7 +47,7 @@ public:
 	//typedef std::ptrdiff_t						difference_type;
 	//typedef size_t								size_type;
 
-	typedef vector_iterator<T>							iterator;
+	typedef vector_iterator<value_type>					iterator;
 	typedef std::reverse_iterator<iterator>				reverse_iterator; //da correggere
 	typedef vector_iterator<const_pointer>				const_iterator;
 	typedef std::reverse_iterator<const_pointer>		const_reverse_iterator; //da correggere
@@ -63,7 +63,7 @@ public:
 					const allocator_type& alloc = allocator_type()):
 					_alloc(alloc),
 					_size(n),
-					_capacity(n) // SBAGLIATO
+					_capacity(n)
 	{
 		_vector = _alloc.allocate(n);
 		for (int i = 0; i < 0; i++) {
@@ -76,11 +76,11 @@ public:
 			_alloc(alloc)
 	{
 		_size = (last - first) / sizeof(inputType);
-		_capacity = _size; //SBAGLIATO
+		_capacity = _size;
 		_vector = _alloc.allocate(_size);
 	}
-	vector (const vector& x);
-	~vector();
+	vector (const vector& x) {};
+	~vector() {};
 
 	// iterators
 	iterator begin() {
@@ -95,20 +95,6 @@ public:
 	reverse_iterator rend(){
 		return(reverse_iterator(begin()));
 	};
-	const_iterator cbegin() const noexcept{
-		return(const_iterator(_vector)));
-	};
-
-	const_iterator cend() const noexcept{
-		return(const_iterator(_vector + _size));
-	};
-	const_reverse_iterator crbegin() const noexcept
-	{
-		return(const_reverse_iterator(cbegin()));
-	};
-	const_reverse_iterator crend() const noexcept{
-		return(const_reverse_iterator(cend()));
-	};
 
 	// capacity
 
@@ -117,29 +103,29 @@ public:
 	};
 
 	size_type max_size() const{
-		return(allocator.max_size());
+		return(_alloc.max_size());
 	};
 
 	void resize (size_type n, value_type val = value_type()) {
 		if(n < _size)
 		{
-			pointer temp = allocator.allocate(n * 2);
+			pointer temp = _alloc.allocate(n * 2);
 			for (unsigned int i = 0; i < n; i++)
 				temp[i] = _vector[i];
-			allocator.deallocate(_vector, _capacity);
+			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
 			_size = n;
 			_capacity = n * 2;
 		}
 		else if (n > _capacity)
 		{
-			pointer temp = allocator.allocate(n * 2)
+			pointer temp = _alloc.allocate(n * 2);
 			int i = -1;
 			while(++i <= _size)
 				temp[i] = _vector[i];
 			while(++i < n * 2)
 				temp[i] = val;
-			allocator.deallocate(_vector, _capacity);
+			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
 			_size = n;
 			_capacity = n * 2;
@@ -157,73 +143,68 @@ public:
 	void reserve (size_type n){
 		if(n > _capacity)
 		{
-			pointer tmp = allocator.allocate(n * 2);
+			pointer tmp = _alloc.allocate(n * 2);
 			for(unsigned int i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			allocator.deallocate(_vector));
+			_alloc.deallocate(_vector);
 			_vector = tmp;
 			_capacity = n * 2;
 		}
 	};
-
+/*
 	void shrink_to_fit(){
 		if(_capacity > _size)
 		{
-			pointer tmp = allocator.allocate(_size);
+			pointer tmp = _alloc.allocate(_size);
 			for(int i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			allocator.deallocate(_vector);
+			_alloc.deallocate(_vector);
 			_vector = tmp;
 			_capacity = _size;
 		}
 	};
-
+*/
 	// access
 
 	reference operator[] (size_type n) {
-		return(reference(_vector + n));
+		return(_vector + n);
 	};
 
 	const_reference operator[] (size_type n) const {
-		return(const_reference(_vector + n));
+		return(_vector + n);
 	};
 
 	reference at (size_type n) {
-		return(reference(_vector + n));
+		return(_vector + n);
 	};
 
 	const_reference at (size_type n) const {
-		return(const_reference(_vector + n));
+		return(_vector + n);
 	};
 
 	reference front() {
-		return(reference(_vector));
+		return(_vector);
 	};
 	
 	const_reference front() const {
-		return(const_reference(_vector));
+		return(_vector);
 	};
 
 	reference back() {
-		return(reference(_vector + _size));
+		return(_vector + _size);
 	};
 
 	const_reference back() const {
-		return(const_reference(_vector + _size));
+		return(_vector + _size);
 	};
 	
-	value_type* data() noexcept;
-	const value_type* data() const noexcept;
-
 	// modifiers
 	// operators
-protected:
-	iterator		_current;
 private:
+	allocator_type	_alloc;
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;
-	allocator_type	_alloc;
 };
 
 } // namespace ft
