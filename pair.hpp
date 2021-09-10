@@ -48,5 +48,5 @@ bool operator>  (const pair<T,U>& lhs, const pair<T,U>& rhs)
 template <class T, class U>
 bool operator>= (const pair<T,U>& lhs, const pair<T,U>& rhs)
 { return !(lhs<rhs); }
-
+} //namespace ft
 #endif /* PAIR_HPP */
