@@ -49,9 +49,9 @@ public:
 	//typedef size_t								size_type;
 
 	typedef vector_iterator<value_type>					iterator;
-	typedef std::reverse_iterator<iterator>				reverse_iterator; //da correggere
+	typedef ft::reverse_iterator<iterator>				reverse_iterator; //da correggere
 	typedef vector_iterator<const_pointer>				const_iterator;
-	typedef std::reverse_iterator<const_pointer>		const_reverse_iterator; //da correggere
+	typedef ft::reverse_iterator<const_pointer>		const_reverse_iterator; //da correggere
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):
@@ -320,8 +320,49 @@ protected:
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;
+}; //end vector class
+
+
+
+//non member function operators
+
+template <class T, class Alloc>
+bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	if(lhs.size() != rhs.size())
+		return(false);
+	for (size_t i = 0; i < lhs.size(); i++)
+		if(lhs[i] != rhs[i])
+			return(false);
+	return(true);
+};
+	
+template <class T, class Alloc>
+bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return(!(lhs == rhs));
+};
+	
+template <class T, class Alloc>
+bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	
 };
 
-} // namespace ft
+template <class T, class Alloc>
+bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 
+};
+	
+template <class T, class Alloc>
+bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+
+};
+
+template <class T, class Alloc>
+bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+
+};
+
+template <class T, class Alloc>
+void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
+
+} // namespace ft
 #endif /* VECTOR_HPP */
