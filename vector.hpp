@@ -309,7 +309,11 @@ public:
 		_capacity = 0;
 		_vector = NULL;
 	};
-	// operators
+	// allocator
+
+	allocator_type get_allocator() const {
+		return(_alloc);
+	};
 private:
 	allocator_type	_alloc;
 protected:
