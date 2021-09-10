@@ -6,24 +6,21 @@ namespace ft {
 template <class T, class U>
 struct pair
 {
-	typedef T first_type;
-	typedef U second_type;
-
 	T first;
 	U second;
 
 	pair() : first(), second() {};
-	pair (const first_type& a, const second_type& b) : first(a), second(b) {};
+	pair (const T& a, const U& b) : first(a), second(b) {};
 
-	template<class U, class V>
-	pair (const pair<U,V>& pr): first(pr.first), second(pr.second) {}
+	template<class V, class Z>
+	pair (const pair<V,Z>& pr): first(pr.first), second(pr.second) {}
 
 	pair& operator=(const pair& pr) {
 		first = pr.first;
 		second = pr.second;
 		return *this;
 	}
-};
+}; // pair
 
 template <class T, class U>
 bool operator== (const pair<T,U>& lhs, const pair<T,U>& rhs)
@@ -48,5 +45,7 @@ bool operator>  (const pair<T,U>& lhs, const pair<T,U>& rhs)
 template <class T, class U>
 bool operator>= (const pair<T,U>& lhs, const pair<T,U>& rhs)
 { return !(lhs<rhs); }
+
 } //namespace ft
+
 #endif /* PAIR_HPP */
