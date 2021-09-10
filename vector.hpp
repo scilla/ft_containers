@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "utils.hpp"
 
 namespace ft
 {
@@ -343,26 +344,23 @@ bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 	
 template <class T, class Alloc>
 bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-	
+	return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 };
 
 template <class T, class Alloc>
 bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+	return(!(lhs > rhs));
 };
 	
 template <class T, class Alloc>
 bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+	return(lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 };
 
 template <class T, class Alloc>
 bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+	return(!(lhs < rhs));
 };
-
-template <class T, class Alloc>
-void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
 
 } // namespace ft
 #endif /* VECTOR_HPP */
