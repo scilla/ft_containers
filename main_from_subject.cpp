@@ -11,7 +11,7 @@
 	// #include <stack.hpp>
 	#include "vector.hpp"
 #endif
-
+#include "rbtree.hpp"
 #include <stdlib.h>
 
 #define MAX_RAM 4294967296
