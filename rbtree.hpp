@@ -49,29 +49,43 @@ public:
 	};
 	~rbtree();
 
-	void insert(T& newdata) {
-		node* N = newNode(newdata);
+	node& insert(T& newdata) {
+		node* ret = newNode(newdata);
+		node* N = ret;
 		binaryInsert(N);
-		do {
-			if (N->parent->color == RED)
-				return;
-			if (!N->parent)
-				N->parent->color = BLACK; // case 4
-			else {
-				if (!N->uncle() || N->uncle()->color == BLACK)
-					caseI56();
-				else {
-					N->parent->color = BLACK;
-					N->uncle()->color = BLACK;
-					N->parent->parent = RED;
-					N = N->parent->parent;
-				}
-			}
-		} while (N->parent);
+		fixTree(N)
+		return *ret;
 	}
 
-	void caseI56(node* N) {
-		if (N == )
+	void fixTree(node* N) {
+		if (!N->parent)			// case 1
+			N->color = BLACK;
+		else if (N->parent->color == RED) // case 2
+		{
+			if (N->uncle() && N->uncle()->color == RED) {
+				N->parent->color = BLACK;
+				N->uncle()->color = BLACK;
+				N->grandparent()->color = RED;
+				fixTree(N->grandparent())
+			}
+			else { // case 4
+				if (N->isRight() && N->parent()->isLeft()) {
+					rotateLeft(N->parent);
+					N = N->left;
+				} else if (N->isLeft() && N->parent->isRight()) {
+					rotateRight(N->parent);
+					N = N->right;
+				}
+				N->parent->color = BLACK; // case 5
+				N->grandparent()->color = RED;
+				if (N->isLeft() && N->parent->isLeft()) {
+					rotateRight(N->grandparent());
+				} else {
+					rotateLeft(N->grandparent());
+				}
+			}
+		} // case 3
+		return *ret;
 	}
 
 	void binaryInsert(node* N) {
