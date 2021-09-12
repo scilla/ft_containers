@@ -189,7 +189,7 @@ public:
 		return newNode;
 	}
 
-	node* rotateDirRoot(node* P, bool right) {
+	node* rotateDir(node* P, bool right) {
 		node* G = this->parent;
 		node* S = right ? this->left : this->right;
 		node* C;
@@ -214,8 +214,8 @@ public:
 		return S;
 	}
 
-	node* rotateLeft(node* P) { return rotateDirRoot(P, false); }
-	node* rotateRight(node* P) { return rotateDirRoot(P, true); }
+	node* rotateLeft(node* P) { return rotateDir(P, false); }
+	node* rotateRight(node* P) { return rotateDir(P, true); }
 };
 } // namespace ft
 
