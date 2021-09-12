@@ -53,22 +53,22 @@ public:
 		node* ret = newNode(newdata);
 		node* N = ret;
 		binaryInsert(N);
-		fixTree(N)
+		fixTree(N);
 		return *ret;
 	}
 
 	void fixTree(node* N) {
-		if (!N->parent)			// case 1
+		if (!N->parent)												// case 1
 			N->color = BLACK;
-		else if (N->parent->color == RED) // case 2
+		else if (N->parent->color == RED) 							// case 2
 		{
 			if (N->uncle() && N->uncle()->color == RED) {
 				N->parent->color = BLACK;
 				N->uncle()->color = BLACK;
 				N->grandparent()->color = RED;
-				fixTree(N->grandparent())
+				fixTree(N->grandparent());
 			}
-			else { // case 4
+			else { 													// case 4
 				if (N->isRight() && N->parent()->isLeft()) {
 					rotateLeft(N->parent);
 					N = N->left;
@@ -76,7 +76,7 @@ public:
 					rotateRight(N->parent);
 					N = N->right;
 				}
-				N->parent->color = BLACK; // case 5
+				N->parent->color = BLACK; 							// case 5
 				N->grandparent()->color = RED;
 				if (N->isLeft() && N->parent->isLeft()) {
 					rotateRight(N->grandparent());
@@ -84,20 +84,102 @@ public:
 					rotateLeft(N->grandparent());
 				}
 			}
-		} // case 3
-		return *ret;
+		} 															// case 3
 	}
 
-	void binaryInsert(node* N) {
-		node* current = _root;
-		while (current)
-		{
-			if (N->data < current->data)
-				current = current->left;
-			else
-				current = current->right;
+	void replaceNode(node* a, node* b) {
+		if (a->parent) {
+			if (a->isLeft()) {
+				a->parent->left = b;
+			} else {
+				a->parent->right = b;
+			}
+			b->parent = a->parent;
 		}
-		current = N;
+	}
+
+	void deleteNode(node* N) {
+		node* child = !N->isRight() ? N->left : N->right;
+		replaceNode(N, child);
+		if (N->color == BLACK) {
+			if (N->color == RED)
+				child->color = BLACK;
+			else
+				fixDeletion(N);
+		}
+		delete N;
+	}
+
+	void fixDeletion(node* N) {
+		if (N->parent) {							// case 1
+			if (N->sibling()->color == RED) 		// case 2
+			{
+				N->parent->color = RED;
+				N->sibling()->color = BLACK;
+				if (N->isLeft())
+					rotateLeft(N->parent);
+				else
+					rotateRight(N->parent);
+			}
+			if (N->parent->color == BLACK &&		// case 3
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == BLACK &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				fixDeletion(N->parent);
+			}
+			else if (N->parent->color == RED &&		// case 4
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == BLACK &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->parent->color = BLACK;
+			}
+			else if (N->isLeft() &&					// case 5
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == RED &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->sibling()->left->color = BLACK;
+				rotateRight(N->sibling());
+			}
+			else if (N->isRight() &&				// still case 5
+				N->sibling()->color == BLACK &&
+				N->sibling()->right->color == RED &&	
+				N->sibling()->left->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->sibling()->right->color = BLACK;
+				rotateLeft(N->sibling());
+			}
+			N->sibling()->color = N->parent->color; // case 6
+			N->parent->color = BLACK;
+			if (N->isLeft()) {
+				N->sibling()->right->color = BLACK;
+				rotateLeft(N->parent);
+			} else {
+				N->sibling()->left->color = BLACK;
+				rotateRight(N->parent);
+			}
+		}
+	}
+
+	void binaryInsert(node* N) {  // fortissimi dubbi
+		node** current = &_root;
+		node* parent = _root->parent;
+		while (*current)
+		{
+			parent = *current;
+			if (N->data < parent->data)
+				*current = parent->left;
+			else
+				*current = parent->right;
+		}
+		*current = N;
+		N->parent = parent;
 	}
 
 	node* newNode(T& newdata) {
