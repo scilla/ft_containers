@@ -169,7 +169,7 @@ public:
 
 	void binaryInsert(node* N) {  // fortissimi dubbi
 		node** current = &_root;
-		node* parent = _root->parent;
+		node* parent = _root ? _root->parent : NULL;
 		while (*current)
 		{
 			parent = *current;
