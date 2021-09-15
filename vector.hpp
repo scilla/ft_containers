@@ -8,7 +8,9 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iterator>
 #include "utils.hpp"
+#include "enable_if.hpp"
 
 namespace ft
 {
@@ -136,17 +138,23 @@ public:
 					_size(n),
 					_capacity(n)
 	{
-		_vector = _alloc.allocate(n);
-		for (int i = 0; i < 0; i++) {
+		/*_vector = _alloc.allocate(n);
+		for (size_t i = 0; i < n; i++) {
 			_vector[i] = val;
-		}
+		}*/
+					    if (n)
+				    _vector = _alloc.allocate(n);
+				while (n--)
+					_alloc.construct(_vector + n, val);
 	};
+
 	template <class inputType>
 	vector (inputType first, inputType last,
-			const allocator_type& alloc = allocator_type()):
+			const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
 			_alloc(alloc)
 	{
-		_size = (last - first) / sizeof(inputType);
+		_size = (last - first) /*/ sizeof(inputType)*/;
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
 	};
@@ -158,7 +166,7 @@ public:
 		*this = x;
 	};
 	~vector() {
-		_alloc.deallocate(_vector, _capacity);
+		//_alloc.deallocate(_vector, _capacity);
 	};
 
 	// iterators
@@ -292,15 +300,20 @@ public:
 	// modifiers
 	/*
 	template <class InputIterator>
-	void assign (InputIterator first, InputIterator last) {
+        void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& u);
+    void assign(initializer_list<value_type> il);
+	*/
+	template <class InputIterator>
+	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		clear();
-		_size = first - last;
+		_size = last - first;
 		_vector = _alloc.allocate(_size);
 		_capacity = _size;
 		for (size_t i = 0; first + i < last; i++)
 			_vector[i] = *(first + i);
 	};
-	*/
+	
 	void assign (size_type n, const value_type& val) {
 		clear();
 		_size = n;
@@ -376,7 +389,7 @@ public:
 			_vector[i] = _vector[i - dist];
 		for (size_t i = 0; i < dist; i++)
 			_vector[index + i] = *(first + i);
-	}
+	};
 
 	void clear() {
 		_alloc.deallocate(_vector, _capacity);
