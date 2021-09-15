@@ -17,8 +17,8 @@ int main()
 {
 	test_vector();
 	std::cout << "\n";
-	test_map();
-	std::cout << "\n";
-	test_stack();
+	// test_map();
+	// std::cout << "\n";
+	// test_stack();
 	// sleep(100);
 }

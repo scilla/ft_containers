@@ -35,7 +35,7 @@ TEST_SET = set_test
 %.os : %.cpp
 	$(CPP) -DSTRING_SET $(FLAGS) -c $< -o $(<:.cpp=.os)
 
-all: $(NAME) $(TEST_SET) $(TEST_SET_S)
+all: $(NAME) # $(TEST_SET) $(TEST_SET_S)
 
 set: $(TEST_SET) $(TEST_SET_S)
 

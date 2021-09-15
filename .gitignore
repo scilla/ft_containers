@@ -4,3 +4,5 @@
 containers
 .vscode
 .DS_Store
+tester/tester/vectors_output/constructor
+tester/ft_containers_tests

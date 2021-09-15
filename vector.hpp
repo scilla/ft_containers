@@ -27,7 +27,7 @@ class vector_iterator //: public iterator<T>
 		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		template<class U>
 		vector_iterator(const vector_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
-		~vector_iterator();
+		~vector_iterator() {}
 
 		reference operator*() const { return *_ptr; }
 		pointer operator->() const { return _ptr; }
@@ -290,6 +290,7 @@ public:
 	};
 	
 	// modifiers
+	/*
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last) {
 		clear();
@@ -299,6 +300,7 @@ public:
 		for (size_t i = 0; first + i < last; i++)
 			_vector[i] = *(first + i);
 	};
+	*/
 	void assign (size_type n, const value_type& val) {
 		clear();
 		_size = n;
@@ -335,7 +337,8 @@ public:
 	};
 
 	iterator erase (iterator first, iterator last){
-		size_type distance = std::distance(first, last);
+		// size_type distance = std::distance(first, last);
+		size_type distance = last - first;
 		for (size_t i = 0; first + i + distance != end(); i++)
 			*(first + i) = *(first + i + distance);
 		_size -= distance;
@@ -364,8 +367,10 @@ public:
 
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last) {
-		size_type dist = std::distance(first, last);
-		size_type index = std::distance(begin(), position);
+		// size_type dist = std::distance(first, last);
+		// size_type index = std::distance(begin(), position);
+		size_type dist = last - first;
+		size_type index = position - begin();
 		resize(_size + dist);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];

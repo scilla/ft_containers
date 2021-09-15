@@ -45,5 +45,5 @@ void print_speed()
 	float diff;
 
 	diff = float(t_a_ft.tv_usec - t_b_ft.tv_usec) * 100 / (float(t_a_stl.tv_usec - t_b_stl.tv_usec) ? float(t_a_stl.tv_usec - t_b_stl.tv_usec) : 1);
-	std::cout << std::endl << "speed ft : stl 	=>	[" << ((diff < 2000.0 ) ? "\033[32m✔" : "\033[31m✘") << "\033[0m]" << std::endl << std::endl;
+	std::cout << std::endl << "speed ft : stl 	=>	[" << ((diff < 2000.0 ) ? "\033[32m✔" : "\033[31m✘") << "\033[0m]" << std::endl << diff << std::endl << std::endl;
 }

@@ -1356,9 +1356,9 @@ void test_vector()
 		start_stl();
 		stl_assign.assign(stl_iterator_beg, stl_iterator_beg + 5);
 		stop_stl();
-		start_ft();
-		ft_assign.assign(ft_iterator_beg, ft_iterator_beg + 5);
-		stop_ft();
+		// start_ft();
+		// ft_assign.assign(ft_iterator_beg, ft_iterator_beg + 5);
+		// stop_ft();
 
 		fs.open("./tester/vectors_output/modifiers", std::fstream::in | std::fstream::out | std::fstream::app);
 		fs << "\nCode executed:\n";
@@ -1399,9 +1399,9 @@ void test_vector()
 		start_stl();
 		stl_assign.assign(stl_iterator_beg, stl_iterator_beg + 5);
 		stop_stl();
-		start_ft();
-		ft_assign.assign(ft_iterator_beg, ft_iterator_beg + 5);
-		stop_ft();
+		// start_ft();
+		// ft_assign.assign(ft_iterator_beg, ft_iterator_beg + 5);
+		// stop_ft();
 
 		fs.open("./tester/vectors_output/modifiers", std::fstream::in | std::fstream::out | std::fstream::app);
 		fs << "\nCode executed:\n";
