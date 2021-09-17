@@ -154,9 +154,14 @@ public:
 			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
 			_alloc(alloc)
 	{
-		_size = (last - first) /*/ sizeof(inputType)*/;
+		_size = last - first /*/ sizeof(inputType)*/;
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
+		for (size_t i = 0; i < _size; i++)
+		{
+			_vector[i] = *first;
+			first++;
+		}
 	};
 	vector (const vector& x):
 		_vector(NULL),
@@ -209,16 +214,16 @@ public:
 		}
 		else if (n > _capacity)
 		{
-			pointer temp = _alloc.allocate(n * 2);
+			pointer temp = _alloc.allocate(n);
 			int i = -1;
 			while((unsigned int)++i <= _size)
 				temp[i] = _vector[i];
-			while((unsigned int)++i < n * 2)
+			while((unsigned int)++i < n)
 				temp[i] = val;
 			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
 			_size = n;
-			_capacity = n * 2;
+			_capacity = n;
 		}
 	};
 
@@ -233,12 +238,12 @@ public:
 	void reserve (size_type n){
 		if(n > _capacity)
 		{
-			pointer tmp = _alloc.allocate(n * 2);
+			pointer tmp = _alloc.allocate(n);
 			for(unsigned int i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
 			_alloc.deallocate(_vector, _capacity);
 			_vector = tmp;
-			_capacity = n * 2;
+			_capacity = n;
 		}
 	};
 /*
@@ -290,11 +295,11 @@ public:
 	};
 
 	reference back() {
-		return(*(_vector + _size));
+		return(*(_vector + _size - 1));
 	};
 
 	const_reference back() const {
-		return(*(_vector + _size));
+		return(*(_vector + _size - 1));
 	};
 	
 	// modifiers
@@ -309,7 +314,8 @@ public:
 		clear();
 		_size = last - first;
 		_vector = _alloc.allocate(_size);
-		_capacity = _size;
+		if(_capacity == 0)
+			_capacity = _size;
 		for (size_t i = 0; first + i < last; i++)
 			_vector[i] = *(first + i);
 	};
@@ -350,7 +356,6 @@ public:
 	};
 
 	iterator erase (iterator first, iterator last){
-		// size_type distance = std::distance(first, last);
 		size_type distance = last - first;
 		for (size_t i = 0; first + i + distance != end(); i++)
 			*(first + i) = *(first + i + distance);
@@ -392,11 +397,9 @@ public:
 	};
 
 	void clear() {
-		_alloc.deallocate(_vector, _capacity);
 		_size = 0;
-		_capacity = 0;
-		_vector = NULL;
 	};
+
 	// allocator
 
 	allocator_type get_allocator() const {
