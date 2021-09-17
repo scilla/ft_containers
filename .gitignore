@@ -4,12 +4,6 @@
 containers
 .vscode
 .DS_Store
-tester/tester/vectors_output/constructor
+tester/tester/vectors_output/
 tester/ft_containers_tests
-tester/tester/vectors_output/access
-tester/tester/vectors_output/assign
-tester/tester/vectors_output/capacity
 .gitignore
-tester/tester/vectors_output/non_member
-tester/tester/vectors_output/modifiers
-tester/tester/vectors_output/iterator
