@@ -225,6 +225,7 @@ public:
 		}
 	};
 
+
 	size_type capacity() const{
 		return(_capacity);
 	};
@@ -254,6 +255,7 @@ public:
 			_alloc.deallocate(_vector);
 			_vector = tmp;
 			_capacity = _size;
+
 		}
 	};
 */
@@ -329,10 +331,10 @@ public:
 
 	void push_back (const value_type& val) {
 		if (_size == _capacity) {
+			_capacity *= 2;
 			if (!_capacity)
 				_capacity = 1;
-			pointer tmp = _alloc.allocate(_capacity*2);
-			_capacity *= 2;
+			pointer tmp = _alloc.allocate(_capacity);
 			for (size_t i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
 			_alloc.deallocate(_vector, _size);
@@ -368,30 +370,41 @@ public:
 	};
 
 	iterator insert (iterator position, const value_type& val) {
-		(void)val;
+		size_type index = position - begin();
+		if(_size == _capacity)
+			recapacity(_capacity * 2);
+		_size++;
+		for(size_t i = _size - 1; i >= index; i--)
+			_vector[i] = _vector[i - 1];
+		for (size_t i = 0; i < 1; i++)
+			_vector[index + i] = val;
 		return position;
 	};
 
     void insert (iterator position, size_type n, const value_type& val){
-		size_type index = std::distance(begin(), position);
-		resize(_size + n);
+		size_type index = position - begin();
+		while(_size + n > _capacity)
+			recapacity(_capacity * 2);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - n];
 		for (size_t i = 0; i < n; i++)
 			_vector[index + i] = val;
+		_size += n;
 	};
 
 	template <class InputIterator>
-    void insert (iterator position, InputIterator first, InputIterator last) {
+    void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		// size_type dist = std::distance(first, last);
 		// size_type index = std::distance(begin(), position);
 		size_type dist = last - first;
 		size_type index = position - begin();
-		resize(_size + dist);
+		if(_size + dist > _capacity)
+			recapacity(_capacity + dist);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];
 		for (size_t i = 0; i < dist; i++)
 			_vector[index + i] = *(first + i);
+		_size += dist;
 	};
 
 	void clear() {
@@ -409,6 +422,19 @@ protected:
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;
+
+	void recapacity (size_type n) {
+		if (n > _capacity)
+		{
+			pointer temp = _alloc.allocate(n);
+			int i = -1;
+			while((unsigned int)++i <= _size)
+				temp[i] = _vector[i];
+			_alloc.deallocate(_vector, _capacity);
+			_vector = temp;
+			_capacity = n;
+		}
+	};
 }; //end vector class
 
 
