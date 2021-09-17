@@ -47,56 +47,8 @@ public:
 	rbtree() {
 		_root = NULL;
 	};
-	~rbtree();
+	~rbtree() {};
 	
-	void rotateRight(struct node *&root, struct node *&pt)
-	{
-		struct node *pt_left = pt->left;
-	
-		pt->left = pt_left->right;
-	
-		if (pt->left != NULL)
-			pt->left->parent = pt;
-	
-		pt_left->parent = pt->parent;
-	
-		if (pt->parent == NULL)
-			root = pt_left;
-	
-		else if (pt == pt->parent->left)
-			pt->parent->left = pt_left;
-	
-		else
-			pt->parent->right = pt_left;
-	
-		pt_left->right = pt;
-		pt->parent = pt_left;
-	}
-
-	void rotateLeft(struct node *&root, struct node *&pt)
-	{
-		struct node *pt_right = pt->right;
-	
-		pt->right = pt_right->left;
-	
-		if (pt->right != NULL)
-			pt->right->parent = pt;
-	
-		pt_right->parent = pt->parent;
-	
-		if (pt->parent == NULL)
-			root = pt_right;
-	
-		else if (pt == pt->parent->left)
-			pt->parent->left = pt_right;
-	
-		else
-			pt->parent->right = pt_right;
-	
-		pt_right->left = pt;
-		pt->parent = pt_right;
-	}
-
 	node& insert(T& newdata) {
 		node* ret = newNode(newdata);
 		node* N = ret;
