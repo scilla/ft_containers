@@ -11,22 +11,41 @@ enum COLOR {
 namespace ft
 {
 template <class T>
-struct node {
-	struct node* 	left;
-	struct node* 	right;
-	struct node*	parent;
-	COLOR			color;
-	T*				data;
+struct Node {
+	struct Node* 	left;
+	struct Node* 	right;
+	struct Node*	parent;
+	enum COLOR		color;
+	T				data;
+
+	bool isLeft() { return (parent && parent->left == this); }
+	bool isRight() { return (parent && parent->right == this); }
+	struct Node* sibling() {
+		if (isLeft())
+			return parent->right;
+		return parent->left;
+	}
+	struct Node* uncle() {
+		if (parent)
+			return parent->sibling();
+		return NULL;
+	}
+	struct Node* grandparent() {
+		if (parent)
+			return parent->parent;
+		return NULL;
+	}
 };
 
 template <class T>
 class rbtree
 {
+	typedef struct Node<T>	node;
 private:
-	struct node<T>*	_root;
+	node*	_root;
 public:
 	rbtree() {
-		_root = nullptr;
+		_root = NULL;
 	};
 	~rbtree();
 	
@@ -78,135 +97,173 @@ public:
 		pt->parent = pt_right;
 	}
 
-	struct node *BSTInsert(struct node* root, struct node *pt)
-	{
-		if (root == NULL)
-			return pt;
-		if (pt->data < root->data)
-		{
-			root->left  = BSTInsert(_root->left, pt);
-			root->left->parent = root;
-		}
-		else if (pt->data > root->data)
-		{
-			root->right = BSTInsert(root->right, pt);
-			root->right->parent = root;
-		}
-		return  root;
+	node& insert(T& newdata) {
+		node* ret = newNode(newdata);
+		node* N = ret;
+		binaryInsert(N);
+		fixTree(N);
+		return *ret;
 	}
 
-	void fixViolation(struct node *&root, struct node *&pt)
-	{
-		struct node *parent_pt = NULL;
-		struct node *grand_parent_pt = NULL;
-	
-		while ((pt != root) && (pt->color != BLACK) &&
-			(pt->parent->color == RED))
+	void fixTree(node* N) {
+		if (!N->parent)												// case 1
+			N->color = BLACK;
+		else if (N->parent->color == RED) 							// case 2
 		{
-	
-			parent_pt = pt->parent;
-			grand_parent_pt = pt->parent->parent;
-	
-			/*  Case : A
-				Parent of pt is left child 
-				of Grand-parent of pt */
-			if (parent_pt == grand_parent_pt->left)
-			{
-	
-				Node *uncle_pt = grand_parent_pt->right;
-	
-				/* Case : 1
-				The uncle of pt is also red
-				Only Recoloring required */
-				if (uncle_pt != NULL && uncle_pt->color == 
-													RED)
-				{
-					grand_parent_pt->color = RED;
-					parent_pt->color = BLACK;
-					uncle_pt->color = BLACK;
-					pt = grand_parent_pt;
+			if (N->uncle() && N->uncle()->color == RED) {
+				N->parent->color = BLACK;
+				N->uncle()->color = BLACK;
+				N->grandparent()->color = RED;
+				fixTree(N->grandparent());
+			}
+			else { 													// case 4
+				if (N->isRight() && N->parent()->isLeft()) {
+					rotateLeft(N->parent);
+					N = N->left;
+				} else if (N->isLeft() && N->parent->isRight()) {
+					rotateRight(N->parent);
+					N = N->right;
 				}
-	
-				else
-				{
-					/* Case : 2
-					pt is right child of its parent
-					Left-rotation required */
-					if (pt == parent_pt->right)
-					{
-						rotateLeft(root, parent_pt);
-						pt = parent_pt;
-						parent_pt = pt->parent;
-					}
-	
-					/* Case : 3
-					pt is left child of its parent
-					Right-rotation required */
-					rotateRight(root, grand_parent_pt);
-					swap(parent_pt->color, 
-							grand_parent_pt->color);
-					pt = parent_pt;
+				N->parent->color = BLACK; 							// case 5
+				N->grandparent()->color = RED;
+				if (N->isLeft() && N->parent->isLeft()) {
+					rotateRight(N->grandparent());
+				} else {
+					rotateLeft(N->grandparent());
 				}
 			}
-	
-			/* Case : B
-			Parent of pt is right child 
-			of Grand-parent of pt */
+		} 															// case 3
+	}
+
+	void replaceNode(node* a, node* b) {
+		if (a->parent) {
+			if (a->isLeft()) {
+				a->parent->left = b;
+			} else {
+				a->parent->right = b;
+			}
+			b->parent = a->parent;
+		}
+	}
+
+	void deleteNode(node* N) {
+		node* child = !N->isRight() ? N->left : N->right;
+		replaceNode(N, child);
+		if (N->color == BLACK) {
+			if (N->color == RED)
+				child->color = BLACK;
 			else
-			{
-				Node *uncle_pt = grand_parent_pt->left;
-	
-				/*  Case : 1
-					The uncle of pt is also red
-					Only Recoloring required */
-				if ((uncle_pt != NULL) && (uncle_pt->color == 
-														RED))
-				{
-					grand_parent_pt->color = RED;
-					parent_pt->color = BLACK;
-					uncle_pt->color = BLACK;
-					pt = grand_parent_pt;
-				}
-				else
-				{
-					/* Case : 2
-					pt is left child of its parent
-					Right-rotation required */
-					if (pt == parent_pt->left)
-					{
-						rotateRight(root, parent_pt);
-						pt = parent_pt;
-						parent_pt = pt->parent;
-					}
-	
-					/* Case : 3
-					pt is right child of its parent
-					Left-rotation required */
-					rotateLeft(root, grand_parent_pt);
-					swap(parent_pt->color, 
-							grand_parent_pt->color);
-					pt = parent_pt;
-				}
-			}
+				fixDeletion(N);
 		}
-	
-		root->color = BLACK;
+		delete N;
 	}
 
-	void start(T newdata)
-	{
-		struct node *node_pt = new_node(newdata);
-			// Do a normal BST insert
-		_root = BSTInsert(_root, node_pt);
-		// fix Red Black Tree violations
-		fixViolation(_root, node_pt);
+	void fixDeletion(node* N) {
+		if (N->parent) {							// case 1
+			if (N->sibling()->color == RED) 		// case 2
+			{
+				N->parent->color = RED;
+				N->sibling()->color = BLACK;
+				if (N->isLeft())
+					rotateLeft(N->parent);
+				else
+					rotateRight(N->parent);
+			}
+			if (N->parent->color == BLACK &&		// case 3
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == BLACK &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				fixDeletion(N->parent);
+			}
+			else if (N->parent->color == RED &&		// case 4
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == BLACK &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->parent->color = BLACK;
+			}
+			else if (N->isLeft() &&					// case 5
+				N->sibling()->color == BLACK &&
+				N->sibling()->left->color == RED &&	
+				N->sibling()->right->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->sibling()->left->color = BLACK;
+				rotateRight(N->sibling());
+			}
+			else if (N->isRight() &&				// still case 5
+				N->sibling()->color == BLACK &&
+				N->sibling()->right->color == RED &&	
+				N->sibling()->left->color == BLACK)
+			{
+				N->sibling()->color = RED;
+				N->sibling()->right->color = BLACK;
+				rotateLeft(N->sibling());
+			}
+			N->sibling()->color = N->parent->color; // case 6
+			N->parent->color = BLACK;
+			if (N->isLeft()) {
+				N->sibling()->right->color = BLACK;
+				rotateLeft(N->parent);
+			} else {
+				N->sibling()->left->color = BLACK;
+				rotateRight(N->parent);
+			}
+		}
 	}
-	
-	struct node& new_node(T newdata) {
-		struct node<T> newnode = new struct node<T>;
-		newnode = {nullptr, nullptr, nullptr, RED, newdata};
-		return newnode;
+
+	void binaryInsert(node* N) {  // fortissimi dubbi
+		node** current = &_root;
+		node* parent = _root ? _root->parent : NULL;
+		while (*current)
+		{
+			parent = *current;
+			if (N->data < parent->data)
+				*current = parent->left;
+			else
+				*current = parent->right;
+		}
+		*current = N;
+		N->parent = parent;
 	}
+
+	node* newNode(T& newdata) {
+		node* newNode = new node;
+		newNode->color = RED;
+		newNode->data = &newdata;
+		return newNode;
+	}
+
+	node* rotateDir(node* P, bool right) {
+		node* G = this->parent;
+		node* S = right ? this->left : this->right;
+		node* C;
+		if (!S)
+			return this;
+		C = right ? this->right: this->left;
+		this->left = right ? C : this;
+		S->right = right ? this : C;
+		if (C)
+			C->parent = this;
+		this->parent = S;
+		S->parent = G;
+		if (G)
+		{
+			if (P == G->right)
+				G->right = S;
+			else
+				G->left = S;
+		}
+		else
+			_root = S;
+		return S;
+	}
+
+	node* rotateLeft(node* P) { return rotateDir(P, false); }
+	node* rotateRight(node* P) { return rotateDir(P, true); }
 };
 
 

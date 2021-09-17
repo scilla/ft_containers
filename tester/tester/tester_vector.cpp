@@ -1,7 +1,7 @@
 # include <vector>
 
-# include "../containers/vector.hpp"
-# include "../containers/random_access_iterator.hpp"
+# include "vector.hpp"
+// # include "../containers/random_access_iterator.hpp"
 # include "tester.hpp"
 
 template <class T>
@@ -1356,7 +1356,7 @@ void test_vector()
 		start_stl();
 		stl_assign.assign(stl_iterator_beg, stl_iterator_beg + 5);
 		stop_stl();
-		start_ft();
+		 start_ft();
 		ft_assign.assign(ft_iterator_beg, ft_iterator_beg + 5);
 		stop_ft();
 
@@ -2631,7 +2631,7 @@ void test_vector()
 		std::swap(stl_swap_one, stl_swap_two);
 		stop_stl();
 		start_ft();
-		ft::swap(ft_swap_one, ft_swap_two);
+		std::swap(ft_swap_one, ft_swap_two);				// change to FT
 		stop_ft();
 
 		fs.open("./tester/vectors_output/non_member", std::fstream::in | std::fstream::out | std::fstream::app);

@@ -1,0 +1,55 @@
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 74, 569, -8822, 8515, 5 };
+int range_array__[] = { 74, 569, -8822, 8515, 5 };
+int range_array__[] = { 74, 569, -8822, 8515, 5 };
+ft::vector<int>::iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+ft::vector<int> ft_assign_vector = ft_range_vector;
+
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 74, 569, -8822, 8515, 5 };
+int range_array__[] = { 74, 569, -8822, 8515, 5 };
+int range_array__[] = { 74, 569, -8822, 8515, 5 };
+std::vector<int>::iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+std::vector<int> stl_assign_vector = stl_range_vector;
+
+══════════════════════════════════════════════════════════════
+Vectors attributes : 
+STL : 
+Empty       : false
+Size        : 1000000
+Max size    : 4611686018427387903
+Capacity    : 1000000
+Content     : [...]
+
+FT : 
+Empty    [✔]: false
+Size     [✔]: 1000000
+Max size [✔]: 4611686018427387903
+Capacity [✔]: 1000000
+Content  [✔]: [...]
+══════════════════════════════════════════════════════════════
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183580248
+end    stl  =>                1631725183582041
+time   stl  =>                [1793]
+
+start  ft   =>                1631725183582041
+end    ft   =>                1631725183586229
+time   ft   =>                [4188]
+percentage: 
+ft : stl 	=>	[233.575%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+

@@ -1,0 +1,360 @@
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+ft::vector<int>::iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+int from_ft = *(ft_range_vector.begin());
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+std::vector<int>::iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+int from_stl = *(stl_range_vector.begin());
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 87
+FT  [✘]: 0
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183632299
+end    stl  =>                1631725183632299
+time   stl  =>                [0]
+
+start  ft   =>                1631725183632299
+end    ft   =>                1631725183632299
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+ft::vector<int>::const_iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+ft::vector<int>::const_iterator ft_const_it = ft_range_vector.begin();
+int from_ft = *(ft_const_it);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+int range_array__[] = { 87, 92, -5, 8984, 96 };
+std::vector<int>::const_iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+std::vector<int>::const_iterator stl_const_it = stl_range_vector.begin();
+int from_stl = *(stl_const_it);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 87
+FT  [✘]: 0
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183632552
+end    stl  =>                1631725183632552
+time   stl  =>                [0]
+
+start  ft   =>                1631725183632552
+end    ft   =>                1631725183632552
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 48, 967, 52, -45, -9, 956551, 44};
+int range_array__[] = { 48, 967, 52, -45, -9, 956551, 44};
+int range_array__[] = { 48, 967, 52, -45, -9, 956551, 44};
+ft::vector<int>::iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 7);
+int from_ft = *(ft_range_vector.end() - 1);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 48, 967, 52, -45, -9, 956551, 44};
+int range_array__[] = { 48, 967, 52, -45, -9, 956551, 44};
+int range_array__[] = { 48, 967, 52, -45, -9, 956551, 44};
+std::vector<int>::iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 7);
+int from_stl = *(stl_range_vector.end() - 1);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 44
+FT  [✘]: 7155803
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183633881
+end    stl  =>                1631725183633881
+time   stl  =>                [0]
+
+start  ft   =>                1631725183633881
+end    ft   =>                1631725183633881
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 95, 89, -6121, 48, 5 };
+int range_array__[] = { 95, 89, -6121, 48, 5 };
+int range_array__[] = { 95, 89, -6121, 48, 5 };
+ft::vector<int>::const_iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+std::vector<int>::const_iterator stl_const_it = stl_range_vector.end() - 1;
+int from_ft = *(ft_const_it);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 95, 89, -6121, 48, 5 };
+int range_array__[] = { 95, 89, -6121, 48, 5 };
+int range_array__[] = { 95, 89, -6121, 48, 5 };
+std::vector<int>::const_iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+ft::vector<int>::const_iterator ft_const_it = ft_range_vector.end() - 1;
+int from_stl = *(stl_const_it);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 5
+FT  [✘]: 4
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183634990
+end    stl  =>                1631725183634990
+time   stl  =>                [0]
+
+start  ft   =>                1631725183634990
+end    ft   =>                1631725183634990
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = {250, -1200, -98657, 2, 34};
+int range_array__[] = {250, -1200, -98657, 2, 34};
+int range_array__[] = {250, -1200, -98657, 2, 34};
+ft::vector<int>::iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+int from_ft = *(ft_range_vector.rbegin());
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = {250, -1200, -98657, 2, 34};
+int range_array__[] = {250, -1200, -98657, 2, 34};
+int range_array__[] = {250, -1200, -98657, 2, 34};
+std::vector<int>::iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+int from_stl = *(stl_range_vector.rbegin());
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 34
+FT  [✘]: 0
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183636199
+end    stl  =>                1631725183636199
+time   stl  =>                [0]
+
+start  ft   =>                1631725183636199
+end    ft   =>                1631725183636199
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 958, -561, 54, 789, -8};
+int range_array__[] = { 958, -561, 54, 789, -8};
+int range_array__[] = { 958, -561, 54, 789, -8};
+ft::vector<int>::const_iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+ft::vector<int>::const_reverse_iterator ft_const_it = ft_range_vector.rbegin();
+int from_ft = *(ft_const_it);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 958, -561, 54, 789, -8};
+int range_array__[] = { 958, -561, 54, 789, -8};
+int range_array__[] = { 958, -561, 54, 789, -8};
+std::vector<int>::const_iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+std::vector<int>::const_reverse_iterator stl_const_it = stl_range_vector.rbegin();
+int from_stl = *(stl_const_it);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : -8
+FT  [✘]: 89
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183637356
+end    stl  =>                1631725183637356
+time   stl  =>                [0]
+
+start  ft   =>                1631725183637356
+end    ft   =>                1631725183637357
+time   ft   =>                [1]
+percentage: 
+ft : stl 	=>	[100%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = {78, -951, 562, 8, 745, 51236, 6987};
+int range_array__[] = {78, -951, 562, 8, 745, 51236, 6987};
+int range_array__[] = {78, -951, 562, 8, 745, 51236, 6987};
+ft::vector<int>::iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 7);
+int from_ft = *(ft_range_vector.rend() - 1);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = {78, -951, 562, 8, 745, 51236, 6987};
+int range_array__[] = {78, -951, 562, 8, 745, 51236, 6987};
+int range_array__[] = {78, -951, 562, 8, 745, 51236, 6987};
+std::vector<int>::iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 7);
+int from_stl = *(stl_range_vector.rend() - 1);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 78
+FT  [✘]: 0
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183638624
+end    stl  =>                1631725183638624
+time   stl  =>                [0]
+
+start  ft   =>                1631725183638624
+end    ft   =>                1631725183638624
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 8, -5615, 412, 89, 475};
+int range_array__[] = { 8, -5615, 412, 89, 475};
+int range_array__[] = { 8, -5615, 412, 89, 475};
+ft::vector<int>::const_iterator ft_iterator(&(range_array[0]));
+ft::vector<int> ft_range_vector(ft_iterator, ft_iterator + 5);
+std::vector<int>::const_reverse_iterator stl_const_it = stl_range_vector.rend() - 1;
+int from_ft = *(ft_const_it);
+    ^^^^^^^
+    Compared value
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+int range_array_[] = { 8, -5615, 412, 89, 475};
+int range_array__[] = { 8, -5615, 412, 89, 475};
+int range_array__[] = { 8, -5615, 412, 89, 475};
+std::vector<int>::const_iterator stl_iterator(&(range_array[0]));
+std::vector<int> stl_range_vector(stl_iterator, stl_iterator + 5);
+ft::vector<int>::const_reverse_iterator ft_const_it = ft_range_vector.rend() - 1;
+int from_stl = *(stl_const_it);
+    ^^^^^^^^
+    Compared value
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : 8
+FT  [✘]: 0
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1631725183640384
+end    stl  =>                1631725183640384
+time   stl  =>                [0]
+
+start  ft   =>                1631725183640384
+end    ft   =>                1631725183640384
+time   ft   =>                [0]
+percentage: 
+ft : stl 	=>	[0%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+

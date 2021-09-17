@@ -1,7 +1,7 @@
 #include <map>
 
 #include "tester.hpp"
-#include "../containers/map.hpp"
+#include "../map.hpp"
 
 #define SIZE 1000000
 

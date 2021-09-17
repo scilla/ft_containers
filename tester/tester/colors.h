@@ -2,6 +2,9 @@
 // Created by Mattia Cossu on 8/25/21.
 //
 
+#ifndef COLORS_H
+#define COLORS_H
+
 #ifndef FT_CONTAINERS_COLORS_H
 #define FT_CONTAINERS_COLORS_H
 
@@ -17,3 +20,6 @@
 # define RD "\033[31m"
 
 #endif //FT_CONTAINERS_COLORS_H
+
+
+#endif /* COLORS_H */

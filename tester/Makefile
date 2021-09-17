@@ -1,15 +1,17 @@
 # tester/tester_map.cpp
 SRCS =	tester/main.cpp \
-		tester/tester_map.cpp \
-		tester/tester_stack.cpp \
-		tester/tester_vector.cpp \
 		tester/tester.cpp \
-		tester/utils.cpp
+		tester/utils.cpp \
+		tester/tester_vector.cpp \
+		# tester/tester_stack.cpp \
+		tester/tester_map.cpp \
 
 SRCS_SET = \
 		tester/tester_set.cpp \
 		tester/tester.cpp \
 		tester/utils.cpp
+
+INCLUDE = -I. -I.. -Itester
 
 OBJS = $(SRCS:.cpp=.o)
 
@@ -19,7 +21,7 @@ OBJS_SET = $(SRCS_SET:.cpp=.o)
 
 CPP = clang++
 
-FLAGS = -g -Wall -Wextra -Werror -pedantic -std=c++98
+FLAGS = -g -Wall -Wextra -Werror -std=c++98
 
 NAME = ft_containers_tests
 
@@ -28,12 +30,12 @@ TEST_SET_S = set_test_string
 TEST_SET = set_test
 
 %.o : %.cpp
-	$(CPP) $(FLAGS) -c $< -o $(<:.cpp=.o)
+	$(CPP) $(FLAGS) -c $< -o $(<:.cpp=.o) $(INCLUDE)
 
 %.os : %.cpp
 	$(CPP) -DSTRING_SET $(FLAGS) -c $< -o $(<:.cpp=.os)
 
-all: $(NAME) $(TEST_SET) $(TEST_SET_S)
+all: $(NAME) # $(TEST_SET) $(TEST_SET_S)
 
 set: $(TEST_SET) $(TEST_SET_S)
 

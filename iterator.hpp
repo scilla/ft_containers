@@ -29,7 +29,7 @@ namespace ft
 		typedef T 							value_type;
 		typedef T* 							pointer;
 		typedef T& 							reference;
-		typedef ptrdiff_t 					difference_type;
+		typedef std::ptrdiff_t 				difference_type; // check
 		typedef random_access_iterator_tag	iterator_category;
 	};
 

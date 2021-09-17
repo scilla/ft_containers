@@ -8,12 +8,14 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iterator>
 #include "utils.hpp"
+#include "enable_if.hpp"
 
 namespace ft
 {
 template <class T>
-class vector_iterator: public iterator<T>
+class vector_iterator //: public iterator<T>
 {
 	public:
 		typedef T												iterator_type;
@@ -27,11 +29,78 @@ class vector_iterator: public iterator<T>
 		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		template<class U>
 		vector_iterator(const vector_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
-		~vector_iterator();
+		~vector_iterator() {}
+
+		reference operator*() const { return *_ptr; }
+		pointer operator->() const { return _ptr; }
+
+		vector_iterator& operator++() {
+			++_ptr;
+			return *this;
+		}
+		vector_iterator operator++(int) {
+			vector_iterator tmp = *this;
+			++_ptr;
+			return *this;
+		}
+		vector_iterator& operator--() {
+			--_ptr;
+			return *this;
+		}
+		vector_iterator operator--(int) {
+			vector_iterator tmp = *this;
+			--_ptr;
+			return *this;
+		}
+
+		vector_iterator operator-(difference_type n) {
+			return vector_iterator(_ptr - n);
+		}
+		vector_iterator operator-=(difference_type n) {
+			_ptr -= n;
+			return _ptr;
+		}
+		vector_iterator operator+(difference_type n) {
+			return vector_iterator(_ptr + n);
+		}
+		vector_iterator operator+=(difference_type n) {
+			_ptr += n;
+			return _ptr;
+		}
+
+		reference operator[](size_t i) {
+			return (*(_ptr + i));
+		}
+
+		template <class K>
+		vector_iterator&	operator=(const vector_iterator<K> & other) {
+			_ptr = other.base();
+			return *this;
+		}
+
 		pointer		base() const { return _ptr; }
 	private:
 		pointer		_ptr;
 };
+
+template <class T, class U>
+std::ptrdiff_t operator-(const vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() - right.base()); }
+template <class T, class U>
+std::ptrdiff_t operator+(const vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() + right.base()); }
+template <class T, class U>
+vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { return left + right; }
+template <class T, class U>
+bool operator== (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() == right.base()); }
+template <class T, class U>
+bool operator!= (const vector_iterator<T>& left,const vector_iterator<U>& right) { return !(left == right); }
+template <class T, class U>
+bool operator< (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() < right.base()); }
+template <class T, class U>
+bool operator<= (const vector_iterator<T>& left,const vector_iterator<U>& right) { return left.base() <= right.base(); }
+template <class T, class U>
+bool operator> (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() > right.base()); }
+template <class T, class U>
+bool operator>= (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() >= right.base()); }
 
 template <class T, class Alloc = std::allocator<T> >
 class vector
@@ -49,10 +118,12 @@ public:
 	//typedef std::ptrdiff_t						difference_type;
 	//typedef size_t								size_type;
 
-	typedef vector_iterator<value_type>					iterator;
-	typedef ft::reverse_iterator<iterator>				reverse_iterator; //da correggere
+	typedef vector_iterator<pointer>					iterator;
+	// typedef std::reverse_iterator<iterator>				reverse_iterator; //da correggere
+	typedef iterator			reverse_iterator; //da correggere
 	typedef vector_iterator<const_pointer>				const_iterator;
-	typedef ft::reverse_iterator<const_pointer>		const_reverse_iterator; //da correggere
+	// typedef std::reverse_iterator<const_iterator>		const_reverse_iterator; //da correggere
+	typedef const_iterator		const_reverse_iterator; //da correggere
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):
@@ -67,17 +138,23 @@ public:
 					_size(n),
 					_capacity(n)
 	{
-		_vector = _alloc.allocate(n);
-		for (int i = 0; i < 0; i++) {
+		/*_vector = _alloc.allocate(n);
+		for (size_t i = 0; i < n; i++) {
 			_vector[i] = val;
-		}
+		}*/
+					    if (n)
+				    _vector = _alloc.allocate(n);
+				while (n--)
+					_alloc.construct(_vector + n, val);
 	};
+
 	template <class inputType>
 	vector (inputType first, inputType last,
-			const allocator_type& alloc = allocator_type()):
+			const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
 			_alloc(alloc)
 	{
-		_size = (last - first) / sizeof(inputType);
+		_size = (last - first) /*/ sizeof(inputType)*/;
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
 	};
@@ -89,20 +166,20 @@ public:
 		*this = x;
 	};
 	~vector() {
-		_alloc.deallocate(_vector, _capacity);
+		//_alloc.deallocate(_vector, _capacity);
 	};
 
 	// iterators
-	iterator begin() {
+	iterator begin() const {
 		return(iterator(_vector));
 	};
-	iterator end(){
+	iterator end() const {
 		return(iterator(_vector + _size));
 	};
-	reverse_iterator rbegin(){
+	reverse_iterator rbegin() const {
 		return(reverse_iterator(end()));
 	};
-	reverse_iterator rend(){
+	reverse_iterator rend() const {
 		return(reverse_iterator(begin()));
 	};
 
@@ -134,9 +211,9 @@ public:
 		{
 			pointer temp = _alloc.allocate(n * 2);
 			int i = -1;
-			while(++i <= _size)
+			while((unsigned int)++i <= _size)
 				temp[i] = _vector[i];
-			while(++i < n * 2)
+			while((unsigned int)++i < n * 2)
 				temp[i] = val;
 			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
@@ -159,7 +236,7 @@ public:
 			pointer tmp = _alloc.allocate(n * 2);
 			for(unsigned int i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			_alloc.deallocate(_vector);
+			_alloc.deallocate(_vector, _capacity);
 			_vector = tmp;
 			_capacity = n * 2;
 		}
@@ -197,11 +274,11 @@ public:
 	};
 
 	reference at (size_type n) {
-		return(_vector + n);
+		return(*(_vector + n));
 	};
 
 	const_reference at (size_type n) const {
-		return(_vector + n);
+		return(*(_vector + n));
 	};
 
 	reference front() {
@@ -213,23 +290,30 @@ public:
 	};
 
 	reference back() {
-		return(_vector + _size);
+		return(*(_vector + _size));
 	};
 
 	const_reference back() const {
-		return(_vector + _size);
+		return(*(_vector + _size));
 	};
 	
 	// modifiers
+	/*
 	template <class InputIterator>
-	void assign (InputIterator first, InputIterator last) {
+        void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& u);
+    void assign(initializer_list<value_type> il);
+	*/
+	template <class InputIterator>
+	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		clear();
-		_size = first - last;
+		_size = last - first;
 		_vector = _alloc.allocate(_size);
 		_capacity = _size;
 		for (size_t i = 0; first + i < last; i++)
 			_vector[i] = *(first + i);
 	};
+	
 	void assign (size_type n, const value_type& val) {
 		clear();
 		_size = n;
@@ -266,7 +350,8 @@ public:
 	};
 
 	iterator erase (iterator first, iterator last){
-		size_type distance = std::distance(first, last);
+		// size_type distance = std::distance(first, last);
+		size_type distance = last - first;
 		for (size_t i = 0; first + i + distance != end(); i++)
 			*(first + i) = *(first + i + distance);
 		_size -= distance;
@@ -295,17 +380,19 @@ public:
 
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last) {
-		size_type dist = std::distance(first, last);
-		size_type index = std::distance(begin(), position);
+		// size_type dist = std::distance(first, last);
+		// size_type index = std::distance(begin(), position);
+		size_type dist = last - first;
+		size_type index = position - begin();
 		resize(_size + dist);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];
 		for (size_t i = 0; i < dist; i++)
 			_vector[index + i] = *(first + i);
-	}
+	};
 
 	void clear() {
-		_alloc.deallocate(_vector);
+		_alloc.deallocate(_vector, _capacity);
 		_size = 0;
 		_capacity = 0;
 		_vector = NULL;
