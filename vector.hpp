@@ -53,14 +53,14 @@ class vector_iterator //: public iterator<T>
 			return *this;
 		}
 
-		vector_iterator operator-(difference_type n) {
+		vector_iterator operator-(difference_type n) const {
 			return vector_iterator(_ptr - n);
 		}
 		vector_iterator operator-=(difference_type n) {
 			_ptr -= n;
 			return _ptr;
 		}
-		vector_iterator operator+(difference_type n) {
+		vector_iterator operator+(difference_type n) const {
 			return vector_iterator(_ptr + n);
 		}
 		vector_iterator operator+=(difference_type n) {
@@ -118,12 +118,10 @@ public:
 	//typedef std::ptrdiff_t						difference_type;
 	//typedef size_t								size_type;
 
-	typedef vector_iterator<pointer>					iterator;
-	// typedef std::reverse_iterator<iterator>				reverse_iterator; //da correggere
-	typedef iterator			reverse_iterator; //da correggere
-	typedef vector_iterator<const_pointer>				const_iterator;
-	// typedef std::reverse_iterator<const_iterator>		const_reverse_iterator; //da correggere
-	typedef const_iterator		const_reverse_iterator; //da correggere
+	typedef vector_iterator<pointer>				iterator;
+	typedef vector_iterator<const_pointer>			const_iterator;
+	typedef reverse_iterator<const_iterator>		const_reverse_iterator; //da correggere
+	typedef reverse_iterator<iterator>				reverse_iterator; //da correggere
 
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):

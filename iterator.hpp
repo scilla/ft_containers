@@ -69,7 +69,7 @@ public:
 	iterator_type base() { return ++Iterator(_current); }
 	// Iterator getCurrent() { return _current; }
 
-	reference operator*() const { return *(_current - 1); }
+	reference operator*() const { return *(_current); }
 	pointer operator->() const { return _current.operator->(); }
 	reference operator[](difference_type n) const { return *(_current - n); }
 	
@@ -92,10 +92,10 @@ public:
 		return tmp;
 	}
 	reverse_iterator operator+( difference_type n ) const {
-		return *(_current + 1 - n);
+		return (_current - n + 1);
 	}
 	reverse_iterator operator-( difference_type n ) const {
-		return *(_current + 1 + n);
+		return (_current + n + 1);
 	}
 	reverse_iterator& operator+=( difference_type n ) {
 		_current -= n;
