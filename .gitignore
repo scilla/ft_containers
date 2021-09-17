@@ -11,3 +11,5 @@ tester/tester/vectors_output/assign
 tester/tester/vectors_output/capacity
 .gitignore
 tester/tester/vectors_output/non_member
+tester/tester/vectors_output/modifiers
+tester/tester/vectors_output/iterator
