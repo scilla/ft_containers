@@ -403,19 +403,19 @@ public:
 		// size_type dist = std::distance(first, last);
 		// size_type index = std::distance(begin(), position);
 		size_t dist = last - first;
-		// size_type index = position - begin();
+		size_type index = position - begin();
 		if (_size + dist > _capacity) {
 			if (_size + dist > capacity() * 2)
 				recapacity(_size + dist);
 			else
 				recapacity(capacity() * 2);
 		}
-		// for(size_t i = _size - 1; i >= index; i--)
-		// 	_vector[i] = _vector[i - dist];
-		memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(value_type) - 1);
-		// for (size_t i = 0; i < dist; i++)
-		// 	_vector[index + i] = *(first + i);
-		memmove(&(*position), &(*first), dist * sizeof(value_type) - 1);
+		for(size_t i = _size - 1; i >= index; i--)
+			_vector[i] = _vector[i - dist];
+		//memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(value_type));
+		for (size_t i = 0; i < dist; i++)
+			_vector[index + i] = *(first + i);
+		//memmove(&(*position), &(*first), dist * sizeof(value_type) - 1);
 		_size += dist;
 	};
 /*
