@@ -218,7 +218,7 @@ public:
 		{
 			pointer temp = _alloc.allocate(n);
 			int i = -1;
-			while((unsigned int)++i <= _size)
+			while((unsigned int)++i < _size)
 				temp[i] = _vector[i];
 			while((unsigned int)++i < n)
 				temp[i] = val;
@@ -397,22 +397,54 @@ public:
 			_vector[index + i] = val;
 		_size += n;
 	};
-
+	
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		// size_type dist = std::distance(first, last);
 		// size_type index = std::distance(begin(), position);
-		size_type dist = last - first;
-		size_type index = position - begin();
-		if(_size + dist > _capacity)
-			recapacity(_capacity + dist);
-		for(size_t i = _size - 1; i >= index; i--)
-			_vector[i] = _vector[i - dist];
-		for (size_t i = 0; i < dist; i++)
-			_vector[index + i] = *(first + i);
+		size_t dist = last - first;
+		// size_type index = position - begin();
+		if (_size + dist > _capacity) {
+			if (_size + dist > capacity() * 2)
+				recapacity(_size + dist);
+			else
+				recapacity(capacity() * 2);
+		}
+		// for(size_t i = _size - 1; i >= index; i--)
+		// 	_vector[i] = _vector[i - dist];
+		memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(value_type) - 1);
+		// for (size_t i = 0; i < dist; i++)
+		// 	_vector[index + i] = *(first + i);
+		memmove(&(*position), &(*first), dist * sizeof(value_type) - 1);
 		_size += dist;
 	};
-
+/*
+	void	traslate(iterator position, size_type dist) {
+		pointer enda = end().operator->() - 1;
+		pointer revEnd = position.operator->() - 1;
+		pointer newit = enda + dist;
+		for (; enda != revEnd; enda--, newit--)
+			*newit = *enda;
+	}
+	template <class InputIterator>
+	void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+		size_type index = position - begin();
+		size_type len = 0;
+		for (InputIterator beg = first; beg != last; beg++)
+			len++;
+		if (_size + len > _capacity) {
+			if (_size + len > capacity() * 2)
+				reserve(_size + len);
+			else
+				reserve(capacity() * 2);
+		}
+		iterator newIt = iterator(_vector + index);
+		traslate(newIt, len);
+		_size += len;
+		for (InputIterator start = first; start != last; start++)
+			_alloc.construct(_vector + index++, *start);
+	}
+*/
 	void clear() {
 		_size = 0;
 	};
@@ -434,7 +466,7 @@ protected:
 		{
 			pointer temp = _alloc.allocate(n);
 			int i = -1;
-			while((unsigned int)++i <= _size)
+			while((unsigned int)++i < _size)
 				temp[i] = _vector[i];
 			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
