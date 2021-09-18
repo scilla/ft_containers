@@ -37,11 +37,11 @@ public:
 	//top
 
 	reference top() {
-		return(*(_container.end()));
+		return(*(_container.end() - 1));
 	};
 
 	const_reference top() const {
-		return(*(_container.end()));
+		return(*(_container.end() - 1));
 	};
 
 	//push
