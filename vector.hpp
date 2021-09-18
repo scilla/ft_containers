@@ -402,7 +402,7 @@ public:
     void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		// size_type dist = std::distance(first, last);
 		// size_type index = std::distance(begin(), position);
-		size_type dist = last - first;
+		size_t dist = last - first;
 		// size_type index = position - begin();
 		if (_size + dist > _capacity) {
 			if (_size + dist > capacity() * 2)
@@ -412,10 +412,10 @@ public:
 		}
 		// for(size_t i = _size - 1; i >= index; i--)
 		// 	_vector[i] = _vector[i - dist];
-		memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(size_type));
+		memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(value_type));
 		// for (size_t i = 0; i < dist; i++)
 		// 	_vector[index + i] = *(first + i);
-		memmove(&(*position), &(*first), dist * sizeof(size_type));
+		memmove(&(*position), &(*first), dist * sizeof(value_type));
 		_size += dist;
 	};
 /*
