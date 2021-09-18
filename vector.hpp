@@ -218,7 +218,7 @@ public:
 		{
 			pointer temp = _alloc.allocate(n);
 			int i = -1;
-			while((unsigned int)++i <= _size)
+			while((unsigned int)++i < _size)
 				temp[i] = _vector[i];
 			while((unsigned int)++i < n)
 				temp[i] = val;
@@ -436,7 +436,7 @@ protected:
 		{
 			pointer temp = _alloc.allocate(n);
 			int i = -1;
-			while((unsigned int)++i <= _size)
+			while((unsigned int)++i < _size)
 				temp[i] = _vector[i];
 			_alloc.deallocate(_vector, _capacity);
 			_vector = temp;
