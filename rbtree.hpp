@@ -16,7 +16,7 @@ struct Node {
 	struct Node* 	right;
 	struct Node*	parent;
 	enum COLOR		color;
-	T				data;
+	T*				data;
 
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }

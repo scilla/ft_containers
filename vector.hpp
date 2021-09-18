@@ -11,15 +11,12 @@
 #include <iterator>
 #include "utils.hpp"
 #include "enable_if.hpp"
-
-
 #include <stdio.h>
-#include <string.h>
 
 namespace ft
 {
 template <class T>
-class vector_iterator //: public iterator<T>
+class vector_iterator
 {
 	public:
 		typedef T												iterator_type;
@@ -27,7 +24,7 @@ class vector_iterator //: public iterator<T>
 		typedef typename iterator_traits<T>::value_type			value_type;
 		typedef typename iterator_traits<T>::reference			reference;
 		typedef typename iterator_traits<T>::pointer			pointer;
-		typedef random_access_iterator_tag						iterator_category; //or another tag
+		typedef random_access_iterator_tag						iterator_category;
 
 		explicit	vector_iterator(): _ptr(NULL) {};
 		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
@@ -415,7 +412,7 @@ public:
 		for (; first != last; first++)
 			*(porcaputtena++) = *(first);
 	};
-	
+
 	void clear() {
 		_size = 0;
 	};
