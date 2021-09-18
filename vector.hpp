@@ -349,9 +349,9 @@ public:
 	}
 
 	iterator erase (iterator position){
-		_size--;
 		for (size_t i = 0; position + i + 1 != end(); i++)
 			*(position + i) = *(position + i + 1);
+		_size--;
 		return position;
 	};
 
