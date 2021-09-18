@@ -412,10 +412,10 @@ public:
 		}
 		// for(size_t i = _size - 1; i >= index; i--)
 		// 	_vector[i] = _vector[i - dist];
-		memmove(&(*(position + dist)), &(*position), end() - position);
+		memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(size_type));
 		// for (size_t i = 0; i < dist; i++)
 		// 	_vector[index + i] = *(first + i);
-		memmove(&(*position), &(*first), dist);
+		memmove(&(*position), &(*first), dist * sizeof(size_type));
 		_size += dist;
 	};
 /*
