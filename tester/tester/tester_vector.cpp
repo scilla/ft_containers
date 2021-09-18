@@ -58,15 +58,19 @@ bool printVectorAttributes(
 	fs << "Max size    : " << stl_max_size  << std::endl;
 	fs << "Capacity    : " << stl_capacity  << std::endl;
 	fs << "Content     : [";
-	if (stl_vector.size() < 50)
+	int porco = 0;
+	if (stl_vector.size() < 500000)
 	{
 
 		typename std::vector<T>::const_iterator stl_it;
 		for (stl_it = stl_vector.begin();  stl_it != stl_vector.end(); stl_it++)
 		{
+			porco++;
 			fs << *stl_it;
 			if (stl_it + 1 != stl_vector.end())
 				fs << ", ";
+			if (!(porco % 100))
+				fs << "\n";
 		}
 		fs << "]\n";
 
@@ -81,15 +85,19 @@ bool printVectorAttributes(
 	fs << "Max size [" << equal(ft_max_size, stl_max_size) << "]: " << ft_max_size  << std::endl;
 	fs << "Capacity [" << equal(ft_capacity, stl_capacity) << "]: " << ft_capacity  << std::endl;
 	fs << "Content  [" << content << "]: [";
-	if (ft_vector.size() < 50)
+	if (ft_vector.size() < 500000)
 	{
 
 		typename ft::vector<T>::const_iterator ft_it;
+		porco = 0;
 		for(ft_it = ft_vector.begin(); ft_it != ft_vector.end(); ft_it++)
 		{
+			porco++;
 			fs << *ft_it;
 			if (ft_it + 1 != ft_vector.end())
 				fs << ", ";
+			if (!(porco % 100))
+				fs << "\n";
 		}
 		fs << "]\n";
 	}
@@ -1695,8 +1703,8 @@ void test_vector()
 		std::vector<int>::iterator stl_iterator_beg(range.begin());
 		ft::vector<int>::iterator ft_iterator_beg(&(range_array[0]));
 
-		std::vector<int> stl_insert(100000, 1);
-		ft::vector<int> ft_insert(100000, 1);
+		std::vector<int> stl_insert(10000, 1);
+		ft::vector<int> ft_insert(10000, 1);
 		start_stl();
 		stl_insert.insert(stl_insert.begin() + 100, stl_iterator_beg, stl_iterator_beg + 5);
 		stop_stl();

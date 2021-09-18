@@ -353,9 +353,9 @@ public:
 	}
 
 	iterator erase (iterator position){
-		_size--;
 		for (size_t i = 0; position + i + 1 != end(); i++)
 			*(position + i) = *(position + i + 1);
+		_size--;
 		return position;
 	};
 
@@ -404,12 +404,14 @@ public:
 		// size_type index = std::distance(begin(), position);
 		size_type dist = last - first;
 		size_type index = position - begin();
-		if(_size + dist > _capacity)
-			recapacity(_capacity + dist);
+		while (_size + dist > _capacity)
+			recapacity(_capacity * 2);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];
+		// memmove(&(*(position + dist)), &(*position), end() - position);
 		for (size_t i = 0; i < dist; i++)
 			_vector[index + i] = *(first + i);
+		// memmove(&(*position), &(*first), dist);
 		_size += dist;
 	};
 
