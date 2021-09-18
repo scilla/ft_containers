@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rchallie <rchallie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 17:53:07 by rchallie          #+#    #+#             */
-/*   Updated: 2020/12/10 21:36:17 by rchallie         ###   ########.fr       */
+/*   Updated: 2021/09/18 14:29:32 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ int main()
 	std::cout << "\n";
 	// test_map();
 	// std::cout << "\n";
-	// test_stack();
+	test_stack();
 	// sleep(100);
 }

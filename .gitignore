@@ -4,6 +4,6 @@
 containers
 .vscode
 .DS_Store
-tester/tester/vectors_output/
+tester/tester/*
 tester/ft_containers_tests
 .gitignore

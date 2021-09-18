@@ -1,10 +1,10 @@
-# tester/tester_map.cpp
 SRCS =	tester/main.cpp \
 		tester/tester.cpp \
 		tester/utils.cpp \
 		tester/tester_vector.cpp \
-		# tester/tester_stack.cpp \
-		tester/tester_map.cpp \
+		tester/tester_stack.cpp \
+		#tester/tester_map.cpp \
+		# tester/tester_map.cpp
 
 SRCS_SET = \
 		tester/tester_set.cpp \

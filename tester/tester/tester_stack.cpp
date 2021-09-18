@@ -1,5 +1,5 @@
 #include "tester.hpp"
-#include "../containers/stack.hpp"
+#include "../stack.hpp"
 #include <stack>
 
 template <class T>
