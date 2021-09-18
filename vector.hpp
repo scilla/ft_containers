@@ -378,7 +378,7 @@ public:
 	iterator insert (iterator position, const value_type& val) {
 		size_type index = position - begin();
 		if(_size == _capacity)
-			recapacity(_capacity * 2);
+			reserve(_capacity * 2);
 		_size++;
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - 1];
@@ -390,7 +390,7 @@ public:
     void insert (iterator position, size_type n, const value_type& val){
 		size_type index = position - begin();
 		while(_size + n > _capacity)
-			recapacity(_capacity * 2);
+			reserve(_capacity * 2);
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - n];
 		for (size_t i = 0; i < n; i++)
@@ -400,8 +400,6 @@ public:
 	
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		// size_type dist = std::distance(first, last);
-		// size_type index = std::distance(begin(), position);
 		size_t dist = last - first;
 		size_type index = position - begin();
 		if (_size + dist > _capacity) {
@@ -410,41 +408,14 @@ public:
 			else
 				reserve(capacity() * 2);
 		}
+		_size += dist;
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];
-		//memmove(&(*(position + dist)), &(*position), (end() - position) * sizeof(value_type));
-		for (size_t i = 0; i < dist; i++)
-			_vector[index + i] = *(first + i);
-		//memmove(&(*position), &(*first), dist * sizeof(value_type) - 1);
-		_size += dist;
+		iterator porcaputtena = begin() + index - 1;
+		for (; first != last; first++)
+			*(porcaputtena++) = *(first);
 	};
-/*
-	void	traslate(iterator position, size_type dist) {
-		pointer enda = end().operator->() - 1;
-		pointer revEnd = position.operator->() - 1;
-		pointer newit = enda + dist;
-		for (; enda != revEnd; enda--, newit--)
-			*newit = *enda;
-	}
-	template <class InputIterator>
-	void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		size_type index = position - begin();
-		size_type len = 0;
-		for (InputIterator beg = first; beg != last; beg++)
-			len++;
-		if (_size + len > _capacity) {
-			if (_size + len > capacity() * 2)
-				reserve(_size + len);
-			else
-				reserve(capacity() * 2);
-		}
-		iterator newIt = iterator(_vector + index);
-		traslate(newIt, len);
-		_size += len;
-		for (InputIterator start = first; start != last; start++)
-			_alloc.construct(_vector + index++, *start);
-	}
-*/
+	
 	void clear() {
 		_size = 0;
 	};

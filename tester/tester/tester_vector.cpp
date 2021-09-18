@@ -60,7 +60,7 @@ bool printVectorAttributes(
 	fs << "Capacity    : " << stl_capacity  << std::endl;
 	fs << "Content     : [";
 	int porco = 0;
-	if (stl_vector.size() < 500000)
+	if (stl_vector.size() < 100)
 	{
 
 		typename std::vector<T>::const_iterator stl_it;
@@ -86,7 +86,7 @@ bool printVectorAttributes(
 	fs << "Max size [" << equal(ft_max_size, stl_max_size) << "]: " << ft_max_size  << std::endl;
 	fs << "Capacity [" << equal(ft_capacity, stl_capacity) << "]: " << ft_capacity  << std::endl;
 	fs << "Content  [" << content << "]: [";
-	if (ft_vector.size() < 500000)
+	if (ft_vector.size() < 100)
 	{
 
 		typename ft::vector<T>::const_iterator ft_it;
@@ -1719,13 +1719,13 @@ void test_vector()
 		fs << "int range_array[] = {47, 152, -325, 9, 14444};\n";
 		fs << "ft::vector<int>::iterator ft_iterator_beg(&(range_array[0]));\n";
 		fs << "ft::vector<int> ft_insert(100000, 1);\n";
-		fs << "ft_insert.insert(ft_insert.end(), ft_iterator_beg, ft_iterator_beg + 5);\n";
+		fs << "ft_insert.insert(ft_insert.end() + 100, ft_iterator_beg, ft_iterator_beg + 5);\n";
 		fs << "\nCompared with:\n";
 		fs << "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n";
 		fs << "int range_array[] = {47, 152, -325, 9, 14444};\n";
 		fs << "std::vector<int>::iterator stl_iterator_beg(&(range_array[0]));\n";
 		fs << "std::vector<int> stl_insert(100000, 1);\n";
-		fs << "stl_insert.insert(stl_insert.end(), stl_iterator_beg, stl_iterator_beg + 5);\n";
+		fs << "stl_insert.insert(stl_insert.end() + 100, stl_iterator_beg, stl_iterator_beg + 5);\n";
 		std::cout << std::setw(30) << std::left << "Insert range large: " << std::setw(0) << (printVectorAttributes(fs, stl_insert, ft_insert) ? "\033[32m[OK]\033[0m" : "\033[31m[NOP]\033[0m");
 		print_speed();
 		evaluate_speed(fs);
