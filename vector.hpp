@@ -406,9 +406,9 @@ public:
 		size_type index = position - begin();
 		if (_size + dist > _capacity) {
 			if (_size + dist > capacity() * 2)
-				recapacity(_size + dist);
+				reserve(_size + dist);
 			else
-				recapacity(capacity() * 2);
+				reserve(capacity() * 2);
 		}
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];

@@ -15,7 +15,8 @@ std::string equalContent(
 	if (ft_vector.size() != stl_vector.size())
 		return ("✘");
 	stl_it = stl_vector.begin();
-	for(ft_it = ft_vector.begin(); ft_it != ft_vector.end(); ft_it++)
+	ft_it = ft_vector.begin();
+	for(; ft_it != ft_vector.end(); ft_it++)
 	{
 		if (*ft_it != *stl_it)
 			return ("✘");
