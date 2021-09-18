@@ -27,12 +27,21 @@ public:
 	typedef typename iterator_traits<T>::pointer			pointer;
 	typedef bidirectional_iterator_tag						iterator_category;
 
-	explicit map_iterator(): _ptr(NULL);
-	explicit map_iterator(iterator_type)
+	explicit map_iterator(): _ptr(NULL) {}
 	~map_iterator() {}
 
 private:
 	pointer _ptr;
+};
+
+template<
+    class Key,
+    class T,
+    class Compare = std::less<Key>,
+    class Allocator = std::allocator<std::pair<const Key, T> >
+> class map {
+
+
 };
 
 }
