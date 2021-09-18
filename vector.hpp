@@ -12,6 +12,10 @@
 #include "utils.hpp"
 #include "enable_if.hpp"
 
+
+#include <stdio.h>
+#include <string.h>
+
 namespace ft
 {
 template <class T>
@@ -355,15 +359,17 @@ public:
 		return position;
 	};
 
+
 	iterator erase (iterator first, iterator last){
 		size_type distance = last - first;
-		for (size_t i = 0; first + i + distance != end(); i++)
-			*(first + i) = *(first + i + distance);
+		// for (size_t i = 0; first + i + distance != end(); i++)
+		// 	*(first + i) = *(first + i + distance);
+		memmove(&(*first), &(*last), end() - last);
 		_size -= distance;
 		return first;
 	};
 
-	void swap (vector& x) {
+	void swap (vector& x) { // cambiare a ft::swap
 		std::swap(_vector, x._vector);
 		std::swap(_size, x._size);
 		std::swap(_capacity, x._capacity);
