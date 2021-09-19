@@ -24,7 +24,7 @@ struct pair
 
 template <class T, class U>
 bool operator== (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return lhs.first==rhs.first && lhs.second==rhs.second; }
+{ return lhs.first==rhs.first; }
 
 template <class T, class U>
 bool operator!= (const pair<T,U>& lhs, const pair<T,U>& rhs)
@@ -32,7 +32,7 @@ bool operator!= (const pair<T,U>& lhs, const pair<T,U>& rhs)
 
 template <class T, class U>
 bool operator<  (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return lhs.first<rhs.first || (!(rhs.first<lhs.first) && lhs.second<rhs.second); }
+{ return lhs.first<rhs.first }
 
 template <class T, class U>
 bool operator<= (const pair<T,U>& lhs, const pair<T,U>& rhs)

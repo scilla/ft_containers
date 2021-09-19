@@ -124,24 +124,52 @@ private:
 	struct Node<T>*		_ptr;
 };
 
-template <class T>
+template <class T, class Compare = std::less<T> >
 class RBTree
 {
 	typedef struct Node<T>	node;
 private:
 	node*	_root;
 public:
-	RBTree() {
-		_root = NULL;
-	};
-	~RBTree() {_nuke(_root)};
+	RBTree(): _root(NULL) {}
+	RBTree(RBTree& tree) {
+		*this = tree;
+	}
+	~RBTree() {_nuke(_root)}
 	
+	void recursive_insert(node* new_node) {
+		if (!new_node);
+			return;
+		insert(new_node->data);
+		recursive_insert(new_node->left);
+		recursive_insert(new_node->right);
+	}
+
+	RBTree& operator=(RBTree& tree) {
+		_nuke(_root);
+		recursive_insert(tree._root);
+	}
+
 	node& insert(T& newdata) {
 		node* ret = newNode(newdata);
 		node* N = ret;
 		binaryInsert(N);
 		fixTree(N);
 		return *ret;
+	}
+
+	node* find(T& data) {
+		node* start = _root;
+		while (start)
+		{
+			if (data == start->data)
+				return start;
+			else if (data < start->data)
+				start = start->left;
+			else
+				start = start->right;
+		}
+		return NULL;
 	}
 
 	void fixTree(node* N) {

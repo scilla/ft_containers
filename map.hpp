@@ -13,7 +13,7 @@
 #include "enable_if.hpp"
 #include <stdio.h>
 #include "rbtree.hpp"
-
+#include "pair.hpp"
 
 namespace ft {
 
@@ -56,17 +56,35 @@ public:
 			_tree.insert(*first);
 		}
 	}
+	map(map& new_map) {
+		*this = new_map;
+	}
 	~map() {}
 
 	// cose
-	map& operator=( const map& other );
-	allocator_type get_allocator() const;
+	map& operator=( const map& other ) {
+		_tree = other._tree;
+		_comp = other._comp;
+		_alloc = other._alloc;
+		_size = other._size;
+		return *this;
+	}
+	allocator_type get_allocator() const { return _alloc; }
 
 	// access
-	T& at( const Key& key );
-	const T& at( const Key& key ) const;
+	T& at( const Key& key ) {
+		struct node<value_type> *res = _tree.find(key);
+		if (!res)
+			/* exception */ ;
+		return res->data->second;
+	}
+	const T& at( const Key& key ) const {
+		struct node<value_type> *res = _tree.find(key);
+		if (!res)
+			/* exception */ ;
+		return res->data->second;
+	}
 	T& operator[]( const Key& key );
-	T& operator[]( Key&& key );
 
 	// iterators
 	iterator begin();
