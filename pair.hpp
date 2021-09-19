@@ -22,6 +22,12 @@ struct pair
 	}
 }; // pair
 
+template< class T1, class T2 >
+pair<T1,T2> make_pair( T1 t, T2 u ) {
+	struct new_pair = new struct pair (t, u);
+	return(new_pair);
+}
+
 template <class T, class U>
 bool operator== (const pair<T,U>& lhs, const pair<T,U>& rhs)
 { return lhs.first==rhs.first; }

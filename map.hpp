@@ -78,18 +78,38 @@ public:
 			/* exception */ ;
 		return res->data->second;
 	}
+
 	const T& at( const Key& key ) const {
 		struct node<value_type> *res = _tree.find(key);
 		if (!res)
 			/* exception */ ;
 		return res->data->second;
 	}
-	T& operator[]( const Key& key );
+
+	T& operator[]( const Key& key ) {
+		struct node<value_type> *res = _tree.find(key);
+		if (!res)
+			return insert(std::make_pair(key, T())).first->second;
+		return res->data->second;
+	};
 
 	// iterators
-	iterator begin();
-	const_iterator begin() const;
-	iterator end();
+	iterator begin() {  //da controllare
+		struct node* pt = _tree._root;
+		if(!_tree._root)
+			return end();
+		while (pt)
+			pt--;
+		return pt;
+	};
+
+	const_iterator begin() const {
+		return(begin());
+	};
+
+	iterator end() {
+
+	};
 	const_iterator end() const;
 	reverse_iterator rbegin();
 	const_reverse_iterator rbegin() const;
