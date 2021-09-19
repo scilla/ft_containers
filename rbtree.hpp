@@ -38,16 +38,16 @@ struct Node {
 };
 
 template <class T>
-class rbtree
+class RBTree
 {
 	typedef struct Node<T>	node;
 private:
 	node*	_root;
 public:
-	rbtree() {
+	RBTree() {
 		_root = NULL;
 	};
-	~rbtree() {};
+	~RBTree() {};
 	
 	node& insert(T& newdata) {
 		node* ret = newNode(newdata);
