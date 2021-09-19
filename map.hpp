@@ -118,8 +118,7 @@ public:
 	};
 
 	// (con|de)structor
-	map(): {}
-	explicit map(const Compare& comp, const Allocator& alloc = Allocator());
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator());
 	template< class InputIt >
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator());
 	~map() {};
