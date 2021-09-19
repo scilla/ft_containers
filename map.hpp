@@ -9,6 +9,7 @@
 #include <utility>
 #include <vector>
 #include <iterator>
+#include <exception>
 #include "utils.hpp"
 #include "enable_if.hpp"
 #include <stdio.h>
@@ -71,17 +72,23 @@ public:
 	}
 	allocator_type get_allocator() const { return _alloc; }
 
+	class outOfBoundException: public std::exception
+	{
+	public:
+		virtual const char* what() const throw();
+	};
+	
 	// access
 	T& at( const Key& key ) {
 		struct node<value_type> *res = _tree.find(key);
 		if (!res)
-			/* exception */ ;
+			throw outOfBoundException;
 		return res->data->second;
 	}
 	const T& at( const Key& key ) const {
 		struct node<value_type> *res = _tree.find(key);
 		if (!res)
-			/* exception */ ;
+			throw outOfBoundException;
 		return res->data->second;
 	}
 	T& operator[]( const Key& key );
@@ -97,12 +104,12 @@ public:
 	const_reverse_iterator rend() const;
 
 	// capacity
-	bool empty() const;
-	size_type size() const;
-	size_type max_size() const;
+	bool empty() const { return !_size; }
+	size_type size() const { return _size; } ;
+	size_type max_size() const { return _alloc.max_size(); } 
 
 	// modifiers
-	void clear();
+	void clear() { _size = 0; _tree._nuke(_tree._root)}
 	std::pair<iterator, bool> insert( const value_type& value );
 	iterator insert( iterator hint, const value_type& value );
 	template< class InputIt >

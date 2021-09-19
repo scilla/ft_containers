@@ -16,7 +16,7 @@ struct Node {
 	struct Node* 	right;
 	struct Node*	parent;
 	enum COLOR		color;
-	T*				data;
+	T				data;
 
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }
@@ -150,7 +150,7 @@ public:
 		recursive_insert(tree._root);
 	}
 
-	node& insert(T& newdata) {
+	node& insert(T newdata) {
 		node* ret = newNode(newdata);
 		node* N = ret;
 		binaryInsert(N);
@@ -297,10 +297,10 @@ public:
 		N->parent = parent;
 	}
 
-	node* newNode(T& newdata) {
+	node* newNode(T newdata) {
 		node* newNode = new node;
 		newNode->color = RED;
-		newNode->data = &newdata;
+		newNode->data = newdata;
 		return newNode;
 	}
 
