@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include "enable_if.hpp"
 #include <stdio.h>
+#include <string.h>
 
 namespace ft
 {
