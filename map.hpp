@@ -17,75 +17,6 @@
 
 namespace ft {
 
-template <class T>
-class map_iterator
-{
-public:
-	typedef T												iterator_type;
-	typedef typename iterator_traits<T>::difference_type	difference_type;
-	typedef typename iterator_traits<T>::value_type			value_type;
-	typedef typename iterator_traits<T>::reference			reference;
-	typedef typename iterator_traits<T>::pointer			pointer;
-	typedef bidirectional_iterator_tag						iterator_category;
-
-	explicit map_iterator(): _ptr(NULL) {}
-	explicit map_iterator(iterator_type ptr): _ptr(ptr) {}
-	template<class U>
-	map_iterator(const map_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
-	~map_iterator() {}
-	reference operator*() const { return *_ptr; }
-	pointer operator->() const { return _ptr; }
-
-	vector_iterator& operator++() {
-		++_ptr;
-		return *this;
-	}
-	vector_iterator operator++(int) {
-		vector_iterator tmp = *this;
-		++_ptr;
-		return *this;
-	}
-	vector_iterator& operator--() {
-		--_ptr;
-		return *this;
-	}
-	vector_iterator operator--(int) {
-		vector_iterator tmp = *this;
-		--_ptr;
-		return *this;
-	}
-
-	vector_iterator operator-(difference_type n) const {
-		return vector_iterator(_ptr - n);
-	}
-	vector_iterator operator-=(difference_type n) {
-		_ptr -= n;
-		return _ptr;
-	}
-	vector_iterator operator+(difference_type n) const {
-		return vector_iterator(_ptr + n);
-	}
-	vector_iterator operator+=(difference_type n) {
-		_ptr += n;
-		return _ptr;
-	}
-
-	reference operator[](size_t i) {
-		return (*(_ptr + i));
-	}
-
-	template <class K>
-	vector_iterator&	operator=(const vector_iterator<K> & other) {
-		_ptr = other.base();
-		return *this;
-	}
-
-	pointer		base() const { return _ptr; }
-private:
-	pointer		_ptr;
-};
-
-
 template< class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
 class map {
 public:
@@ -100,8 +31,8 @@ public:
 	typedef const reference						const_reference;
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
-	typedef map_iterator<value_type>			iterator;
-	typedef const map_iterator<const value_type> const_iterator;
+	typedef rbt_iterator<value_type>			iterator;
+	typedef const rbt_iterator<const value_type> const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	
@@ -118,10 +49,14 @@ public:
 	};
 
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator());
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _alloc(alloc), _comp(comp) {}
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator());
-	~map() {};
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _alloc(alloc), _comp(comp) {
+		for (; first != last; first++) {
+			_tree.insert(*first);
+		}
+	}
+	~map() {}
 
 	// cose
 	map& operator=( const map& other );

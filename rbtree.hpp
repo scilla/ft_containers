@@ -38,6 +38,93 @@ struct Node {
 };
 
 template <class T>
+class rbt_iterator
+{
+public:
+	typedef T												iterator_type;
+	typedef typename iterator_traits<T>::difference_type	difference_type;
+	typedef typename iterator_traits<T>::value_type			value_type;
+	typedef typename iterator_traits<T>::reference			reference;
+	typedef typename iterator_traits<T>::pointer			pointer;
+	typedef bidirectional_iterator_tag						iterator_category;
+
+	explicit rbt_iterator(): _ptr(NULL) {}
+	explicit rbt_iterator(struct Node<T>& ptr): _ptr(ptr) {}
+	//template<class U>
+	//rbt_iterator(const rbt_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
+	~rbt_iterator() {}
+	reference operator*() const { return *_ptr->data; }
+	pointer operator->() const { return _ptr->data; }
+
+	rbt_iterator& operator++() {
+		if(_ptr->right)
+		{
+			_ptr = _ptr->right;
+			while(_ptr->left)
+				_ptr = _ptr->left;
+			return *this;
+		}
+		else
+		{
+			while(_ptr->parent)
+			{
+				if(*_ptr->parent > *_ptr)
+				{
+					_ptr = _ptr->parent;
+					return(_ptr->parent);
+				}
+				_ptr = _ptr->parent;
+			}
+			//exception
+			return(NULL);
+		}
+	}
+	rbt_iterator operator++(int) {
+		rbt_iterator tmp = *this;
+		++_ptr;
+		return *this;
+	}
+	rbt_iterator& operator--() {
+		if(_ptr->left)
+		{
+			_ptr = _ptr->left;
+			while(_ptr->right)
+				_ptr = _ptr->right;
+			return *this;
+		}
+		else
+		{
+			while(_ptr->parent)
+			{
+				if(*_ptr->parent < *_ptr)
+				{
+					_ptr = _ptr->parent;
+					return(_ptr->parent);
+				}
+				_ptr = _ptr->parent;
+			}
+			//exception
+			return(NULL);
+		}
+	}
+	rbt_iterator operator--(int) {
+		rbt_iterator tmp = *this;
+		--_ptr;
+		return *this;
+	}
+
+	template <class K>
+	rbt_iterator&	operator=(const rbt_iterator<K> & other) {
+		_ptr = other.base();
+		return *this;
+	}
+
+	pointer		base() const { return _ptr; }
+private:
+	struct Node<T>*		_ptr;
+};
+
+template <class T>
 class RBTree
 {
 	typedef struct Node<T>	node;
@@ -47,7 +134,7 @@ public:
 	RBTree() {
 		_root = NULL;
 	};
-	~RBTree() {};
+	~RBTree() {_nuke(_root)};
 	
 	node& insert(T& newdata) {
 		node* ret = newNode(newdata);
@@ -216,6 +303,14 @@ public:
 
 	node* rotateLeft(node* P) { return rotateDir(P, false); }
 	node* rotateRight(node* P) { return rotateDir(P, true); }
+
+	void _nuke(node* n) {
+		if (!n)
+			return;
+		_nuke(n->left);
+		_nuke(n->right);
+		delete n;
+	}
 };
 
 
