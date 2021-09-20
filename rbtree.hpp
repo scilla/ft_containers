@@ -180,9 +180,11 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return const_rbt_iterator(*_ptr);
-				if(*_ptr->parent > *_ptr)
-					return const_rbt_iterator(*_ptr->parent);
+					return (*this);
+				if(*_ptr->parent > *_ptr) {
+					_ptr = _ptr->parent;
+					return (*this);
+				}
 				_ptr = _ptr->parent;
 			}
 			//exception
@@ -208,9 +210,11 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return const_rbt_iterator(*_ptr);
-				if(*_ptr->parent < *_ptr)
-					return const_rbt_iterator(*_ptr->parent);
+					return (*this);
+				if(*_ptr->parent < *_ptr) {
+					_ptr = _ptr->parent;
+					return (*this);
+				}
 				_ptr = _ptr->parent;
 			}
 			//exception
