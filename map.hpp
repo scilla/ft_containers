@@ -27,6 +27,7 @@ public:
 	typedef size_t								size_type;
 	typedef ptrdiff_t							difference_type;
 	typedef Compare								key_compare;
+	typedef key_compare							value_compare;
 	typedef Allocator							allocator_type;
 	typedef value_type&							reference;
 	typedef const value_type&					const_reference;
@@ -167,25 +168,82 @@ public:
 		add_bounds();
 		return interator(nd);
 	}
+
 	template< class InputIt >
-	void insert( InputIt first, InputIt last );
-	void erase( iterator pos );
-	void swap( map& other );
+	void insert( InputIt first, InputIt last ) {
+		remove_bounds();
+		for (; first != last; first++)
+			insert(*first);
+		add_bounds();
+	}
+
+	void erase( iterator pos ) {
+		remove_bounds();
+		_tree.deleteNode(*pos);
+		add_bounds();
+	}
+
+	void swap( map& other ) {
+		std::swap(_tree, other._tree);
+		std::swap(_start, other._start);
+		std::swap(_end, other._end);
+		std::swap(_start_ptr, other._start_ptr);
+		std::swap(_end_ptr, other._end_ptr);
+		std::swap(_comp, other._comp);
+		std::swap(_alloc, other._alloc);
+		std::swap(_size, other._size);
+	}
 
 	// lookup
-	size_type count( const Key& key ) const;
-	iterator find( const Key& key );
-	const_iterator find( const Key& key ) const;
-	std::pair<iterator,iterator> equal_range( const Key& key );
-	std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
-	iterator lower_bound( const Key& key );
-	const_iterator lower_bound( const Key& key ) const;
-	iterator upper_bound( const Key& key );
-	const_iterator upper_bound( const Key& key ) const;
+	size_type count( const Key& key ) const {
+		size_type s = 0;
+		for (iterator it = begin(); it != end(); it++)
+			if ((*it).first == key)
+				s++;
+		return s;
+	}
+	iterator find( const Key& key ) {
+		return iterator(_tree.find(key));
+	}
+	const_iterator find( const Key& key ) const {
+		return const_iterator(_tree.find(key));
+	}
+	std::pair<iterator,iterator> equal_range( const Key& key ) {
+		return make_pair(lower_bound(), upper_bound());
+	}
+	std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
+		return make_pair(lower_bound(), upper_bound());
+	}
+	iterator lower_bound( const Key& key ) {
+		iterator beg = end();
+		beg--;
+		while (*beg > key)
+			beg--;
+		return beg;
+	}
+	const_iterator lower_bound( const Key& key ) const {
+		iterator beg = end();
+		beg--;
+		while (*beg > key)
+			beg--;
+		return beg;
+	}
+	iterator upper_bound( const Key& key ) {
+		iterator beg = begin();
+		while (*beg <= key)
+			beg++;
+		return beg;
+	}
+	const_iterator upper_bound( const Key& key ) const {
+		iterator beg = begin();
+		while (*beg <= key)
+			beg++;
+		return beg;
+	}
 
 	// observer
-	key_compare key_comp() const;
-	map::value_compare value_comp() const;
+	key_compare key_comp() const { return _comp; } // ??
+	map::value_compare value_comp() const { return _comp; } // ??
 private:
 	void add_bounds() {
 		node_type* ptr;
