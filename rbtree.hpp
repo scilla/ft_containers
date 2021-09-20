@@ -180,9 +180,9 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return _ptr;
+					return const_rbt_iterator(*_ptr);
 				if(*_ptr->parent > *_ptr)
-					return(_ptr->parent);
+					return const_rbt_iterator(*_ptr->parent);
 				_ptr = _ptr->parent;
 			}
 			//exception
@@ -208,9 +208,9 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return _ptr;
+					return const_rbt_iterator(*_ptr);
 				if(*_ptr->parent < *_ptr)
-					return(_ptr->parent);
+					return const_rbt_iterator(*_ptr->parent);
 				_ptr = _ptr->parent;
 			}
 			//exception
@@ -238,7 +238,7 @@ public:
 	bool operator==(const const_rbt_iterator &other) { return _ptr == other._ptr; }
 	bool operator!=(const const_rbt_iterator &other) { return _ptr != other._ptr; }
 private:
-	struct Node<T>*		_ptr;
+	const struct Node<T>*		_ptr;
 };
 
 template <class T, class Compare = std::less<T> >
