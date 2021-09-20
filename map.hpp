@@ -151,20 +151,21 @@ public:
 		remove_bounds();
 		node_type* nd = _tree.find(value.first);
 		if (nd)
-			return make_pair(interator(nd), false));
+			return make_pair(interator(nd), false);
 		nd = _tree.insert(value);
 		add_bounds();
-		return make_pair(interator(nb), true);
+		return make_pair(interator(nd), true);
 	}
 
 	iterator insert( iterator hint, const value_type& value ) {
 		remove_bounds();
+		(void)hint;
 		node_type* nd = _tree.find(value.first);
 		if (nd)
-			return interator(exists);
+			return interator(nd);
 		nd = _tree.insert(value);
 		add_bounds();
-		return interator(nb);
+		return interator(nd);
 	}
 	template< class InputIt >
 	void insert( InputIt first, InputIt last );
