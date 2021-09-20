@@ -5,7 +5,8 @@
 
 enum COLOR {
 	RED,
-	BLACK
+	BLACK,
+	FLUO
 };
 
 namespace ft
@@ -38,23 +39,28 @@ struct Node {
 };
 
 template <class T>
-class rbt_iterator
+class rbt_iterator: ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
 	typedef T												iterator_type;
-	typedef typename iterator_traits<T>::difference_type	difference_type;
-	typedef typename iterator_traits<T>::value_type			value_type;
-	typedef typename iterator_traits<T>::reference			reference;
-	typedef typename iterator_traits<T>::pointer			pointer;
+	typedef T*												iterator_value;
+	typedef T&												reference;
+	typedef T*												pointer;
 	typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
-	explicit rbt_iterator(struct Node<T>& ptr): _ptr(ptr) {}
-	//template<class U>
-	//rbt_iterator(const rbt_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
+	explicit rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
+	template<class U>
+	rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~rbt_iterator() {}
 	reference operator*() const { return *_ptr->data; }
 	pointer operator->() const { return _ptr->data; }
+
+	class outOfBoundException: public std::exception
+	{
+	public:
+		virtual const char* what() const throw();
+	};
 
 	rbt_iterator& operator++() {
 		if(_ptr->right)
@@ -68,20 +74,18 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if(*_ptr->parent > *_ptr)
-				{
-					_ptr = _ptr->parent;
+				if(_ptr->color == FLUO || *_ptr->parent > *_ptr)
 					return(_ptr->parent);
-				}
 				_ptr = _ptr->parent;
 			}
 			//exception
-			return(NULL);
+			// return(NULL);
+			throw outOfBoundException();
 		}
 	}
 	rbt_iterator operator++(int) {
 		rbt_iterator tmp = *this;
-		++_ptr;
+		++*this;
 		return *this;
 	}
 	rbt_iterator& operator--() {
@@ -96,20 +100,18 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if(*_ptr->parent < *_ptr)
-				{
-					_ptr = _ptr->parent;
+				if(_ptr->color == FLUO || *_ptr->parent < *_ptr)
 					return(_ptr->parent);
-				}
 				_ptr = _ptr->parent;
 			}
 			//exception
-			return(NULL);
+			//return(NULL);
+			throw outOfBoundException();
 		}
 	}
 	rbt_iterator operator--(int) {
 		rbt_iterator tmp = *this;
-		--_ptr;
+		--*this;
 		return *this;
 	}
 
@@ -135,10 +137,10 @@ public:
 	RBTree(RBTree& tree) {
 		*this = tree;
 	}
-	~RBTree() {_nuke(_root)}
+	~RBTree() {_nuke(_root);}
 	
 	void recursive_insert(node* new_node) {
-		if (!new_node);
+		if (!new_node)
 			return;
 		insert(new_node->data);
 		recursive_insert(new_node->left);

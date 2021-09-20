@@ -3,8 +3,7 @@ SRCS =	tester/main.cpp \
 		tester/utils.cpp \
 		tester/tester_vector.cpp \
 		tester/tester_stack.cpp \
-		#tester/tester_map.cpp \
-		# tester/tester_map.cpp
+		tester/tester_map.cpp
 
 SRCS_SET = \
 		tester/tester_set.cpp \
@@ -21,7 +20,7 @@ OBJS_SET = $(SRCS_SET:.cpp=.o)
 
 CPP = clang++
 
-FLAGS = -g -Wall -Wextra -Werror -std=c++98 
+FLAGS = -g -Wall -Wextra -Werror -std=c++98 -ferror-limit=2
 
 NAME = ft_containers_tests
 
