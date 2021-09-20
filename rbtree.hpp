@@ -74,7 +74,9 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if(_ptr->color == FLUO || *_ptr->parent > *_ptr)
+				if (_ptr->color == FLUO)
+					return _ptr;
+				if(*_ptr->parent > *_ptr)
 					return(_ptr->parent);
 				_ptr = _ptr->parent;
 			}
@@ -100,7 +102,9 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if(_ptr->color == FLUO || *_ptr->parent < *_ptr)
+				if (_ptr->color == FLUO)
+					return _ptr;
+				if(*_ptr->parent < *_ptr)
 					return(_ptr->parent);
 				_ptr = _ptr->parent;
 			}

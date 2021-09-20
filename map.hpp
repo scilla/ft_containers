@@ -137,7 +137,7 @@ public:
 
 	// capacity
 	bool empty() const { return !_size; }
-	size_type size() const { return _size; } ;
+	size_type size() const { return _size; }
 	size_type max_size() const { return _alloc.max_size(); } 
 
 	// modifiers
@@ -146,8 +146,26 @@ public:
 		_size = 0;
 		_tree._nuke(_tree._root);
 	}
-	std::pair<iterator, bool> insert( const value_type& value );
-	iterator insert( iterator hint, const value_type& value );
+
+	ft::pair<iterator, bool> insert( const value_type& value ) {
+		remove_bounds();
+		node_type* nd = _tree.find(value.first);
+		if (nd)
+			return make_pair(interator(nd), false));
+		nd = _tree.insert(value);
+		add_bounds();
+		return make_pair(interator(nb), true);
+	}
+
+	iterator insert( iterator hint, const value_type& value ) {
+		remove_bounds();
+		node_type* nd = _tree.find(value.first);
+		if (nd)
+			return interator(exists);
+		nd = _tree.insert(value);
+		add_bounds();
+		return interator(nb);
+	}
 	template< class InputIt >
 	void insert( InputIt first, InputIt last );
 	void erase( iterator pos );
@@ -177,7 +195,7 @@ private:
 			ptr = ptr->left;
 		ptr->left = &_start;
 		_start.parent = ptr;
-		_start_ptr = &ptr->left;		
+		_start_ptr = &ptr->left;
 		ptr = _tree._root;
 		while (ptr->right)
 			ptr = ptr->right;
