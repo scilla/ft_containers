@@ -21,21 +21,22 @@ namespace ft {
 template< class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
 class map {
 public:
-	typedef typename Key						key_type;
-	typedef typename T							mapped_key;
+	typedef Key									key_type;
+	typedef T									mapped_key;
 	typedef typename ft::pair<const Key, T>		value_type;
 	typedef size_t								size_type;
 	typedef ptrdiff_t							difference_type;
 	typedef Compare								key_compare;
 	typedef Allocator							allocator_type;
 	typedef value_type&							reference;
-	typedef const reference						const_reference;
+	typedef const value_type&					const_reference;
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
 	typedef rbt_iterator<value_type>			iterator;
 	typedef const rbt_iterator<const value_type> const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
+	typedef Node<T>								node_type;
 	
 	class value_compare: public std::binary_function<value_type, value_type, bool>
 	{
@@ -55,19 +56,26 @@ public:
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _alloc(alloc), _comp(comp) {
 		for (; first != last; first++) {
 			_tree.insert(*first);
+			_size++;
 		}
+		add_bounds();
 	}
+
 	map(map& new_map) {
 		*this = new_map;
+		add_bounds();
 	}
+
 	~map() {}
 
 	// cose
 	map& operator=( const map& other ) {
+		remove_bounds();
 		_tree = other._tree;
 		_comp = other._comp;
 		_alloc = other._alloc;
 		_size = other._size;
+		add_bounds();
 		return *this;
 	}
 	allocator_type get_allocator() const { return _alloc; }
@@ -80,58 +88,84 @@ public:
 	
 	// access
 	T& at( const Key& key ) {
-		struct node<value_type> *res = _tree.find(key);
+		node_type *res = _tree.find(key);
 		if (!res)
-			throw outOfBoundException;
+			throw outOfBoundException();
 		return res->data->second;
 	}
 
 	const T& at( const Key& key ) const {
-		struct node<value_type> *res = _tree.find(key);
+		node_type *res = _tree.find(key);
 		if (!res)
-			throw outOfBoundException;
+			throw outOfBoundException();
 		return res->data->second;
 	}
 
 	T& operator[]( const Key& key ) {
-		struct node<value_type> *res = _tree.find(key);
+		node_type *res = _tree.find(key);
 		if (!res)
 			return insert(std::make_pair(key, T())).first->second;
 		return res->data->second;
 	};
 
 	// iterators
+
 	iterator begin() {  //da controllare
-		struct node* pt = _tree._root;
+		node_type* pt = _tree._root;
 		if(!_tree._root)
 			return end();
-		while (pt)
+		while (pt->color != FLUO)
 			pt--;
-		return pt;
+		return iterator(pt);
 	};
 
 	const_iterator begin() const {
-		return(begin());
+		node_type* pt = _tree._root;
+		if(!_tree._root)
+			return end();
+		while (pt->color != FLUO)
+			pt--;
+		return const_iterator(pt);
 	};
 
-	iterator end() {
-
-	};
-	const_iterator end() const;
-	reverse_iterator rbegin();
-	const_reverse_iterator rbegin() const;
-	reverse_iterator rend();
-	const_reverse_iterator rend() const;
+	iterator end() { return iterator(_end);	};
+	const_iterator end() const { return const_iterator(_end); }
+	reverse_iterator rbegin() { return reverse_iterator(end()); }
+	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	reverse_iterator rend() { return reverse_iterator(begin()); }
+	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
-	size_type size() const { return _size; } ;
+	size_type size() const { return _size; }
 	size_type max_size() const { return _alloc.max_size(); } 
 
 	// modifiers
-	void clear() { _size = 0; _tree._nuke(_tree._root)}
-	std::pair<iterator, bool> insert( const value_type& value );
-	iterator insert( iterator hint, const value_type& value );
+	void clear() {
+		remove_bounds();
+		_size = 0;
+		_tree._nuke(_tree._root);
+	}
+
+	ft::pair<iterator, bool> insert( const value_type& value ) {
+		remove_bounds();
+		node_type* nd = _tree.find(value.first);
+		if (nd)
+			return make_pair(interator(nd), false));
+		nd = _tree.insert(value);
+		add_bounds();
+		return make_pair(interator(nb), true);
+	}
+
+	iterator insert( iterator hint, const value_type& value ) {
+		remove_bounds();
+		node_type* nd = _tree.find(value.first);
+		if (nd)
+			return interator(exists);
+		nd = _tree.insert(value);
+		add_bounds();
+		return interator(nb);
+	}
 	template< class InputIt >
 	void insert( InputIt first, InputIt last );
 	void erase( iterator pos );
@@ -152,7 +186,38 @@ public:
 	key_compare key_comp() const;
 	map::value_compare value_comp() const;
 private:
+	void add_bounds() {
+		node_type* ptr;
+		if (!_tree._root)
+			return;
+		ptr = _tree._root;
+		while (ptr->left)
+			ptr = ptr->left;
+		ptr->left = &_start;
+		_start.parent = ptr;
+		_start_ptr = &ptr->left;
+		ptr = _tree._root;
+		while (ptr->right)
+			ptr = ptr->right;
+		ptr->right = &_end;
+		_end.parent = ptr;
+		_end_ptr = &ptr->right;		
+	}
+
+	void remove_bounds() {
+		if (!_tree._root)
+			return;
+		*_start_ptr = NULL;
+		*_end_ptr = NULL;
+		_start.parent = NULL;
+		_end.parent = NULL;
+	}
+
 	RBTree<value_type>		_tree;
+	node_type				_start;
+	node_type				_end;
+	node_type**				_start_ptr;
+	node_type**				_end_ptr;
 	key_compare				_comp;
 	allocator_type			_alloc;
 	size_type				_size;
