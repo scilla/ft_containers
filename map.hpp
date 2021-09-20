@@ -27,7 +27,6 @@ public:
 	typedef size_t								size_type;
 	typedef ptrdiff_t							difference_type;
 	typedef Compare								key_compare;
-	typedef key_compare							value_compare;
 	typedef Allocator							allocator_type;
 	typedef value_type&							reference;
 	typedef const value_type&					const_reference;
@@ -209,10 +208,10 @@ public:
 		return const_iterator(_tree.find(key));
 	}
 	std::pair<iterator,iterator> equal_range( const Key& key ) {
-		return make_pair(lower_bound(), upper_bound());
+		return make_pair(lower_bound(key), upper_bound(key));
 	}
 	std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
-		return make_pair(lower_bound(), upper_bound());
+		return make_pair(lower_bound(key), upper_bound(key));
 	}
 	iterator lower_bound( const Key& key ) {
 		iterator beg = end();
