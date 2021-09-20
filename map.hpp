@@ -36,7 +36,7 @@ public:
 	typedef const_rbt_iterator<value_type> 		const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
-	typedef Node<T>								node_type;
+	typedef Node<value_type>					node_type;
 	
 	class value_compare: public std::binary_function<value_type, value_type, bool>
 	{
@@ -51,9 +51,9 @@ public:
 	};
 
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _alloc(alloc), _comp(comp) {}
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc) {}
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _alloc(alloc), _comp(comp) {
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc) {
 		for (; first != last; first++) {
 			_tree.insert(*first);
 			_size++;
@@ -116,7 +116,7 @@ public:
 			return end();
 		while (pt->color != FLUO)
 			pt--;
-		return iterator(pt);
+		return iterator(*pt);
 	};
 
 	const_iterator begin() const {
@@ -125,7 +125,7 @@ public:
 			return end();
 		while (pt->color != FLUO)
 			pt--;
-		return const_iterator(pt);
+		return const_iterator(*pt);
 	};
 
 	iterator end() { return iterator(_end);	};
@@ -180,6 +180,20 @@ public:
 		remove_bounds();
 		_tree.deleteNode(*pos);
 		add_bounds();
+	}
+
+	size_type erase (const key_type& k) {
+		iterator found = find(k);
+		if (found) {
+			_tree.deleteNode(found);
+			return 1;
+		}
+		return 0;
+	}
+
+	void erase (iterator first, iterator last) {
+		for (; first != last; first++)
+			erase(*first);
 	}
 
 	void swap( map& other ) {

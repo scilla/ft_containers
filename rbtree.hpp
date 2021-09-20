@@ -52,6 +52,8 @@ public:
 	explicit rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
 	template<class U>
 	rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	// template<class U>
+	// rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~rbt_iterator() {}
 	reference operator*() const { return *_ptr->data; }
 	pointer operator->() const { return _ptr->data; }
@@ -125,7 +127,13 @@ public:
 		return *this;
 	}
 
-	pointer		base() const { return _ptr; }
+	// pointer		base() const { return _ptr; }
+
+	iterator_type base() { return _ptr; }
+	const iterator_type base() const { return _ptr; }
+
+	bool operator==(const rbt_iterator &other) { return _ptr == other._ptr; }
+	bool operator!=(const rbt_iterator &other) { return _ptr != other._ptr; }
 private:
 	struct Node<T>*		_ptr;
 };
@@ -145,6 +153,8 @@ public:
 	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
 	template<class U>
 	const_rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	template<class U>
+	const_rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~const_rbt_iterator() {}
 	reference operator*() const { return *_ptr->data; }
 	pointer operator->() const { return _ptr->data; }
@@ -218,7 +228,13 @@ public:
 		return *this;
 	}
 
-	pointer		base() const { return _ptr; }
+	// pointer		base() const { return _ptr; }
+
+	iterator_type base() { return _ptr; }
+	const iterator_type base() const { return _ptr; }
+
+	bool operator==(const const_rbt_iterator &other) { return _ptr == other._ptr; }
+	bool operator!=(const const_rbt_iterator &other) { return _ptr != other._ptr; }
 private:
 	struct Node<T>*		_ptr;
 };
@@ -228,14 +244,13 @@ class RBTree
 {
 	typedef struct Node<T>	node;
 private:
-	node*	_root;
 public:
+	node*	_root;
 	RBTree(): _root(NULL) {}
 	RBTree(RBTree& tree) {
 		*this = tree;
 	}
 	~RBTree() {_nuke(_root);}
-	
 	void recursive_insert(node* new_node) {
 		if (!new_node)
 			return;
