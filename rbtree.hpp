@@ -147,7 +147,9 @@ public:
 	typedef T												iterator_type;
 	typedef T*												iterator_value;
 	typedef T&												reference;
+	typedef const T&										const_reference;
 	typedef T*												pointer;
+	typedef const T*										const_pointer;
 	typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit const_rbt_iterator(): _ptr(NULL) {}
@@ -158,8 +160,8 @@ public:
 	template<class U>
 	const_rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~const_rbt_iterator() {}
-	reference operator*() const { return *_ptr->data; }
-	pointer operator->() const { return _ptr->data; }
+	const_reference operator*() const { return *_ptr->data; }
+	const_pointer operator->() const { return _ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{
@@ -181,7 +183,7 @@ public:
 			{
 				if (_ptr->color == FLUO)
 					return (*this);
-				if(*_ptr->parent > *_ptr) {
+				if(_ptr->parent->data > _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -195,7 +197,7 @@ public:
 	const_rbt_iterator operator++(int) {
 		const_rbt_iterator tmp = *this;
 		++*this;
-		return *this;
+		return tmp;
 	}
 	const_rbt_iterator& operator--() {
 		if(_ptr->left)
@@ -225,7 +227,7 @@ public:
 	const_rbt_iterator operator--(int) {
 		const_rbt_iterator tmp = *this;
 		--*this;
-		return *this;
+		return tmp;
 	}
 
 	template <class K>
@@ -278,7 +280,7 @@ public:
 		return *ret;
 	}
 
-	node* find(T& data) {
+	node* find(const T& data) {
 		node* start = _root;
 		while (start)
 		{

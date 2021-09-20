@@ -149,7 +149,7 @@ public:
 
 	ft::pair<iterator, bool> insert( const value_type& value ) {
 		remove_bounds();
-		node_type* nd = _tree.find(value.first);
+		node_type* nd = _tree.find(value);
 		if (nd)
 			return make_pair(interator(nd), false);
 		nd = _tree.insert(value);
