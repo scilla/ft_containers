@@ -23,7 +23,7 @@ class map {
 public:
 	typedef Key									key_type;
 	typedef T									mapped_key;
-	typedef typename ft::pair<const Key, T>		value_type;
+	typedef typename ft::pair<Key, T>			value_type;
 	typedef size_t								size_type;
 	typedef ptrdiff_t							difference_type;
 	typedef Compare								key_compare;

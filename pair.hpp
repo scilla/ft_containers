@@ -10,6 +10,7 @@ struct pair
 	U second;
 
 	pair() : first(), second() {};
+	pair (T& a, U& b) : first(a), second(b) {};
 	pair (const T& a, const U& b) : first(a), second(b) {};
 
 	template<class V, class Z>
@@ -22,10 +23,9 @@ struct pair
 	}
 }; // pair
 
-template< class T1, class T2 >
-pair<T1,T2> make_pair( T1 t, T2 u ) {
-	pair<T1,T2>* new_pair = new struct pair<T1,T2>(t, u);
-	return (*new_pair);
+template <class T1,class T2>
+	pair<T1,T2> make_pair (T1 x, T2 y) {
+		return ( pair<T1,T2>(x,y) );
 }
 
 template <class T, class U>

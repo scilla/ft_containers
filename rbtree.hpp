@@ -56,8 +56,8 @@ public:
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~rbt_iterator() {}
-	reference operator*() const { return *_ptr->data; }
-	pointer operator->() const { return _ptr->data; }
+	reference operator*() const { return _ptr->data; }
+	pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{
@@ -267,9 +267,10 @@ public:
 		recursive_insert(new_node->right);
 	}
 
-	RBTree& operator=(RBTree& tree) {
+	RBTree& operator=(const RBTree& tree) {
 		_nuke(_root);
 		recursive_insert(tree._root);
+		return *this;
 	}
 
 	node& insert(T newdata) {
@@ -306,7 +307,7 @@ public:
 				fixTree(N->grandparent());
 			}
 			else { 													// case 4
-				if (N->isRight() && N->parent()->isLeft()) {
+				if (N->isRight() && N->parent->isLeft()) {
 					rotateLeft(N->parent);
 					N = N->left;
 				} else if (N->isLeft() && N->parent->isRight()) {
@@ -427,17 +428,17 @@ public:
 	}
 
 	node* rotateDir(node* P, bool right) {
-		node* G = this->parent;
-		node* S = right ? this->left : this->right;
+		node* G = P->parent;
+		node* S = right ? P->left : P->right;
 		node* C;
 		if (!S)
-			return this;
-		C = right ? this->right: this->left;
-		this->left = right ? C : this;
-		S->right = right ? this : C;
+			return P;
+		C = right ? P->right: P->left;
+		P->left = right ? C : P;
+		S->right = right ? P : C;
 		if (C)
-			C->parent = this;
-		this->parent = S;
+			C->parent = P;
+		P->parent = S;
 		S->parent = G;
 		if (G)
 		{
