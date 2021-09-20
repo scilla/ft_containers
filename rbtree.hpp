@@ -50,8 +50,9 @@ public:
 
 	explicit rbt_iterator(): _ptr(NULL) {}
 	explicit rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
+	//explicit rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
 	template<class U>
-	rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	rbt_iterator(rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~rbt_iterator() {}
@@ -151,6 +152,7 @@ public:
 
 	explicit const_rbt_iterator(): _ptr(NULL) {}
 	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
+	explicit const_rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
 	template<class U>
 	const_rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	template<class U>

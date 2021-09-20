@@ -128,8 +128,8 @@ public:
 		return const_iterator(*pt);
 	};
 
-	iterator end() { return iterator(_end);	};
-	const_iterator end() const { return const_iterator(_end); }
+	iterator end() { return iterator(_end); };
+	const_iterator end() const { return iterator(_end); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
 	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 	reverse_iterator rend() { return reverse_iterator(begin()); }
