@@ -39,7 +39,7 @@ struct Node {
 };
 
 template <class T>
-class rbt_iterator: ft::iterator<ft::bidirectional_iterator_tag, T>
+class rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
 	typedef T												iterator_type;
