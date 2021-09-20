@@ -419,7 +419,7 @@ public:
 		N->parent = parent;
 	}
 
-	node* newNode(T newdata) {
+	node* newNode(T& newdata) {
 		node* newNode = new node;
 		newNode->color = RED;
 		newNode->data = newdata;

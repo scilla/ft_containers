@@ -147,14 +147,14 @@ public:
 		_tree._nuke(_tree._root);
 	}
 
-	ft::pair<iterator, bool> insert( const value_type& value ) {
+	ft::pair<iterator, bool> insert(const value_type& value ) {
 		remove_bounds();
 		node_type* nd = _tree.find(value);
 		if (nd)
-			return make_pair(interator(nd), false);
-		nd = _tree.insert(value);
+			return ft::make_pair(iterator(*nd), false);
+		nd = &_tree.insert(value);
 		add_bounds();
-		return make_pair(interator(nd), true);
+		return ft::make_pair(iterator(*nd), true);
 	}
 
 	iterator insert( iterator hint, const value_type& value ) {
@@ -162,10 +162,10 @@ public:
 		(void)hint;
 		node_type* nd = _tree.find(value.first);
 		if (nd)
-			return interator(nd);
+			return iterator(*nd);
 		nd = _tree.insert(value);
 		add_bounds();
-		return interator(nd);
+		return iterator(*nd);
 	}
 
 	template< class InputIt >
