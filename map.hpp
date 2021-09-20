@@ -33,7 +33,7 @@ public:
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
 	typedef rbt_iterator<value_type>			iterator;
-	typedef const rbt_iterator<const value_type> const_iterator;
+	typedef const_rbt_iterator<value_type> 		const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	typedef Node<T>								node_type;
