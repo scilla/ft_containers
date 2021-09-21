@@ -273,12 +273,14 @@ private:
 		node_type* ptr;
 		if (!_tree._root)
 			return;
+		
 		ptr = _tree._root;
 		while (ptr->left)
 			ptr = ptr->left;
 		ptr->left = &_start;
 		_start.parent = ptr;
 		_start_ptr = &ptr->left;
+
 		ptr = _tree._root;
 		while (ptr->right)
 			ptr = ptr->right;

@@ -52,8 +52,15 @@ public:
 	explicit rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
-	template<class U>
-	rbt_iterator(rbt_iterator<U> &newit): _ptr(NULL) { *this = newit; } 
+	rbt_iterator(const rbt_iterator& newit) { *this = newit; } 
+	// rbt_iterator(const const_rbt_iterator<T>& newit) { *this = newit; } 
+	// rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
+	//template<class U>
+	// template<class U>
+	// rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
+
+	// template<class Iter>
+	// rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
 	reference operator*() const { return _ptr->data; }
@@ -128,23 +135,28 @@ public:
 		return *this;
 	}
 
+	// template <class K>
+	// rbt_iterator&	operator=(const rbt_iterator<K> & other) {
+	// 	_ptr = other.base();
+	// 	return *this;
+	// }
+
 	template <class K>
-	rbt_iterator&	operator=(const rbt_iterator<K> & other) {
+	rbt_iterator& operator=(const K& other) {
 		_ptr = other.base();
 		return *this;
 	}
 
 	// pointer		base() const { return _ptr; }
 
-	iterator_type base() { return iterator_type(_ptr); }
-	const iterator_type base() const { return iterator_type(_ptr); }
+	const struct Node<T>* base() { return _ptr; }
+	const struct Node<T>* base() const { return _ptr; }
 
-	bool operator==(const rbt_iterator &other) { return _ptr == other._ptr; }
-	bool operator!=(const rbt_iterator &other) { return _ptr != other._ptr; }
+	bool operator==(const rbt_iterator &other) { return _ptr == other.base(); }
+	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
 private:
 	struct Node<T>*		_ptr;
 };
-
 
 template <class T>
 class const_rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
@@ -161,10 +173,18 @@ public:
 	explicit const_rbt_iterator(): _ptr(NULL) {}
 	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
 	explicit const_rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
+
+	const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
+	const_rbt_iterator(const rbt_iterator<T>& newit) { *this = newit; } 
+	// const_rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
 	// template<class U>
 	// const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
-	template<class Iter>
-	const_rbt_iterator(const Iter& newit) { *this = newit; } 
+	// template<class U>
+	// const_rbt_iterator(const rbt_iterator<U>& newit) { *this = newit; } 
+
+	// template<class Iter>
+	// const_rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
@@ -238,19 +258,25 @@ public:
 		return tmp;
 	}
 
+	// template <class K>
+	// const_rbt_iterator&	operator=(const const_rbt_iterator<K> & other) {
+	// 	_ptr = other.base();
+	// 	return *this;
+	// }
+
 	template <class K>
-	const_rbt_iterator&	operator=(const const_rbt_iterator<K> & other) {
+	const_rbt_iterator&	operator=(const K& other) {
 		_ptr = other.base();
 		return *this;
 	}
 
 	// pointer		base() const { return _ptr; }
 
-	iterator_type base() { return _ptr; }
-	const iterator_type base() const { return _ptr; }
+	const struct Node<T>* base() { return _ptr; }
+	const struct Node<T>* base() const { return _ptr; }
 
-	bool operator==(const const_rbt_iterator &other) { return _ptr == other._ptr; }
-	bool operator!=(const const_rbt_iterator &other) { return _ptr != other._ptr; }
+	bool operator==(const const_rbt_iterator &other) { return _ptr == other.base(); }
+	bool operator!=(const const_rbt_iterator &other) { return _ptr != other.base(); }
 private:
 	const struct Node<T>*		_ptr;
 };
