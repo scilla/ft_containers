@@ -178,14 +178,14 @@ public:
 
 	void erase( iterator pos ) {
 		remove_bounds();
-		_tree.deleteNode(find(*pos));
+		_tree.deleteNode(_tree.find(*pos));
 		add_bounds();
 	}
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
-		if (found) {
-			_tree.deleteNode(found);
+		if (found != end()) {
+			_tree.deleteNode(_tree.find(*found));
 			return 1;
 		}
 		return 0;
@@ -193,7 +193,7 @@ public:
 
 	void erase (iterator first, iterator last) {
 		for (; first != last; first++)
-			erase(*first);
+			erase(first);
 	}
 
 	void swap( map& other ) {
@@ -216,10 +216,10 @@ public:
 		return s;
 	}
 	iterator find( const Key& key ) {
-		return iterator(_tree.find(key));
+		return iterator(_tree.find(ft::make_pair(key, T())));
 	}
 	const_iterator find( const Key& key ) const {
-		return const_iterator(_tree.find(key));
+		return const_iterator(_tree.find(ft::make_pair(key, T())));
 	}
 	std::pair<iterator,iterator> equal_range( const Key& key ) {
 		return make_pair(lower_bound(key), upper_bound(key));
