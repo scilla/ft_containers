@@ -83,7 +83,9 @@ public:
 	class outOfBoundException: public std::exception
 	{
 	public:
-		virtual const char* what() const throw();
+		virtual const char* what() const throw() {
+			return "Out of Bound exception";
+		}
 	};
 	
 	// access
@@ -210,7 +212,7 @@ public:
 	// lookup
 	size_type count( const Key& key ) const {
 		size_type s = 0;
-		for (iterator it = begin(); it != end(); it++)
+		for (const_iterator it = begin(); it != end(); it++)
 			if ((*it).first == key)
 				s++;
 		return s;

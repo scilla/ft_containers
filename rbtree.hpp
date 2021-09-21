@@ -62,7 +62,9 @@ public:
 	class outOfBoundException: public std::exception
 	{
 	public:
-		virtual const char* what() const throw();
+		virtual const char* what() const throw() {
+			return "Out of Bound exception";
+		}
 	};
 
 	rbt_iterator& operator++() {
@@ -170,7 +172,9 @@ public:
 	class outOfBoundException: public std::exception
 	{
 	public:
-		virtual const char* what() const throw();
+		virtual const char* what() const throw() {
+			return "Out of Bound exception";
+		}
 	};
 
 	const_rbt_iterator& operator++() {
