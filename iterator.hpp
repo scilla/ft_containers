@@ -33,7 +33,7 @@ struct iterator_traits<T*> {
 	typedef random_access_iterator_tag	iterator_category;
 };
 
-template <class T, class Category = random_access_iterator_tag, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& >
+template <class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& >
 struct iterator {
 	typedef T			value_type;
 	typedef Distance	difference_type;
@@ -44,9 +44,9 @@ struct iterator {
 
 template<class Iterator>
 class reverse_iterator: public iterator<
-				typename iterator_traits<Iterator>::difference_type,
 				typename iterator_traits<Iterator>::iterator_category,
 				typename iterator_traits<Iterator>::value_type,
+				typename iterator_traits<Iterator>::difference_type,
 				typename iterator_traits<Iterator>::pointer,
 				typename iterator_traits<Iterator>::reference
 				>
@@ -76,7 +76,7 @@ public:
 		_current = other.getCurrent();
 		return *this;
 	}
-	value_type& operator*() const { return *(_current); }
+	const value_type& operator*() const { return *(_current); }
 	value_type* operator->() const { return _current.operator->(); }
 	reference operator[](difference_type n) const { return *(_current - n); }
 

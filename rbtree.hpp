@@ -49,10 +49,10 @@ public:
 	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
-	explicit rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
-	//explicit rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
+	explicit rbt_iterator(struct Node<T>& newnode) { *_ptr = newnode; }
+	explicit rbt_iterator(const struct Node<T>& newnode) { *_ptr = newnode; }
 	template<class U>
-	rbt_iterator(rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	rbt_iterator(rbt_iterator<U>& newit)/*: _ptr(newit.base()) */{ *this = newit; } 
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
 	~rbt_iterator() {}
@@ -134,8 +134,8 @@ public:
 
 	// pointer		base() const { return _ptr; }
 
-	iterator_type base() { return _ptr; }
-	const iterator_type base() const { return _ptr; }
+	iterator_type base() { return iterator_type(_ptr); }
+	const iterator_type base() const { return iterator_type(_ptr); }
 
 	bool operator==(const rbt_iterator &other) { return _ptr == other._ptr; }
 	bool operator!=(const rbt_iterator &other) { return _ptr != other._ptr; }
@@ -283,6 +283,20 @@ public:
 		binaryInsert(N);
 		fixTree(N);
 		return *ret;
+	}
+
+	node* find(T& data) {
+		node* start = _root;
+		while (start)
+		{
+			if (data == start->data)
+				return start;
+			else if (data < start->data)
+				start = start->left;
+			else
+				start = start->right;
+		}
+		return NULL;
 	}
 
 	node* find(const T& data) {

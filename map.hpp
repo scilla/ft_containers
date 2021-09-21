@@ -18,7 +18,7 @@
 
 namespace ft {
 
-template< class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
+template< class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
 class map {
 public:
 	typedef Key									key_type;
@@ -102,10 +102,10 @@ public:
 	}
 
 	T& operator[]( const Key& key ) {
-		node_type *res = _tree.find(key);
+		node_type *res = _tree.find(ft::make_pair(key, T()));
 		if (!res)
-			return insert(std::make_pair(key, T())).first->second;
-		return res->data->second;
+			return insert(ft::make_pair(key, T())).first->second;
+		return res->data.second;
 	};
 
 	// iterators
@@ -160,10 +160,10 @@ public:
 	iterator insert( iterator hint, const value_type& value ) {
 		remove_bounds();
 		(void)hint;
-		node_type* nd = _tree.find(value.first);
+		node_type* nd = _tree.find(value);
 		if (nd)
 			return iterator(*nd);
-		nd = _tree.insert(value);
+		nd = &_tree.insert(value);
 		add_bounds();
 		return iterator(*nd);
 	}
@@ -178,7 +178,7 @@ public:
 
 	void erase( iterator pos ) {
 		remove_bounds();
-		_tree.deleteNode(*pos);
+		_tree.deleteNode(find(*pos));
 		add_bounds();
 	}
 
