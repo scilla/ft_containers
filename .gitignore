@@ -7,3 +7,4 @@ containers
 tester/tester/*_output
 tester/ft_containers_tests
 .gitignore
+tester/out.txt

@@ -51,9 +51,10 @@ public:
 	};
 
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc) {}
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc) { initialize_bounds(); }
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc) {
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc) {
+		initialize_bounds();
 		for (; first != last; first++) {
 			_tree.insert(*first);
 			_size++;
@@ -61,12 +62,20 @@ public:
 		add_bounds();
 	}
 
-	map(map& new_map) {
+	map(map& new_map): _start(), _end() {
+		initialize_bounds();
 		*this = new_map;
 		add_bounds();
 	}
 
 	~map() {}
+
+	void initialize_bounds() {
+		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
+		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
+		_end_ptr = NULL;
+		_start_ptr = NULL;
+	}
 
 	// cose
 	map& operator=( const map& other ) {

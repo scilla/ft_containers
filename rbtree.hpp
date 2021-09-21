@@ -13,25 +13,25 @@ namespace ft
 {
 template <class T>
 struct Node {
-	struct Node* 	left;
-	struct Node* 	right;
-	struct Node*	parent;
+	struct Node<T>* left;
+	struct Node<T>* right;
+	struct Node<T>*	parent;
 	enum COLOR		color;
 	T				data;
 
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }
-	struct Node* sibling() {
+	struct Node<T>* sibling() {
 		if (isLeft())
 			return parent->right;
 		return parent->left;
 	}
-	struct Node* uncle() {
+	struct Node<T>* uncle() {
 		if (parent)
 			return parent->sibling();
 		return NULL;
 	}
-	struct Node* grandparent() {
+	struct Node<T>* grandparent() {
 		if (parent)
 			return parent->parent;
 		return NULL;
@@ -49,11 +49,11 @@ public:
 	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
-	explicit rbt_iterator(struct Node<T>& newnode) { *_ptr = newnode; }
-	explicit rbt_iterator(const struct Node<T>& newnode) { *_ptr = newnode; }
+	explicit rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
+	explicit rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
 	template<class U>
-	rbt_iterator(rbt_iterator<U> &newit) { *this = newit; } 
+	rbt_iterator(rbt_iterator<U> &newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
 	reference operator*() const { return _ptr->data; }
@@ -161,10 +161,10 @@ public:
 	explicit const_rbt_iterator(): _ptr(NULL) {}
 	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
 	explicit const_rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
-	template<class U>
-	const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
-	template<class U>
-	const_rbt_iterator(const rbt_iterator<U>& newit) { *this = newit; } 
+	// template<class U>
+	// const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
+	template<class Iter>
+	const_rbt_iterator(const Iter& newit) { *this = newit; } 
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
