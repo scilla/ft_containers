@@ -221,35 +221,35 @@ public:
 	const_iterator find( const Key& key ) const {
 		return const_iterator(_tree.find(ft::make_pair(key, T())));
 	}
-	std::pair<iterator,iterator> equal_range( const Key& key ) {
-		return make_pair(lower_bound(key), upper_bound(key));
+	ft::pair<iterator,iterator> equal_range( const Key& key ) {
+		return ft::make_pair(iterator(lower_bound(key)), iterator(upper_bound(key)));
 	}
-	std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
-		return make_pair(lower_bound(key), upper_bound(key));
+	ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
+		return ft::make_pair(const_iterator(lower_bound(key)), const_iterator(upper_bound(key)));
 	}
 	iterator lower_bound( const Key& key ) {
 		iterator beg = end();
 		beg--;
-		while (*beg > key)
+		while ((*beg).first > key)
 			beg--;
 		return beg;
 	}
 	const_iterator lower_bound( const Key& key ) const {
 		iterator beg = end();
 		beg--;
-		while (*beg > key)
+		while ((*beg).first > key)
 			beg--;
 		return beg;
 	}
 	iterator upper_bound( const Key& key ) {
 		iterator beg = begin();
-		while (*beg <= key)
+		while ((*beg).first <= key)
 			beg++;
 		return beg;
 	}
 	const_iterator upper_bound( const Key& key ) const {
 		iterator beg = begin();
-		while (*beg <= key)
+		while ((*beg).first <= key)
 			beg++;
 		return beg;
 	}

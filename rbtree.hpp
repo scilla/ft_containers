@@ -51,10 +51,10 @@ public:
 	explicit rbt_iterator(): _ptr(NULL) {}
 	explicit rbt_iterator(struct Node<T>& newnode) { *_ptr = newnode; }
 	explicit rbt_iterator(const struct Node<T>& newnode) { *_ptr = newnode; }
+
 	template<class U>
-	rbt_iterator(rbt_iterator<U>& newit)/*: _ptr(newit.base()) */{ *this = newit; } 
-	// template<class U>
-	// rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	rbt_iterator(rbt_iterator<U> &newit) { *this = newit; } 
+
 	~rbt_iterator() {}
 	reference operator*() const { return _ptr->data; }
 	pointer operator->() const { return &_ptr->data; }
