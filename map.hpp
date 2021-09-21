@@ -129,11 +129,11 @@ public:
 	};
 
 	iterator end() { return iterator(_end); };
-	const_iterator end() const { return const_iterator(_end); }
+	const_iterator end() const { return iterator(_end); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
-	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
 	reverse_iterator rend() { return reverse_iterator(begin()); }
-	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+	const_reverse_iterator rend() const { return reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
@@ -169,7 +169,7 @@ public:
 	}
 
 	template< class InputIt >
-	void insert( InputIt first, InputIt last ) {
+	void insert( InputIt first, InputIt last, typename enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0 ) {
 		remove_bounds();
 		for (; first != last; first++)
 			insert(*first);

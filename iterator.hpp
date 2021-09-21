@@ -64,21 +64,22 @@ public:
 	reverse_iterator(): _current() {};
 	reverse_iterator(value_type* p) { _current = Iterator(p); }
 	reverse_iterator(const Iterator& x) { _current = x; --_current; }
+
 	Iterator getCurrent() const { return _current; }
-	template< class U >
-	reverse_iterator( const reverse_iterator<U>& other ) { *this = other; }
 	iterator_type base() { return ++Iterator(_current); }
 
 	template< class U >
-	reverse_iterator operator=( const reverse_iterator<U>& other ) {
+	reverse_iterator( const reverse_iterator<U>& other ) { *this = other; }
+
+	template< class U >
+	reverse_iterator& operator=( const reverse_iterator<U>& other ) {
 		_current = other.getCurrent();
 		return *this;
 	}
-
-	reference operator*() const { return *(_current); }
-	pointer operator->() const { return _current.operator->(); }
+	value_type& operator*() const { return *(_current); }
+	value_type* operator->() const { return _current.operator->(); }
 	reference operator[](difference_type n) const { return *(_current - n); }
-	
+
 	reverse_iterator& operator++() {
 		--_current;
 		return  *this;

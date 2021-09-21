@@ -46,7 +46,7 @@ public:
 	typedef T*												iterator_value;
 	typedef T&												reference;
 	typedef T*												pointer;
-	typedef bidirectional_iterator_tag						iterator_category;
+	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
 	explicit rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
@@ -78,9 +78,11 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return _ptr;
-				if(*_ptr->parent > *_ptr)
-					return(_ptr->parent);
+					return (*this);
+				if(_ptr->parent->data > _ptr->data) {
+					_ptr = _ptr->parent;
+					return (*this);
+				}
 				_ptr = _ptr->parent;
 			}
 			//exception
@@ -106,9 +108,11 @@ public:
 			while(_ptr->parent)
 			{
 				if (_ptr->color == FLUO)
-					return _ptr;
-				if(*_ptr->parent < *_ptr)
-					return(_ptr->parent);
+					return (*this);
+				if(_ptr->parent->data < _ptr->data) {
+					_ptr = _ptr->parent;
+					return (*this);
+				}
 				_ptr = _ptr->parent;
 			}
 			//exception
@@ -150,18 +154,18 @@ public:
 	typedef const T&										const_reference;
 	typedef T*												pointer;
 	typedef const T*										const_pointer;
-	typedef bidirectional_iterator_tag						iterator_category;
+	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit const_rbt_iterator(): _ptr(NULL) {}
 	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
 	explicit const_rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
 	template<class U>
-	const_rbt_iterator(const const_rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
 	template<class U>
-	const_rbt_iterator(const rbt_iterator<U>& newit): _ptr(newit.base()) { *this = newit; } 
+	const_rbt_iterator(const rbt_iterator<U>& newit) { *this = newit; } 
 	~const_rbt_iterator() {}
-	const_reference operator*() const { return *_ptr->data; }
-	const_pointer operator->() const { return _ptr->data; }
+	const_reference operator*() const { return _ptr->data; }
+	const_pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{
@@ -213,7 +217,7 @@ public:
 			{
 				if (_ptr->color == FLUO)
 					return (*this);
-				if(*_ptr->parent < *_ptr) {
+				if(_ptr->parent->data < _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
