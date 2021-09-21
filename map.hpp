@@ -25,7 +25,7 @@ public:
 	typedef T									mapped_key;
 	typedef typename ft::pair<Key, T>			value_type;
 	typedef size_t								size_type;
-	typedef ptrdiff_t							difference_type;
+	typedef std::ptrdiff_t						difference_type; // std:: cause linux
 	typedef Compare								key_compare;
 	typedef Allocator							allocator_type;
 	typedef value_type&							reference;
@@ -216,7 +216,7 @@ public:
 		return s;
 	}
 	iterator find( const Key& key ) {
-		return iterator(_tree.find(ft::make_pair(key, T())));
+		return iterator(*_tree.find(ft::make_pair(key, T())));
 	}
 	const_iterator find( const Key& key ) const {
 		return const_iterator(_tree.find(ft::make_pair(key, T())));
