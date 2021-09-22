@@ -455,7 +455,7 @@ public:
 		}
 	}
 
-	void binaryInsert(node* N) {  // fortissimi dubbi
+	void binaryInsert(node* N) {  // fortissimi dubbi (rottissimo)
 		node** current = &_root;
 		node* parent = _root ? _root->parent : NULL;
 		while (*current)
