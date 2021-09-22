@@ -317,7 +317,7 @@ public:
 		return *ret;
 	}
 
-	node* find(T& data) {
+	node* find(T& data) const {
 		node* start = _root;
 		while (start)
 		{
@@ -331,7 +331,7 @@ public:
 		return NULL;
 	}
 
-	node* find(const T& data) {
+	node* find(const T& data) const {
 		node* start = _root;
 		while (start)
 		{
