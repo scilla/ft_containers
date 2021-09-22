@@ -329,13 +329,13 @@ bool operator==(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,C
 
 template< class Key, class T, class Compare, class Alloc >
 bool operator!=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs ){
-	return (!(lhs == rhs));
+	return equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 };
 
 template< class Key, class T, class Compare, class Alloc >
 bool operator<(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
 {
-	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 };
 
 template< class Key, class T, class Compare, class Alloc >
