@@ -292,12 +292,12 @@ private:
 	}
 
 	void remove_bounds() {
+		_start.parent = NULL;
+		_end.parent = NULL;
 		if (!_tree._root)
 			return;
 		*_start_ptr = NULL;
 		*_end_ptr = NULL;
-		_start.parent = NULL;
-		_end.parent = NULL;
 	}
 
 	RBTree<value_type>		_tree;
