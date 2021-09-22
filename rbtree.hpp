@@ -312,6 +312,8 @@ public:
 		node* N = ret;
 		binaryInsert(N);
 		fixTree(N);
+		while (_root->parent)
+			_root = _root->parent;
 		return *ret;
 	}
 
@@ -472,6 +474,9 @@ public:
 		node* newNode = new node;
 		newNode->color = RED;
 		newNode->data = newdata;
+		newNode->left = NULL;
+		newNode->right = NULL;
+		newNode->parent = NULL;
 		return newNode;
 	}
 
