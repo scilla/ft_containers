@@ -53,7 +53,7 @@ public:
 	// (con|de)structor
 	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc),  _size() { initialize_bounds(); }
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc) {
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc), _size(0) {
 		initialize_bounds();
 		for (; first != last; first++) {
 			_tree.insert(*first);

@@ -505,7 +505,7 @@ public:
 	node* rotateRight(node* P) { return rotateDir(P, true); }
 
 	void _nuke(node* n) {
-		if (!n)
+		if (!n || n->color == FLUO)
 			return;
 		_nuke(n->left);
 		_nuke(n->right);
