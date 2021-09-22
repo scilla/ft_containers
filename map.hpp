@@ -328,7 +328,7 @@ bool operator<(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Co
 template< class Key, class T, class Compare, class Alloc >
 bool operator<=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
 {
-	if(!(rhs < lhs));
+	return(!(rhs < lhs));
 };
 
 template< class Key, class T, class Compare, class Alloc >
