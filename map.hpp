@@ -121,30 +121,30 @@ public:
 
 	// iterators
 
-	iterator begin() {  //da controllare
-		node_type* pt = _tree._root;
-		if(!_tree._root)
+	iterator begin() const {  //da controllare
+		if (!_tree._root)
 			return end();
-		while (pt->color != FLUO)
+		iterator pt = iterator(*_tree._root);
+		while (pt.base()->color != FLUO)
 			pt--;
-		return iterator(*pt);
+		return pt;
 	};
 
-	const_iterator begin() const {
-		node_type* pt = _tree._root;
-		if(!_tree._root)
-			return end();
-		while (pt->color != FLUO)
-			pt--;
-		return const_iterator(*pt);
-	};
+	// const_iterator begin() const {
+	// 	node_type* pt = _tree._root;
+	// 	if(!_tree._root)
+	// 		return end();
+	// 	while (pt->color != FLUO)
+	// 		pt--;
+	// 	return const_iterator(*pt);
+	// };
 
-	iterator end() { return iterator(_end); };
-	const_iterator end() const { return iterator(_end); }
-	reverse_iterator rbegin() { return reverse_iterator(end()); }
-	const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	reverse_iterator rend() { return reverse_iterator(begin()); }
-	const_reverse_iterator rend() const { return reverse_iterator(begin()); }
+	iterator end() const { return iterator(_end); };
+	// const_iterator end() const { return iterator(_end); }
+	reverse_iterator rbegin() const { return reverse_iterator(end()); }
+	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
+	reverse_iterator rend() const { return reverse_iterator(begin()); }
+	// const_reverse_iterator rend() const { return reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
