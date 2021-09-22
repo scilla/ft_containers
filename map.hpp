@@ -51,7 +51,7 @@ public:
 	};
 
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc) { initialize_bounds(); }
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc),  _size() { initialize_bounds(); }
 	template< class InputIt >
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc) {
 		initialize_bounds();
@@ -149,7 +149,7 @@ public:
 	// capacity
 	bool empty() const { return !_size; }
 	size_type size() const { return _size; }
-	size_type max_size() const { return _alloc.max_size(); } 
+	size_type max_size() const { return _tree.max_size(); } //sbagliata bisogna prendere l'allocator dell'rbtree che a sua volta prende quello del nodo type
 
 	// modifiers
 	void clear() {
