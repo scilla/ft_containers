@@ -165,6 +165,7 @@ public:
 			return ft::make_pair(iterator(*nd), false);
 		nd = &_tree.insert(value);
 		add_bounds();
+		_size++;
 		return ft::make_pair(iterator(*nd), true);
 	}
 
@@ -176,6 +177,7 @@ public:
 			return iterator(*nd);
 		nd = &_tree.insert(value);
 		add_bounds();
+		_size++;
 		return iterator(*nd);
 	}
 
