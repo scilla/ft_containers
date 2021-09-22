@@ -86,9 +86,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO)
-					return (*this);
-				if(_ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -116,9 +114,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO)
-					return (*this);
-				if(_ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -457,14 +453,14 @@ public:
 
 	void binaryInsert(node* N) {  // fortissimi dubbi (rottissimo)
 		node** current = &_root;
-		node* parent = _root ? _root->parent : NULL;
+		node* parent = NULL;
 		while (*current)
 		{
 			parent = *current;
 			if (N->data < parent->data)
-				*current = parent->left;
+				current = &parent->left;
 			else
-				*current = parent->right;
+				current = &parent->right;
 		}
 		*current = N;
 		N->parent = parent;

@@ -127,7 +127,7 @@ public:
 		iterator pt = iterator(*_tree._root);
 		while (pt.base()->color != FLUO)
 			pt--;
-		return pt;
+		return ++pt;
 	};
 
 	// const_iterator begin() const {
