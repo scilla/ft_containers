@@ -121,39 +121,30 @@ public:
 
 	// iterators
 
-	iterator begin() const {  //da controllare
-		if (!_tree._root)
+	iterator begin() {  //da controllare
+		node_type* pt = _tree._root;
+		if(!_tree._root)
 			return end();
-		iterator pt = iterator(*_tree._root);
-		while (pt.base()->color != FLUO)
+		while (pt->color != FLUO)
 			pt--;
-		return pt;
+		return iterator(*pt);
 	};
-	
-	// const_iterator begin() const {  //da controllare
-	// 	if (!_tree._root)
-	// 		return end();
-	// 	iterator pt = iterator(*_tree._root);
-	// 	while (_tree.find(*pt)->color != FLUO)
-	// 		pt--;
-	// 	return pt;
-	// };
 
-	// const_iterator begin() const {
-	// 	node_type* pt = _tree._root;
-	// 	if(!_tree._root)
-	// 		return end();
-	// 	while (pt->color != FLUO)
-	// 		pt--;
-	// 	return const_iterator(*pt);
-	// };
+	const_iterator begin() const {
+		node_type* pt = _tree._root;
+		if(!_tree._root)
+			return end();
+		while (pt->color != FLUO)
+			pt--;
+		return const_iterator(*pt);
+	};
 
-	iterator end() const { return iterator(_end); };
-	// const_iterator end() const { return iterator(_end); }
-	reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	reverse_iterator rend() const { return reverse_iterator(begin()); }
-	// const_reverse_iterator rend() const { return reverse_iterator(begin()); }
+	iterator end() { return iterator(_end); };
+	const_iterator end() const { return iterator(_end); }
+	reverse_iterator rbegin() { return reverse_iterator(end()); }
+	const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
+	reverse_iterator rend() { return reverse_iterator(begin()); }
+	const_reverse_iterator rend() const { return reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
@@ -320,25 +311,12 @@ private:
 template< class Key, class T, class Compare, class Alloc >
 bool operator==(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
 {
-	if (lhs.size() != rhs.size())
-		return false;
-	iterator *lit = lhs.begin();
-	iterator *rit = rhs.begin();
-	while(lit || rit)
-	{
-		if(lit == rit){
-			lit++;
-			rit++
-		}
-		else
-			return false;
-	}
-	return true;
+	return (equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 };
 
 template< class Key, class T, class Compare, class Alloc >
 bool operator!=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs ){
-	return equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return (!(lhs == rhs));
 };
 
 template< class Key, class T, class Compare, class Alloc >
