@@ -307,7 +307,7 @@ public:
 		node* ret = newNode(newdata);
 		node* N = ret;
 		binaryInsert(N);
-		fixTree(N);
+		fixTree(_root);
 		while (_root->parent)
 			_root = _root->parent;
 		return *ret;
