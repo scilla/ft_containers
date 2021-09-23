@@ -385,7 +385,7 @@ public:
 	}
 
 	void deleteNode(node* N) {
-		node* child = !N->isRight() ? N->left : N->right;
+		node* child = !N->right ? N->left : N->right;
 		replaceNode(N, child);
 		if (N->color == BLACK) {
 			if (N->color == RED)
@@ -477,47 +477,6 @@ public:
 		newNode->parent = NULL;
 		return newNode;
 	}
-/*
-	node* rotateDir(node* P, bool right) {
-		node* G = P->parent;
-		node* S = right ? P->left : P->right;
-		node* C;
-		if (!S)
-			throw std::exception();
-		C = right ? P->right: P->left;
-		if (!right){
-		print_tree("prima");
-			P->right = C;
-		print_tree("dopo");
-		}
-		else{
-			P->left = C;
-		}
-		if (C)
-			C->parent = P;
-		//P->left = right ? C : P;
-		if (right)
-			S->right = P;
-		else
-			S->left = P;
-		//S->right = right ? P : C;
-		P->parent = S;
-		S->parent = G;
-		if (G)
-		{
-			if (P == G->right)
-				G->right = S;
-			else
-				G->left = S;
-		}
-		else
-			_root = S;
-		return S;
-	}
-
-	node* rotateLeft(node* P) { return rotateDir(P, false); }
-	node* rotateRight(node* P) { return rotateDir(P, true); }
-*/
 
 	void rotateLeft(node* x) {
 		node* y = x->right;
