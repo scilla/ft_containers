@@ -194,13 +194,13 @@ public:
 
 	void erase( iterator pos ) {
 		remove_bounds();
-		_tree.deleteNode(_tree.find(*pos));
+		_tree.deleteNode(pos.base());
 		add_bounds();
 	}
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
-		if (found != end()) {
+		if (found.base() && found != end()) {
 			_tree.deleteNode(_tree.find(*found));
 			return 1;
 		}

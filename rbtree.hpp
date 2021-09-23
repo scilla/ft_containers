@@ -147,8 +147,8 @@ public:
 
 	// pointer		base() const { return _ptr; }
 
-	const struct Node<T>* base() { return _ptr; }
-	const struct Node<T>* base() const { return _ptr; }
+	struct ft::Node<T>* base() { return _ptr; }
+	struct ft::Node<T>* base() const { return _ptr; }
 
 	bool operator==(const rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
@@ -282,7 +282,7 @@ private:
 template <class T, class Compare = std::less<T> >
 class RBTree
 {
-	typedef struct Node<T>	node;
+	typedef struct ft::Node<T>	node;
 private:
 public:
 	node*	_root;
@@ -397,10 +397,10 @@ public:
 	}
 */
 	void rbTransplant(node* u, node* v) {
-		if (u->parent == NULL) {
+		if (!u->parent) {
 			_root = v;
 		}
-		else if (u == u->parent->left) {
+		else if (u->isLeft()) {
 			u->parent->left = v;
 		}
 		else {
@@ -421,39 +421,35 @@ public:
 	}
 
 	void deleteNode(node* n) {
-		node* z = n;
-		node *x, *y;
-		// while (n != NULL) {
-		// 	if (n->data == key) {
-		// 		z = n;
-		// 	}
-
-		// 	if (n->data <= key) {
-		// 		n = n->right;
-		// 	} else {
-		// 		n = n->left;
-		// 	}
-		// }
-		// if (z == NULL) {
-		// 	std::cout << "Key not found in the tree" << std::endl;
-		// 	return;
-		// }
-		y = z;
-		int y_original_color = y->color;
-		if (z->left == NULL) {
-			x = z->right;
+		node *z = n;
+		node *y = z;
+		node *x;
+		int y_original_color;
+		if (!z->parent) {
+			_root = NULL;
+		}
+		else if (!z->left && !z->right) {
+			if (z->isLeft()) {
+				z->parent->left = NULL;
+			} else {
+				z->parent->right = NULL;
+			}
+		}
+		else if (!z->left) {
+			// x = z->right;
 			rbTransplant(z, z->right);
 		}
-		else if (z->right == NULL) {
-			x = z->left;
+		else if (!z->right) {
+			// x = z->left;
 			rbTransplant(z, z->left);
 		}
 		else {
+			this->print_tree();
 			y = minimumNode(z->right);
 			y_original_color = y->color;
 			x = y->right;
 			if (y->parent == z) {
-				x->parent = y;
+				x->parent = z;
 			}
 			else {
 				rbTransplant(y, y->right);
@@ -464,12 +460,12 @@ public:
 			y->left = z->left;
 			y->left->parent = y;
 			y->color = z->color;
+			if (y_original_color == BLACK) {
+				// deleteFix(x);
+				fixDeletion(x);
+			}
 		}
 		delete z;
-		if (y_original_color == 0) {
-			// deleteFix(x);
-			fixDeletion(x);
-		}
 	}
 
 	void fixDeletion(node* N) {
