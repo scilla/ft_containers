@@ -70,6 +70,20 @@ public:
 
 	~map() {}
 
+	void print() {
+		print_tree(_tree._root);
+	}
+
+	void print_tree(node_type* n, size_t l = 0) {
+		if (!n) {
+			std::cout << std::endl;
+			return;
+		}
+		print_tree(n->right, l + 1);
+		std::cout << std::string(l * 5,' ') << n->data.first;
+		print_tree(n->left, l + 1);
+	}
+
 	void initialize_bounds() {
 		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
 		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
@@ -120,7 +134,6 @@ public:
 	};
 
 	// iterators
-
 	iterator begin() const {  //da controllare
 		if (!_tree._root)
 			return end();
@@ -311,35 +324,35 @@ private:
 };
 
 template< class Key, class T, class Compare, class Alloc >
-bool operator==(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
+bool operator==(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
 	return (equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 };
 
 template< class Key, class T, class Compare, class Alloc >
-bool operator!=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs ){
+bool operator!=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ){
 	return (!(lhs == rhs));
 };
 
 template< class Key, class T, class Compare, class Alloc >
-bool operator<(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
+bool operator<(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
 	return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 };
 
 template< class Key, class T, class Compare, class Alloc >
-bool operator<=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
+bool operator<=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
 	return(!(rhs < lhs));
 };
 
 template< class Key, class T, class Compare, class Alloc >
-bool operator>(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
+bool operator>(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
 	return (rhs < lhs);
 };
 template< class Key, class T, class Compare, class Alloc >
-bool operator>=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs )
+bool operator>=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
 	return(!(lhs < rhs));
 }
