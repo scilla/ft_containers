@@ -372,7 +372,7 @@ public:
 			}
 		} 															// case 3
 	}
-
+/*
 	void replaceNode(node* a, node* b) {
 		if (a->parent) {
 			if (a->isLeft()) {
@@ -394,6 +394,82 @@ public:
 				fixDeletion(N);
 		}
 		delete N;
+	}
+*/
+	void rbTransplant(node* u, node* v) {
+		if (u->parent == NULL) {
+			_root = v;
+		}
+		else if (u == u->parent->left) {
+			u->parent->left = v;
+		}
+		else {
+			u->parent->right = v;
+		}
+		v->parent = u->parent;
+	}
+
+	node* minimumNode(node *n) {
+		while (n->left)
+			n = n->left;
+		return n;
+	}
+	node* maximumNode(node *n) {
+		while (n->right)
+			n = n->right;
+		return n;
+	}
+
+	void deleteNode(node* n) {
+		node* z = n;
+		node *x, *y;
+		// while (n != NULL) {
+		// 	if (n->data == key) {
+		// 		z = n;
+		// 	}
+
+		// 	if (n->data <= key) {
+		// 		n = n->right;
+		// 	} else {
+		// 		n = n->left;
+		// 	}
+		// }
+		// if (z == NULL) {
+		// 	std::cout << "Key not found in the tree" << std::endl;
+		// 	return;
+		// }
+		y = z;
+		int y_original_color = y->color;
+		if (z->left == NULL) {
+			x = z->right;
+			rbTransplant(z, z->right);
+		}
+		else if (z->right == NULL) {
+			x = z->left;
+			rbTransplant(z, z->left);
+		}
+		else {
+			y = minimumNode(z->right);
+			y_original_color = y->color;
+			x = y->right;
+			if (y->parent == z) {
+				x->parent = y;
+			}
+			else {
+				rbTransplant(y, y->right);
+				y->right = z->right;
+				y->right->parent = y;
+			}
+			rbTransplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
+		}
+		delete z;
+		if (y_original_color == 0) {
+			// deleteFix(x);
+			fixDeletion(x);
+		}
 	}
 
 	void fixDeletion(node* N) {
