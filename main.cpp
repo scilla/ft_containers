@@ -2,6 +2,7 @@
 #include "rbtree.hpp"
 #include "map.hpp"
 #include "utils.hpp"
+#include <stdlib.h>
 
 int main(void)
 {

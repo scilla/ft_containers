@@ -307,7 +307,7 @@ public:
 		node* ret = newNode(newdata);
 		node* N = ret;
 		binaryInsert(N);
-		fixTree(_root);
+		fixTree(ret);
 		while (_root->parent)
 			_root = _root->parent;
 		return *ret;
@@ -481,12 +481,20 @@ public:
 		node* S = right ? P->left : P->right;
 		node* C;
 		if (!S)
-			return P;
+			throw std::exception();
 		C = right ? P->right: P->left;
-		P->left = right ? C : P;
-		S->right = right ? P : C;
+		if (!right)
+			P->right = C;
+		else
+			P->left = C;
+		//P->left = right ? C : P;
 		if (C)
 			C->parent = P;
+		if (right)
+			S->right = P;
+		else
+			S->left = P;
+		//S->right = right ? P : C;
 		P->parent = S;
 		S->parent = G;
 		if (G)

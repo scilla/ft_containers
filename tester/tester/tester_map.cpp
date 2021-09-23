@@ -58,7 +58,7 @@ bool printMapAttributes(
 
 	typename std::map<Ta, Tb>::iterator stl_it;
 	int i = 0;
-	for (stl_it = stl_map.begin();  stl_it != stl_map.end() && i < 20; ++stl_it, ++i)
+	for (stl_it = stl_map.begin();  stl_it != stl_map.end() && i < 200; ++stl_it, ++i)
 	{
 		if (!(i % 5)) fs << "	";
 		fs << "[";
@@ -82,7 +82,7 @@ bool printMapAttributes(
 
 	typename ft::map<Ta, Tb>::iterator ft_it;
 	i = 0;
-	for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 20; ++ft_it, ++i)
+	for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 200; ++ft_it, ++i)
 	{
 		if (!(i % 5)) fs << "	";
 		fs << "[";

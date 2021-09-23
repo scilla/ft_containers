@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "rbtree.hpp"
 #include "pair.hpp"
+#include "colors.h"
 
 namespace ft {
 
@@ -65,7 +66,7 @@ public:
 	map(map& new_map): _start(), _end() {
 		initialize_bounds();
 		*this = new_map;
-		add_bounds();
+		// add_bounds();
 	}
 
 	~map() {}
@@ -80,13 +81,29 @@ public:
 			return;
 		}
 		print_tree(n->right, l + 1);
-		std::cout << std::string(l * 5,' ') << n->data.first;
+		std::string coll;
+		switch (n->color)
+		{
+		case 0:
+			coll = BOLD_RED;
+			break;
+		case 1:
+			coll = BOLD_GREEN;
+			break;
+		case 2:
+			coll = YELLOW;
+			break;
+		default:
+			coll = BLUE;
+			break;
+		}
+		std::cout << std::string(l * 5,' ') << coll << n->data.first;
 		print_tree(n->left, l + 1);
 	}
 
 	void initialize_bounds() {
-		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
-		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, value_type()};
+		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(666, "DorcoPioEND")};
+		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(665, "DorcoPioSTARt")};
 		_end_ptr = NULL;
 		_start_ptr = NULL;
 	}
@@ -172,34 +189,33 @@ public:
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
-		remove_bounds();
 		node_type* nd = _tree.find(value);
 		if (nd)
 			return ft::make_pair(iterator(*nd), false);
+		remove_bounds();
 		nd = &_tree.insert(value);
 		add_bounds();
 		_size++;
+		// print();
 		return ft::make_pair(iterator(*nd), true);
 	}
 
 	iterator insert( iterator hint, const value_type& value ) {
-		remove_bounds();
 		(void)hint;
 		node_type* nd = _tree.find(value);
 		if (nd)
 			return iterator(*nd);
+		remove_bounds();
 		nd = &_tree.insert(value);
-		add_bounds();
+		add_bounds(); 
 		_size++;
 		return iterator(*nd);
 	}
 
 	template< class InputIt >
 	void insert( InputIt first, InputIt last, typename enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0 ) {
-		remove_bounds();
 		for (; first != last; first++)
 			insert(*first);
-		add_bounds();
 	}
 
 	void erase( iterator pos ) {
@@ -311,6 +327,7 @@ private:
 			return;
 		*_start_ptr = NULL;
 		*_end_ptr = NULL;
+		print();
 	}
 
 	RBTree<value_type>		_tree;
