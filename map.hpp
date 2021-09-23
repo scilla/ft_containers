@@ -72,33 +72,7 @@ public:
 	~map() {}
 
 	void print() {
-		print_tree(_tree._root);
-	}
-
-	void print_tree(node_type* n, size_t l = 0) {
-		if (!n) {
-			std::cout << std::endl;
-			return;
-		}
-		print_tree(n->right, l + 1);
-		std::string coll;
-		switch (n->color)
-		{
-		case 0:
-			coll = BOLD_RED;
-			break;
-		case 1:
-			coll = BOLD_GREEN;
-			break;
-		case 2:
-			coll = YELLOW;
-			break;
-		default:
-			coll = BLUE;
-			break;
-		}
-		std::cout << std::string(l * 5,' ') << coll << n->data.first;
-		print_tree(n->left, l + 1);
+		_tree.print_tree();
 	}
 
 	void initialize_bounds() {
@@ -327,7 +301,7 @@ private:
 			return;
 		*_start_ptr = NULL;
 		*_end_ptr = NULL;
-		print();
+		// print();
 	}
 
 	RBTree<value_type>		_tree;

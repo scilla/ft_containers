@@ -2,6 +2,8 @@
 #define RBTREE_HPP
 
 #include "pair.hpp"
+#include "colors.h"
+#include <iostream>
 
 enum COLOR {
 	RED,
@@ -451,7 +453,7 @@ public:
 		}
 	}
 
-	void binaryInsert(node* N) {  // fortissimi dubbi (rottissimo)
+	void binaryInsert(node* N) {
 		node** current = &_root;
 		node* parent = NULL;
 		while (*current)
@@ -475,7 +477,7 @@ public:
 		newNode->parent = NULL;
 		return newNode;
 	}
-
+/*
 	node* rotateDir(node* P, bool right) {
 		node* G = P->parent;
 		node* S = right ? P->left : P->right;
@@ -483,13 +485,17 @@ public:
 		if (!S)
 			throw std::exception();
 		C = right ? P->right: P->left;
-		if (!right)
+		if (!right){
+		print_tree("prima");
 			P->right = C;
-		else
+		print_tree("dopo");
+		}
+		else{
 			P->left = C;
-		//P->left = right ? C : P;
+		}
 		if (C)
 			C->parent = P;
+		//P->left = right ? C : P;
 		if (right)
 			S->right = P;
 		else
@@ -511,6 +517,47 @@ public:
 
 	node* rotateLeft(node* P) { return rotateDir(P, false); }
 	node* rotateRight(node* P) { return rotateDir(P, true); }
+*/
+
+	void rotateLeft(node* x) {
+		node* y = x->right;
+		x->right = y->left;
+		if (y->left != NULL) {
+			y->left->parent = x;
+		}
+		y->parent = x->parent;
+		if (x->parent == NULL) {
+			_root = y;
+		}
+		else if (x == x->parent->left) {
+			x->parent->left = y;
+		}
+		else {
+			x->parent->right = y;
+		}
+		y->left = x;
+		x->parent = y;
+	}
+
+	void rotateRight(node* x) {
+		node* y = x->left;
+		x->left = y->right;
+		if (y->right != NULL) {
+			y->right->parent = x;
+		}
+		y->parent = x->parent;
+		if (x->parent == NULL) {
+			_root = y;
+		}
+		else if (x == x->parent->right) {
+			x->parent->right = y;
+		}
+		else {
+			x->parent->left = y;
+		}
+		y->right = x;
+		x->parent = y;
+	}
 
 	void _nuke(node* n) {
 		if (!n || n->color == FLUO)
@@ -518,6 +565,38 @@ public:
 		_nuke(n->left);
 		_nuke(n->right);
 		delete n;
+	}
+
+
+	void print_tree(std::string s = "") {
+		std::cout << BLUE << s << "#####################################################" << std::endl;
+		_print_tree(_root);
+		std::cout << BLUE << s << "#####################################################" << std::endl;
+	}
+	void _print_tree(node* n, size_t l = 0) {
+		if (!n) {
+			std::cout << std::endl;
+			return;
+		}
+		_print_tree(n->right, l + 1);
+		std::string coll;
+		switch (n->color)
+		{
+		case 0:
+			coll = BOLD_RED;
+			break;
+		case 1:
+			coll = BOLD_GREEN;
+			break;
+		case 2:
+			coll = YELLOW;
+			break;
+		default:
+			coll = BLUE;
+			break;
+		}
+		std::cout << std::string(l * 5,' ') << coll << n->data.first;
+		_print_tree(n->left, l + 1);
 	}
 };
 
