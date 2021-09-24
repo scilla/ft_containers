@@ -8,40 +8,26 @@
 
 int main(void)
 {
-	// const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
-
-	// ft::map<int, std::string> ft_map;
-	// ft::map<int, std::string> ft_mak;
-
-	// for (int i = 0; i < 5; i++)
-	// {
-	// 	ft_map.insert(ft::make_pair(i, range_str[i % 5]));
-	// 	ft_mak.insert(ft::make_pair(i + 100, range_str[i % 5]));
-	// }
-	// //ft_map.erase(7);
-	// ft_map.print();
-	// ft_mak.print();
-
-	// ft_map.swap(ft_mak);
-	
-	// ft_map.print();
-	// ft_mak.print();
-
-	// ft::map<int, std::string>::iterator ss = ft_map.begin();
-	// ft::map<int, std::string>::iterator ee = ft_map.end();
-	// ft_map.erase(ss, ee);
-
-
+	const int range_int[] = {-854, -1, -965, -9, -755};
 	const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
 	ft::map<int, std::string> ft_map;
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 6; i++)
 	{
-		ft_map.insert(ft::make_pair(i, range_str[i % 5]));
+		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
 	}
-	
-	ft::map<int, std::string> ft_map_copy(ft_map);
+
+	ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
+	ft::map<int, std::string>::iterator ft_it_end = ft_map.end();
+
+	for (int i = 0; i < 2; i++)
+	{
+		ft_it_beg++;
+	}
+	ft_it_end--;
+
+	ft_map.erase(ft_it_beg, ft_it_end);
 
 	ft::map<int, std::string>::iterator ft_it;
 	int i = 0;
