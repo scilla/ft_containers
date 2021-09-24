@@ -154,7 +154,7 @@ public:
 	// capacity
 	bool empty() const { return !_size; }
 	size_type size() const { return _size; }
-	size_type max_size() const { return _alloc.max_size()/*_tree.max_size() corretto*/; } //sbagliata bisogna prendere l'allocator dell'rbtree che a sua volta prende quello del nodo type
+	size_type max_size() const { return _tree.max_size(); } //sbagliata bisogna prendere l'allocator dell'rbtree che a sua volta prende quello del nodo type
 
 	// modifiers
 	void clear() {
