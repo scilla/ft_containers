@@ -214,12 +214,9 @@ public:
 		iterator todel;
 		while (first != last)
 		{
-			std::cout << (*first).first << std::endl;
-			_tree.print_tree("bef ");
 			todel = first;
 			++first;
 			erase(todel);
-			_tree.print_tree("aft ");
 		}
 	}
 

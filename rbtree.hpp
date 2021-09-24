@@ -442,7 +442,6 @@ public:
 			y = minimumNode(n->right);
 			y_original_color = y->color;
 			x = y;								// was y->parent 
-			print_tree("bef all");
 			if (y->parent == n) {
 				x->parent = n;
 			}
@@ -451,14 +450,10 @@ public:
 				y->right = n->right;
 				y->right->parent = y;
 			}
-			print_tree("bef del");
 			rbTransplant(n, y);
 			y->left = n->left;
-			print_tree("yl");
 			y->left->parent = y;
-			print_tree("ylp");
 			y->color = n->color;
-			print_tree("bef fix");
 			if (y_original_color == BLACK) {
 				// deleteFix(x);
 			}
@@ -471,14 +466,15 @@ public:
 		node *y = n;
 		node *x;
 		int y_original_color;
-		if (!n->parent) {
-			_root = NULL;
-		}
-		else if (!n->left && !n->right) {
-			if (n->isLeft()) {
-				n->parent->left = NULL;
-			} else {
-				n->parent->right = NULL;
+		if (!n->left && !n->right) {
+			if (!n->parent)
+				_root = NULL;
+			else {
+				if (n->isLeft()) {
+					n->parent->left = NULL;
+				} else {
+					n->parent->right = NULL;
+				}
 			}
 		}
 		else if (!n->left) {
@@ -492,8 +488,7 @@ public:
 		else {
 			y = minimumNode(n->right);
 			y_original_color = y->color;
-			x = y;								// was y->parent 
-			print_tree("bef all");
+			x = y;								// was y->parent
 			rbTransplant(n, y);
 			// fixDeletion(n);
 
