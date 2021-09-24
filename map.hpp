@@ -83,13 +83,15 @@ public:
 	}
 
 	// cose
-	map& operator=( const map& other ) {
+	map& operator=( map& other ) {
 		remove_bounds();
+		other.remove_bounds();
 		_tree = other._tree;
 		_comp = other._comp;
 		_alloc = other._alloc;
 		_size = other._size;
 		add_bounds();
+		other.add_bounds();
 		return *this;
 	}
 	allocator_type get_allocator() const { return _alloc; }
@@ -219,11 +221,13 @@ public:
 			todel = first;
 			++first;
 			erase(todel);
-			print();
+			// print();
 		}
 	}
 
 	void swap( map& other ) {
+		remove_bounds();
+		other.remove_bounds();
 		std::swap(_tree, other._tree);
 		std::swap(_start, other._start);
 		std::swap(_end, other._end);
@@ -232,6 +236,8 @@ public:
 		std::swap(_comp, other._comp);
 		std::swap(_alloc, other._alloc);
 		std::swap(_size, other._size);
+		add_bounds();
+		other.add_bounds();
 	}
 
 	// lookup
