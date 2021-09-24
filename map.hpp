@@ -197,6 +197,7 @@ public:
 		remove_bounds();
 		_tree.deleteNode(pos.base());
 		add_bounds();
+		_size--;
 	}
 
 	size_type erase (const key_type& k) {
@@ -205,6 +206,7 @@ public:
 			remove_bounds();
 			_tree.deleteNode(_tree.find(*found));
 			add_bounds();
+			_size--;
 			return 1;
 		}
 		return 0;
