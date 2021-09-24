@@ -94,16 +94,16 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			//exception
-			// return(NULL);
 			throw outOfBoundException();
 		}
 	}
+
 	rbt_iterator operator++(int) {
 		rbt_iterator tmp = *this;
 		++*this;
-		return *this;
+		return tmp;
 	}
+	
 	rbt_iterator& operator--() {
 		if(_ptr->left)
 		{
@@ -122,15 +122,14 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			//exception
-			//return(NULL);
 			throw outOfBoundException();
 		}
 	}
+
 	rbt_iterator operator--(int) {
 		rbt_iterator tmp = *this;
 		--*this;
-		return *this;
+		return tmp;
 	}
 
 	// template <class K>

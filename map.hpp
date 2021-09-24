@@ -219,6 +219,7 @@ public:
 			todel = first;
 			++first;
 			erase(todel);
+			print();
 		}
 	}
 
