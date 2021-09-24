@@ -386,7 +386,7 @@ public:
 
 	void deleteNode(node* N) {
 		node* child = !N->right ? N->left : N->right;
-		replaceNode(N, child);
+		rbTransplant(N, child);
 		if (N->color == BLACK) {
 			if (N->color == RED)
 				child->color = BLACK;
@@ -395,7 +395,7 @@ public:
 		}
 		delete N;
 	}
-*/
+	*/
 	void rbTransplant(node* u, node* v) {
 		if (!u->parent) {
 			_root = v;
@@ -425,6 +425,7 @@ public:
 		node *y = z;
 		node *x;
 		int y_original_color;
+		print_tree("bef all");
 		if (!z->parent) {
 			_root = NULL;
 		}
@@ -444,7 +445,6 @@ public:
 			rbTransplant(z, z->left);
 		}
 		else {
-			this->print_tree();
 			y = minimumNode(z->right);
 			y_original_color = y->color;
 			x = y->right;
@@ -456,10 +456,14 @@ public:
 				y->right = z->right;
 				y->right->parent = y;
 			}
+			print_tree("bef del");
 			rbTransplant(z, y);
 			y->left = z->left;
+			print_tree("yl");
 			y->left->parent = y;
+			print_tree("ylp");
 			y->color = z->color;
+			print_tree("bef fix");
 			if (y_original_color == BLACK) {
 				// deleteFix(x);
 				fixDeletion(x);
@@ -470,7 +474,7 @@ public:
 
 	void fixDeletion(node* N) {
 		if (N->parent) {							// case 1
-			if (N->sibling()->color == RED) 		// case 2
+			if (N->sibling() && N->sibling()->color == RED) 		// case 2
 			{
 				N->parent->color = RED;
 				N->sibling()->color = BLACK;
@@ -480,34 +484,34 @@ public:
 					rotateRight(N->parent);
 			}
 			if (N->parent->color == BLACK &&		// case 3
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == BLACK &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				fixDeletion(N->parent);
 			}
 			else if (N->parent->color == RED &&		// case 4
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == BLACK &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->parent->color = BLACK;
 			}
 			else if (N->isLeft() &&					// case 5
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == RED &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				N->sibling()->left && N->sibling()->left->color == RED &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->sibling()->left->color = BLACK;
 				rotateRight(N->sibling());
 			}
 			else if (N->isRight() &&				// still case 5
-				N->sibling()->color == BLACK &&
-				N->sibling()->right->color == RED &&	
-				N->sibling()->left->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				N->sibling()->right && N->sibling()->right->color == RED &&	
+				(!N->sibling()->left || N->sibling()->left->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->sibling()->right->color = BLACK;
@@ -626,7 +630,10 @@ public:
 			coll = BLUE;
 			break;
 		}
-		std::cout << std::string(l * 5,' ') << coll << n->data.first;
+		std::cout << coll << std::string(l * 5,' ');
+		if (n->parent)
+			std::cout << "(" << n->parent->data.first << ") ";
+		std::cout << n->data.first << NORMAL;
 		_print_tree(n->left, l + 1);
 	}
 };

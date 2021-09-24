@@ -14,7 +14,7 @@ int main(void)
 	{
 		ft_map.insert(ft::make_pair(i, range_str[i % 5]));
 	}
-
+	ft_map.erase(7);
 	ft_map.print();
 
 	return 0;
