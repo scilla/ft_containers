@@ -207,9 +207,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO)
-					return (*this);
-				if(_ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -237,9 +235,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO)
-					return (*this);
-				if(_ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -386,7 +382,7 @@ public:
 
 	void deleteNode(node* N) {
 		node* child = !N->right ? N->left : N->right;
-		replaceNode(N, child);
+		rbTransplant(N, child);
 		if (N->color == BLACK) {
 			if (N->color == RED)
 				child->color = BLACK;
@@ -395,7 +391,7 @@ public:
 		}
 		delete N;
 	}
-*/
+	*/
 	void rbTransplant(node* u, node* v) {
 		if (!u->parent) {
 			_root = v;
@@ -420,57 +416,107 @@ public:
 		return n;
 	}
 
-	void deleteNode(node* n) {
-		node *z = n;
-		node *y = z;
+	void _deleteNode(node* n) {
+		node *y = n;
 		node *x;
 		int y_original_color;
-		if (!z->parent) {
+		if (!n->parent) {
 			_root = NULL;
 		}
-		else if (!z->left && !z->right) {
-			if (z->isLeft()) {
-				z->parent->left = NULL;
+		else if (!n->left && !n->right) {
+			if (n->isLeft()) {
+				n->parent->left = NULL;
 			} else {
-				z->parent->right = NULL;
+				n->parent->right = NULL;
 			}
 		}
-		else if (!z->left) {
-			// x = z->right;
-			rbTransplant(z, z->right);
+		else if (!n->left) {
+			// x = n->right;
+			rbTransplant(n, n->right);
 		}
-		else if (!z->right) {
-			// x = z->left;
-			rbTransplant(z, z->left);
+		else if (!n->right) {
+			// x = n->left;
+			rbTransplant(n, n->left);
 		}
 		else {
-			this->print_tree();
-			y = minimumNode(z->right);
+			y = minimumNode(n->right);
 			y_original_color = y->color;
-			x = y->right;
-			if (y->parent == z) {
-				x->parent = z;
+			x = y;								// was y->parent 
+			print_tree("bef all");
+			if (y->parent == n) {
+				x->parent = n;
 			}
 			else {
 				rbTransplant(y, y->right);
-				y->right = z->right;
+				y->right = n->right;
 				y->right->parent = y;
 			}
-			rbTransplant(z, y);
-			y->left = z->left;
+			print_tree("bef del");
+			rbTransplant(n, y);
+			y->left = n->left;
+			print_tree("yl");
 			y->left->parent = y;
-			y->color = z->color;
+			print_tree("ylp");
+			y->color = n->color;
+			print_tree("bef fix");
 			if (y_original_color == BLACK) {
 				// deleteFix(x);
-				fixDeletion(x);
 			}
 		}
-		delete z;
+		fixDeletion(n);
+		delete n;
+	}
+
+	void deleteNode(node* n) {
+		node *y = n;
+		node *x;
+		int y_original_color;
+		if (!n->parent) {
+			_root = NULL;
+		}
+		else if (!n->left && !n->right) {
+			if (n->isLeft()) {
+				n->parent->left = NULL;
+			} else {
+				n->parent->right = NULL;
+			}
+		}
+		else if (!n->left) {
+			// x = n->right;
+			rbTransplant(n, n->right);
+		}
+		else if (!n->right) {
+			// x = n->left;
+			rbTransplant(n, n->left);
+		}
+		else {
+			y = minimumNode(n->right);
+			y_original_color = y->color;
+			x = y;								// was y->parent 
+			print_tree("bef all");
+			rbTransplant(n, y);
+			// fixDeletion(n);
+
+			// y->right = n->right;
+			// y->right->parent = y;
+			// print_tree("bef del");
+			// rbTransplant(n, y);
+			// y->left = n->left;
+			// print_tree("yl");
+			// y->left->parent = y;
+			// print_tree("ylp");
+			// y->color = n->color;
+			// print_tree("bef fix");
+			// if (y_original_color == BLACK) {
+			// 	// deleteFix(x);
+			// }
+		}
+		delete n;
 	}
 
 	void fixDeletion(node* N) {
 		if (N->parent) {							// case 1
-			if (N->sibling()->color == RED) 		// case 2
+			if (N->sibling() && N->sibling()->color == RED) 		// case 2
 			{
 				N->parent->color = RED;
 				N->sibling()->color = BLACK;
@@ -480,34 +526,34 @@ public:
 					rotateRight(N->parent);
 			}
 			if (N->parent->color == BLACK &&		// case 3
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == BLACK &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				fixDeletion(N->parent);
 			}
 			else if (N->parent->color == RED &&		// case 4
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == BLACK &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->parent->color = BLACK;
 			}
 			else if (N->isLeft() &&					// case 5
-				N->sibling()->color == BLACK &&
-				N->sibling()->left->color == RED &&	
-				N->sibling()->right->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				N->sibling()->left && N->sibling()->left->color == RED &&	
+				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->sibling()->left->color = BLACK;
 				rotateRight(N->sibling());
 			}
 			else if (N->isRight() &&				// still case 5
-				N->sibling()->color == BLACK &&
-				N->sibling()->right->color == RED &&	
-				N->sibling()->left->color == BLACK)
+				(!N->sibling() || N->sibling()->color == BLACK) &&
+				N->sibling()->right && N->sibling()->right->color == RED &&	
+				(!N->sibling()->left || N->sibling()->left->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->sibling()->right->color = BLACK;
@@ -516,10 +562,12 @@ public:
 			N->sibling()->color = N->parent->color; // case 6
 			N->parent->color = BLACK;
 			if (N->isLeft()) {
-				N->sibling()->right->color = BLACK;
+				if (N->sibling()->right)
+					N->sibling()->right->color = BLACK;
 				rotateLeft(N->parent);
 			} else {
-				N->sibling()->left->color = BLACK;
+				if (N->sibling()->right)
+					N->sibling()->left->color = BLACK;
 				rotateRight(N->parent);
 			}
 		}
@@ -600,6 +648,8 @@ public:
 
 
 	void print_tree(std::string s = "") {
+		(void)s;
+		//return;
 		std::cout << BLUE << s << "#####################################################" << std::endl;
 		_print_tree(_root);
 		std::cout << BLUE << s << "#####################################################" << std::endl;
@@ -626,7 +676,15 @@ public:
 			coll = BLUE;
 			break;
 		}
-		std::cout << std::string(l * 5,' ') << coll << n->data.first;
+		std::cout << coll << std::string(l * 4,' ');
+		if (n->parent) {
+			//std::cout << "(" << n->parent->data.first << ") ";
+			if (n->isLeft())
+				std::cout << "\\";
+			else
+				std::cout << "/";
+		}
+		std::cout << n->data.first << NORMAL;
 		_print_tree(n->left, l + 1);
 	}
 };

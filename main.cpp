@@ -10,12 +10,15 @@ int main(void)
 
 	ft::map<int, std::string> ft_map;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		ft_map.insert(ft::make_pair(i, range_str[i % 5]));
 	}
-
+	//ft_map.erase(7);
 	ft_map.print();
 
+	ft::map<int, std::string>::iterator ss = ft_map.begin();
+	ft::map<int, std::string>::iterator ee = ft_map.end();
+	ft_map.erase(ss, ee);
 	return 0;
 }

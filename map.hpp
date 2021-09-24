@@ -76,8 +76,8 @@ public:
 	}
 
 	void initialize_bounds() {
-		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(666, "DorcoPioEND")};
-		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(665, "DorcoPioSTARt")};
+		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
+		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
 		_end_ptr = NULL;
 		_start_ptr = NULL;
 	}
@@ -131,7 +131,8 @@ public:
 		iterator pt = iterator(*_tree._root);
 		while (pt.base()->color != FLUO)
 			pt--;
-		return ++pt;
+		pt++;
+		return pt;
 	};
 
 	// const_iterator begin() const {
@@ -201,15 +202,25 @@ public:
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
 		if (found.base() && found != end()) {
+			remove_bounds();
 			_tree.deleteNode(_tree.find(*found));
+			add_bounds();
 			return 1;
 		}
 		return 0;
 	}
 
 	void erase (iterator first, iterator last) {
-		for (; first != last; first++)
-			erase(first);
+		iterator todel;
+		while (first != last)
+		{
+			std::cout << (*first).first << std::endl;
+			_tree.print_tree("bef ");
+			todel = first;
+			++first;
+			erase(todel);
+			_tree.print_tree("aft ");
+		}
 	}
 
 	void swap( map& other ) {
@@ -297,10 +308,10 @@ private:
 	void remove_bounds() {
 		_start.parent = NULL;
 		_end.parent = NULL;
-		if (!_tree._root)
-			return;
-		*_start_ptr = NULL;
-		*_end_ptr = NULL;
+		if (_start_ptr)
+			*_start_ptr = NULL;
+		if (_end_ptr)
+			*_end_ptr = NULL;
 		// print();
 	}
 
