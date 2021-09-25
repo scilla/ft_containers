@@ -400,86 +400,10 @@ public:
 
 	void deleteNode(node* n) {
 		remove_bounds();
-		if (!n->left && !n->right) {
-			if (!n->parent)
-				_root = NULL;
-			else {
-				if (n->isLeft()) {
-					n->parent->left = NULL;
-				} else {
-					n->parent->right = NULL;
-				}
-			}
-		}
-		else if (!n->left) {
-			// x = n->right;
-			// rbTransplant(n, n->right);
-			n->right->parent = n->parent;
-			if (!n->parent) {
-				_root = n->right;
-			} else {
-				if (n->isLeft())
-					n->parent->left = n->right;
-				else
-					n->parent->right = n->right;
-			}
-		}
-		else if (!n->right) {
-			// x = n->left;
-			// rbTransplant(n, n->left);
-			n->left->parent = n->parent;
-			if (!n->parent) {
-				_root = n->right;
-			} else {
-				if (n->isLeft())
-					n->parent->left = n->left;
-				else
-					n->parent->right = n->left;
-			}
-		}
-		else {
-			y = minimumNode(n->right);
-			y_original_color = y->color;
-			//x = y;								// was y->parent
-			//rbTransplant(n, y);
-			if (y->parent) {
-				if (y->isLeft())
-					y->parent->left = NULL;
-				else
-					y->parent->right = NULL;
-			}
-			y->parent = n->parent;
-			if (!n->parent)
-				_root = y;
-			else {
-				if (y->isLeft())
-					y->parent->left = y;
-				else
-					y->parent->right = y;
-			}
-			y->left = n->left;
-			if (y->left)
-				y->left->parent = y;
-			y->right = n->right;
-			if (y->right)
-				y->right->parent = y;
-
-			//*parentSelfPtr(n) = NULL;
-			// fixDeletion(n);
-
-			// y->right = n->right;
-			// y->right->parent = y;
-			// print_tree("bef del");
-			// rbTransplant(n, y);
-			// y->left = n->left;
-			// print_tree("yl");
-			// y->left->parent = y;
-			// print_tree("ylp");
-			// y->color = n->color;
-			// print_tree("bef fix");
-			// if (y_original_color == BLACK) {
-			// 	// deleteFix(x);
-			// }
+		if (!n->parent && !n->left && !n->right) {
+			_root = NULL;
+		} else if (n->left && n->right) {
+			
 		}
 		delete n;
 		add_bounds();

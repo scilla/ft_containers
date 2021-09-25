@@ -17,10 +17,10 @@ int main(void)
 	{
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
 	}
-
+	ft_map.print();
 	ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
 	ft::map<int, std::string>::iterator ft_it_end = ft_map.end();
-
+/*
 	for (int i = 0; i < 2; i++)
 	{
 		ft_it_beg++;
@@ -42,5 +42,6 @@ int main(void)
 		fs << ", ";
 		if ((i % 5) == 4) fs << std::endl;
 	}
+	*/
 	return 0;
 }
