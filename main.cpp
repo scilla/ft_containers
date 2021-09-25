@@ -13,7 +13,7 @@ int main(void)
 
 	ft::map<int, std::string> ft_map;
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
 	}

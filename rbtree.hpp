@@ -288,17 +288,22 @@ class RBTree
 	typedef typename allocator_type::difference_type			difference_type;
 
 private:
-	allocator_type _alloc;
+	allocator_type		_alloc;
+	node				_start;
+	node				_end;
+	node**				_start_ptr;
+	node**				_end_ptr;
 public:
 
 	size_type	max_size() const { return _alloc.max_size(); }
 
 	node*	_root;
-	RBTree(): _root(NULL) {}
+	RBTree(): _root(NULL) { initialize_bounds(); }
 	RBTree(RBTree& tree) {
+		initialize_bounds();
 		*this = tree;
 	}
-	~RBTree() {_nuke(_root);}
+	~RBTree() {remove_bounds(); _nuke(_root);}
 	void recursive_insert(node* new_node) {
 		if (!new_node)
 			return;
@@ -307,25 +312,37 @@ public:
 		recursive_insert(new_node->right);
 	}
 
+	const node& getEnd() const { return _end; }
+	const node& getStart() const { return _start; }
+
 	RBTree& operator=(const RBTree& tree) {
+		remove_bounds();
 		_nuke(_root);
 		recursive_insert(tree._root);
+		add_bounds();
 		return *this;
+	}
+
+	void clear() {
+		remove_bounds();
+		_nuke(_root);
 	}
 
 	node& insert(T newdata) {
 		node* ret = newNode(newdata);
 		node* N = ret;
+		remove_bounds();
 		binaryInsert(N);
 		fixTree(ret);
 		while (_root->parent)
 			_root = _root->parent;
+		add_bounds();
 		return *ret;
 	}
 
 	node* find(T& data) const {
 		node* start = _root;
-		while (start)
+		while (start && start->color != FLUO)
 		{
 			if (data == start->data)
 				return start;
@@ -339,7 +356,7 @@ public:
 
 	node* find(const T& data) const {
 		node* start = _root;
-		while (start)
+		while (start && start->color != FLUO)
 		{
 			if (data == start->data)
 				return start;
@@ -478,6 +495,7 @@ public:
 		node *y = n;
 		node *x;
 		int y_original_color;
+		remove_bounds();
 		if (!n->left && !n->right) {
 			if (!n->parent)
 				_root = NULL;
@@ -519,6 +537,7 @@ public:
 			// }
 		}
 		delete n;
+		add_bounds();
 	}
 
 	void fixDeletion(node* N) {
@@ -653,6 +672,42 @@ public:
 		delete n;
 	}
 
+	void initialize_bounds() {
+		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
+		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
+		_end_ptr = NULL;
+		_start_ptr = NULL;
+	}
+	
+	void add_bounds() {
+		node* ptr;
+		if (!_root)
+			return;
+		
+		ptr = _root;
+		while (ptr->left)
+			ptr = ptr->left;
+		ptr->left = &_start;
+		_start.parent = ptr;
+		_start_ptr = &ptr->left;
+
+		ptr = _root;
+		while (ptr->right)
+			ptr = ptr->right;
+		ptr->right = &_end;
+		_end.parent = ptr;
+		_end_ptr = &ptr->right;		
+	}
+
+	void remove_bounds() {
+		_start.parent = NULL;
+		_end.parent = NULL;
+		if (_start_ptr)
+			*_start_ptr = NULL;
+		if (_end_ptr)
+			*_end_ptr = NULL;
+		// print();
+	}
 
 	void print_tree(std::string s = "") {
 		(void)s;
