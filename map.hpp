@@ -67,8 +67,8 @@ public:
 
 	~map() {}
 
-	void print() {
-		_tree.print_tree();
+	void print(std::string s = "") {
+		_tree.print_tree(s);
 	}
 
 	// cose
@@ -194,10 +194,11 @@ public:
 		iterator todel;
 		while (first != last)
 		{
+			print("bef");
 			todel = first;
 			++first;
 			erase(todel);
-			// print();
+			print("aft");
 		}
 	}
 

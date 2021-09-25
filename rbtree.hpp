@@ -397,104 +397,8 @@ public:
 			}
 		} 															// case 3
 	}
-/*
-	void replaceNode(node* a, node* b) {
-		if (a->parent) {
-			if (a->isLeft()) {
-				a->parent->left = b;
-			} else {
-				a->parent->right = b;
-			}
-			b->parent = a->parent;
-		}
-	}
-
-	void deleteNode(node* N) {
-		node* child = !N->right ? N->left : N->right;
-		rbTransplant(N, child);
-		if (N->color == BLACK) {
-			if (N->color == RED)
-				child->color = BLACK;
-			else
-				fixDeletion(N);
-		}
-		delete N;
-	}
-	*/
-	void rbTransplant(node* u, node* v) {
-		if (!u->parent) {
-			_root = v;
-		}
-		else if (u->isLeft()) {
-			u->parent->left = v;
-		}
-		else {
-			u->parent->right = v;
-		}
-		v->parent = u->parent;
-	}
-
-	node* minimumNode(node *n) {
-		while (n->left)
-			n = n->left;
-		return n;
-	}
-	node* maximumNode(node *n) {
-		while (n->right)
-			n = n->right;
-		return n;
-	}
-
-	void _deleteNode(node* n) {
-		node *y = n;
-		node *x;
-		int y_original_color;
-		if (!n->parent) {
-			_root = NULL;
-		}
-		else if (!n->left && !n->right) {
-			if (n->isLeft()) {
-				n->parent->left = NULL;
-			} else {
-				n->parent->right = NULL;
-			}
-		}
-		else if (!n->left) {
-			// x = n->right;
-			rbTransplant(n, n->right);
-		}
-		else if (!n->right) {
-			// x = n->left;
-			rbTransplant(n, n->left);
-		}
-		else {
-			y = minimumNode(n->right);
-			y_original_color = y->color;
-			x = y;								// was y->parent 
-			if (y->parent == n) {
-				x->parent = n;
-			}
-			else {
-				rbTransplant(y, y->right);
-				y->right = n->right;
-				y->right->parent = y;
-			}
-			rbTransplant(n, y);
-			y->left = n->left;
-			y->left->parent = y;
-			y->color = n->color;
-			if (y_original_color == BLACK) {
-				// deleteFix(x);
-			}
-		}
-		fixDeletion(n);
-		delete n;
-	}
 
 	void deleteNode(node* n) {
-		node *y = n;
-		node *x;
-		int y_original_color;
 		remove_bounds();
 		if (!n->left && !n->right) {
 			if (!n->parent)
@@ -509,17 +413,58 @@ public:
 		}
 		else if (!n->left) {
 			// x = n->right;
-			rbTransplant(n, n->right);
+			// rbTransplant(n, n->right);
+			n->right->parent = n->parent;
+			if (!n->parent) {
+				_root = n->right;
+			} else {
+				if (n->isLeft())
+					n->parent->left = n->right;
+				else
+					n->parent->right = n->right;
+			}
 		}
 		else if (!n->right) {
 			// x = n->left;
-			rbTransplant(n, n->left);
+			// rbTransplant(n, n->left);
+			n->left->parent = n->parent;
+			if (!n->parent) {
+				_root = n->right;
+			} else {
+				if (n->isLeft())
+					n->parent->left = n->left;
+				else
+					n->parent->right = n->left;
+			}
 		}
 		else {
 			y = minimumNode(n->right);
 			y_original_color = y->color;
-			x = y;								// was y->parent
-			rbTransplant(n, y);
+			//x = y;								// was y->parent
+			//rbTransplant(n, y);
+			if (y->parent) {
+				if (y->isLeft())
+					y->parent->left = NULL;
+				else
+					y->parent->right = NULL;
+			}
+			y->parent = n->parent;
+			if (!n->parent)
+				_root = y;
+			else {
+				if (y->isLeft())
+					y->parent->left = y;
+				else
+					y->parent->right = y;
+			}
+			y->left = n->left;
+			if (y->left)
+				y->left->parent = y;
+			y->right = n->right;
+			if (y->right)
+				y->right->parent = y;
+
+			//*parentSelfPtr(n) = NULL;
 			// fixDeletion(n);
 
 			// y->right = n->right;
@@ -716,6 +661,7 @@ public:
 		_print_tree(_root);
 		std::cout << BLUE << s << "#####################################################" << std::endl;
 	}
+
 	void _print_tree(node* n, size_t l = 0) {
 		if (!n) {
 			std::cout << std::endl;
