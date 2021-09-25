@@ -194,11 +194,11 @@ public:
 		iterator todel;
 		while (first != last)
 		{
-			print("bef");
+			//print("bef");
 			todel = first;
 			++first;
 			erase(todel);
-			print("aft");
+			//print("aft");
 		}
 	}
 

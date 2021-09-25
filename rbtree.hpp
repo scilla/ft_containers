@@ -398,15 +398,80 @@ public:
 		} 															// case 3
 	}
 
+	node** selfParentPtrCross(node* n, node* p) {
+		if (!n->parent)
+			return &_root;
+		else if (n->parent->left == p)
+			return &n->parent->left;
+		else if (n->parent->right == p)
+			return &n->parent->right;
+		throw std::exception();
+	}
+
+	node** selfParentPtr(node* n) {
+		if (!n->parent)
+			return &_root;
+		else if (n->isLeft())
+			return &n->parent->left;
+		else if (n->isRight())
+			return &n->parent->right;
+		throw std::exception();
+	}
+
+	node* minimumNode(node* n) {
+		while (n->left)
+			n = n->left;
+		return n;
+	}
+
+	void fixDependencies(node* n) {
+		if (n->left)
+			n->left->parent = n;
+		if (n->right)
+			n->right->parent = n;
+	}
+
+	void replaceNode(node* a, node* b) {
+		*selfParentPtr(a) = b;
+		*selfParentPtr(b) = a;
+		std::swap(a->parent, b->parent);
+		std::swap(a->left, b->left);
+		std::swap(a->right, b->right);
+		std::swap(a->color, b->color);
+		fixDependencies(a);
+		fixDependencies(b);
+	}
+
 	void deleteNode(node* n) {
 		remove_bounds();
-		if (!n->parent && !n->left && !n->right) {
-			_root = NULL;
-		} else if (n->left && n->right) {
-			
-		}
+		_deleteNode(n);
 		delete n;
 		add_bounds();
+	}
+
+	void _deleteNode(node* n) {
+		node* x;
+		if (!n->parent && !n->left && !n->right) {
+			_root = NULL;
+		} else if (!n->left && !n->right) {
+			if (n->isLeft())
+				n->parent->left = NULL;
+			else if (n->isRight())
+				n->parent->right = NULL;
+			else
+				throw std::exception();
+		} else if (n->left && n->right) {
+			x = minimumNode(n->right);
+			replaceNode(n, x);
+			_deleteNode(n);
+		} else if (!n->left) {
+			replaceNode(n, n->right);
+			_deleteNode(n);
+		} else if (!n->right) {
+			replaceNode(n, n->left);
+			_deleteNode(n);
+		} else
+			throw std::exception();
 	}
 
 	void fixDeletion(node* N) {
