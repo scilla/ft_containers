@@ -305,8 +305,7 @@ public:
 	}
 	
 	~RBTree() {
-		remove_bounds();
-		_nuke(_root);
+		clear();
 	}
 
 	void recursive_insert(node* new_node) {
@@ -323,7 +322,7 @@ public:
 	const node& getStart() const { return _start; }
 
 	RBTree& operator=(const RBTree& tree) {
-		_nuke(_root);
+		clear();
 		recursive_insert(tree._root);
 		return *this;
 	}
@@ -563,7 +562,7 @@ public:
 			parent = *current;
 			if (N->data < parent->data)
 				current = &parent->left;
-			else if (N->data < parent->data)
+			else if (N->data > parent->data)
 				current = &parent->right;
 			else
 				throw duplicateElementException();
