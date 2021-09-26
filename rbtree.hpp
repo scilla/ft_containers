@@ -303,10 +303,12 @@ public:
 		initialize_bounds();
 		*this = tree;
 	}
+	
 	~RBTree() {
 		remove_bounds();
 		_nuke(_root);
 	}
+
 	void recursive_insert(node* new_node) {
 		if (!new_node)
 			return;
@@ -321,10 +323,8 @@ public:
 	const node& getStart() const { return _start; }
 
 	RBTree& operator=(const RBTree& tree) {
-		remove_bounds();
 		_nuke(_root);
 		recursive_insert(tree._root);
-		add_bounds();
 		return *this;
 	}
 
@@ -612,7 +612,7 @@ public:
 		x->parent = y;
 	}
 
-	void _nuke(node* n) {
+	void _nuke(node* n) {			// todo: handle boundaries reset 
 		if (!n || n->color == FLUO)
 			return;
 		_nuke(n->left);
