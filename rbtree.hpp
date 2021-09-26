@@ -613,7 +613,6 @@ public:
 	}
 
 	void _nuke(node* n) {
-		remove_bounds();
 		if (!n || n->color == FLUO)
 			return;
 		_nuke(n->left);
