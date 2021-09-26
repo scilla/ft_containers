@@ -547,6 +547,14 @@ public:
 		}
 	}
 
+	class duplicateElementException: public std::exception
+	{
+	public:
+		virtual const char* what() const throw() {
+			return "Duplicate element exception";
+		}
+	};
+
 	void binaryInsert(node* N) {
 		node** current = &_root;
 		node* parent = NULL;
@@ -555,8 +563,10 @@ public:
 			parent = *current;
 			if (N->data < parent->data)
 				current = &parent->left;
-			else
+			else if (N->data < parent->data)
 				current = &parent->right;
+			else
+				throw duplicateElementException();
 		}
 		*current = N;
 		N->parent = parent;
