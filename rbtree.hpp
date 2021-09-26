@@ -299,7 +299,7 @@ public:
 
 	node*	_root;
 	RBTree(): _root(NULL) { initialize_bounds(); }
-	RBTree(RBTree& tree) {
+	RBTree(RBTree& tree): _root(NULL) {
 		initialize_bounds();
 		*this = tree;
 	}

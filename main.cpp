@@ -12,7 +12,7 @@ int main(void)
 	const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
 	ft::map<int, std::string> ft_map;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
 	}
@@ -47,5 +47,6 @@ int main(void)
 	ft::map<int, std::string> ft_map_copy(ft_map);
 	ft_map_copy.print();
 
+	ft_map_copy.swap(ft_map);
 	return 0;
 }
