@@ -288,24 +288,39 @@ class RBTree
 	typedef typename allocator_type::difference_type			difference_type;
 
 private:
-	allocator_type _alloc;
+	allocator_type		_alloc;
+	node				_start;
+	node				_end;
+	node**				_start_ptr;
+	node**				_end_ptr;
 public:
 
 	size_type	max_size() const { return _alloc.max_size(); }
 
 	node*	_root;
-	RBTree(): _root(NULL) {}
+	RBTree(): _root(NULL) { initialize_bounds(); }
 	RBTree(RBTree& tree) {
+		initialize_bounds();
 		*this = tree;
 	}
-	~RBTree() {_nuke(_root);}
+	
+	~RBTree() {
+		remove_bounds();
+		_nuke(_root);
+	}
+
 	void recursive_insert(node* new_node) {
 		if (!new_node)
+			return;
+		if (new_node->color == FLUO)
 			return;
 		insert(new_node->data);
 		recursive_insert(new_node->left);
 		recursive_insert(new_node->right);
 	}
+
+	const node& getEnd() const { return _end; }
+	const node& getStart() const { return _start; }
 
 	RBTree& operator=(const RBTree& tree) {
 		_nuke(_root);
@@ -313,19 +328,26 @@ public:
 		return *this;
 	}
 
+	void clear() {
+		remove_bounds();
+		_nuke(_root);
+	}
+
 	node& insert(T newdata) {
 		node* ret = newNode(newdata);
 		node* N = ret;
+		remove_bounds();
 		binaryInsert(N);
 		fixTree(ret);
 		while (_root->parent)
 			_root = _root->parent;
+		add_bounds();
 		return *ret;
 	}
 
 	node* find(T& data) const {
 		node* start = _root;
-		while (start)
+		while (start && start->color != FLUO)
 		{
 			if (data == start->data)
 				return start;
@@ -339,7 +361,7 @@ public:
 
 	node* find(const T& data) const {
 		node* start = _root;
-		while (start)
+		while (start && start->color != FLUO)
 		{
 			if (data == start->data)
 				return start;
@@ -380,145 +402,90 @@ public:
 			}
 		} 															// case 3
 	}
-/*
-	void replaceNode(node* a, node* b) {
-		if (a->parent) {
-			if (a->isLeft()) {
-				a->parent->left = b;
-			} else {
-				a->parent->right = b;
-			}
-			b->parent = a->parent;
-		}
+
+	node** selfParentPtrCross(node* n, node* p) {
+		if (!n->parent)
+			return &_root;
+		else if (n->parent->left == p)
+			return &n->parent->left;
+		else if (n->parent->right == p)
+			return &n->parent->right;
+		throw std::exception();
 	}
 
-	void deleteNode(node* N) {
-		node* child = !N->right ? N->left : N->right;
-		rbTransplant(N, child);
-		if (N->color == BLACK) {
-			if (N->color == RED)
-				child->color = BLACK;
-			else
-				fixDeletion(N);
-		}
-		delete N;
-	}
-	*/
-	void rbTransplant(node* u, node* v) {
-		if (!u->parent) {
-			_root = v;
-		}
-		else if (u->isLeft()) {
-			u->parent->left = v;
-		}
-		else {
-			u->parent->right = v;
-		}
-		v->parent = u->parent;
+	node** selfParentPtr(node* n) {
+		if (!n->parent)
+			return &_root;
+		else if (n->isLeft())
+			return &n->parent->left;
+		else if (n->isRight())
+			return &n->parent->right;
+		throw std::exception();
 	}
 
-	node* minimumNode(node *n) {
+	node* minimumNode(node* n) {
 		while (n->left)
 			n = n->left;
 		return n;
 	}
-	node* maximumNode(node *n) {
-		while (n->right)
-			n = n->right;
-		return n;
+
+	void fixDependencies(node* n) {
+		if (n->left)
+			n->left->parent = n;
+		if (n->right)
+			n->right->parent = n;
 	}
 
-	void _deleteNode(node* n) {
-		node *y = n;
-		node *x;
-		int y_original_color;
-		if (!n->parent) {
-			_root = NULL;
-		}
-		else if (!n->left && !n->right) {
-			if (n->isLeft()) {
-				n->parent->left = NULL;
-			} else {
-				n->parent->right = NULL;
-			}
-		}
-		else if (!n->left) {
-			// x = n->right;
-			rbTransplant(n, n->right);
-		}
-		else if (!n->right) {
-			// x = n->left;
-			rbTransplant(n, n->left);
-		}
-		else {
-			y = minimumNode(n->right);
-			y_original_color = y->color;
-			x = y;								// was y->parent 
-			if (y->parent == n) {
-				x->parent = n;
-			}
-			else {
-				rbTransplant(y, y->right);
-				y->right = n->right;
-				y->right->parent = y;
-			}
-			rbTransplant(n, y);
-			y->left = n->left;
-			y->left->parent = y;
-			y->color = n->color;
-			if (y_original_color == BLACK) {
-				// deleteFix(x);
-			}
-		}
-		fixDeletion(n);
-		delete n;
+	void swapNode(node* a, node* b) {
+		*selfParentPtr(a) = b;
+		*selfParentPtr(b) = a;
+		std::swap(a->parent, b->parent);
+		std::swap(a->left, b->left);
+		std::swap(a->right, b->right);
+		std::swap(a->color, b->color);
+		fixDependencies(a);
+		fixDependencies(b);
+	}
+
+	void replaceNodeWithLoneChild(node* a, node* b) {
+		if (b->parent != a)
+			throw std::exception();
+		if (a->left && a->right)
+			throw std::exception();
+		if (!a->left && !a->right)
+			throw std::exception();
+		b->parent = a->parent;
+		*selfParentPtr(a) = b;
 	}
 
 	void deleteNode(node* n) {
-		node *y = n;
-		node *x;
-		int y_original_color;
-		if (!n->left && !n->right) {
-			if (!n->parent)
-				_root = NULL;
-			else {
-				if (n->isLeft()) {
-					n->parent->left = NULL;
-				} else {
-					n->parent->right = NULL;
-				}
-			}
-		}
-		else if (!n->left) {
-			// x = n->right;
-			rbTransplant(n, n->right);
-		}
-		else if (!n->right) {
-			// x = n->left;
-			rbTransplant(n, n->left);
-		}
-		else {
-			y = minimumNode(n->right);
-			y_original_color = y->color;
-			x = y;								// was y->parent
-			rbTransplant(n, y);
-			// fixDeletion(n);
-
-			// y->right = n->right;
-			// y->right->parent = y;
-			// print_tree("bef del");
-			// rbTransplant(n, y);
-			// y->left = n->left;
-			// print_tree("yl");
-			// y->left->parent = y;
-			// print_tree("ylp");
-			// y->color = n->color;
-			// print_tree("bef fix");
-			// if (y_original_color == BLACK) {
-			// 	// deleteFix(x);
-			// }
-		}
+		remove_bounds();
+		_deleteNode(n);
 		delete n;
+		add_bounds();
+	}
+
+	void _deleteNode(node* n) {
+		node* x;
+		if (!n->parent && !n->left && !n->right) {
+			_root = NULL;
+		} else if (!n->left && !n->right) {
+			if (n->isLeft())
+				n->parent->left = NULL;
+			else if (n->isRight())
+				n->parent->right = NULL;
+			else
+				throw std::exception();
+		} else if (n->left && n->right) {
+			x = minimumNode(n->right);
+			swapNode(n, x);
+			_deleteNode(n);
+		} else if (!n->left) {
+			replaceNodeWithLoneChild(n, n->right);
+		} else if (!n->right) {
+			replaceNodeWithLoneChild(n, n->left);
+		} else
+			throw std::exception();
 	}
 
 	void fixDeletion(node* N) {
@@ -645,7 +612,7 @@ public:
 		x->parent = y;
 	}
 
-	void _nuke(node* n) {
+	void _nuke(node* n) {			// todo: handle boundaries reset 
 		if (!n || n->color == FLUO)
 			return;
 		_nuke(n->left);
@@ -653,6 +620,42 @@ public:
 		delete n;
 	}
 
+	void initialize_bounds() {
+		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
+		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
+		_end_ptr = NULL;
+		_start_ptr = NULL;
+	}
+	
+	void add_bounds() {
+		node* ptr;
+		if (!_root)
+			return;
+		
+		ptr = _root;
+		while (ptr->left)
+			ptr = ptr->left;
+		ptr->left = &_start;
+		_start.parent = ptr;
+		_start_ptr = &ptr->left;
+
+		ptr = _root;
+		while (ptr->right)
+			ptr = ptr->right;
+		ptr->right = &_end;
+		_end.parent = ptr;
+		_end_ptr = &ptr->right;		
+	}
+
+	void remove_bounds() {
+		_start.parent = NULL;
+		_end.parent = NULL;
+		if (_start_ptr)
+			*_start_ptr = NULL;
+		if (_end_ptr)
+			*_end_ptr = NULL;
+		// print();
+	}
 
 	void print_tree(std::string s = "") {
 		(void)s;
@@ -661,6 +664,7 @@ public:
 		_print_tree(_root);
 		std::cout << BLUE << s << "#####################################################" << std::endl;
 	}
+
 	void _print_tree(node* n, size_t l = 0) {
 		if (!n) {
 			std::cout << std::endl;
@@ -685,7 +689,7 @@ public:
 		}
 		std::cout << coll << std::string(l * 4,' ');
 		if (n->parent) {
-			//std::cout << "(" << n->parent->data.first << ") ";
+			std::cout << "(" << n->parent->data.first << ")";
 			if (n->isLeft())
 				std::cout << "\\";
 			else

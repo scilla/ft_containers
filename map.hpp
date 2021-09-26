@@ -52,46 +52,31 @@ public:
 	};
 
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc),  _size() { initialize_bounds(); }
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {}
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _start(), _end(), _comp(comp), _alloc(alloc), _size(0) {
-		initialize_bounds();
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc), _size(0) {
 		for (; first != last; first++) {
 			_tree.insert(*first);
 			_size++;
 		}
-		add_bounds();
 	}
 
-	map(map& new_map): _start(), _end() {
-		initialize_bounds();
+	map(map& new_map) {
 		*this = new_map;
-		// add_bounds();
 	}
 
 	~map() {}
 
-	void print() {
-		_tree.print_tree();
-	}
-
-	void initialize_bounds() {
-		_end = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
-		_start = (struct Node<value_type>){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
-		_end_ptr = NULL;
-		_start_ptr = NULL;
+	void print(std::string s = "") {
+		_tree.print_tree(s);
 	}
 
 	// cose
 	map& operator=( map& other ) {
-		remove_bounds();
-		other.remove_bounds();
 		_tree = other._tree;
 		_comp = other._comp;
 		_alloc = other._alloc;
 		_size = other._size;
-		add_bounds();
-		other.add_bounds();
 		return *this;
 	}
 	allocator_type get_allocator() const { return _alloc; }
@@ -146,32 +131,29 @@ public:
 	// 	return const_iterator(*pt);
 	// };
 
-	iterator end() const { return iterator(_end); };
-	// const_iterator end() const { return iterator(_end); }
+	const iterator end() const { return iterator(_tree.getEnd()); };
+	// const_iterator end() const { return iterator(_tree.getEnd()); }
 	reverse_iterator rbegin() const { return reverse_iterator(end()); }
 	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	reverse_iterator rend() const { return reverse_iterator(begin()); }
+	reverse_iterator rend() const { return reverse_iterator(begin()); } // 			why not getStart()?
 	// const_reverse_iterator rend() const { return reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
 	size_type size() const { return _size; }
-	size_type max_size() const { return _tree.max_size(); } //sbagliata bisogna prendere l'allocator dell'rbtree che a sua volta prende quello del nodo type
+	size_type max_size() const { return _tree.max_size(); }
 
 	// modifiers
 	void clear() {
-		remove_bounds();
 		_size = 0;
-		_tree._nuke(_tree._root);
+		_tree.clear();
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
 		node_type* nd = _tree.find(value);
 		if (nd)
 			return ft::make_pair(iterator(*nd), false);
-		remove_bounds();
 		nd = &_tree.insert(value);
-		add_bounds();
 		_size++;
 		// print();
 		return ft::make_pair(iterator(*nd), true);
@@ -182,9 +164,7 @@ public:
 		node_type* nd = _tree.find(value);
 		if (nd)
 			return iterator(*nd);
-		remove_bounds();
 		nd = &_tree.insert(value);
-		add_bounds(); 
 		_size++;
 		return iterator(*nd);
 	}
@@ -196,18 +176,14 @@ public:
 	}
 
 	void erase( iterator pos ) {
-		remove_bounds();
 		_tree.deleteNode(pos.base());
-		add_bounds();
 		_size--;
 	}
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
 		if (found.base() && found != end()) {
-			remove_bounds();
 			_tree.deleteNode(_tree.find(*found));
-			add_bounds();
 			_size--;
 			return 1;
 		}
@@ -218,26 +194,20 @@ public:
 		iterator todel;
 		while (first != last)
 		{
+			//print("bef");
 			todel = first;
+			// std::cout << "removing " << (*todel).first << "\n";
 			++first;
 			erase(todel);
-			// print();
+			// print("aft");
 		}
 	}
 
 	void swap( map& other ) {
-		remove_bounds();
-		other.remove_bounds();
 		std::swap(_tree, other._tree);
-		std::swap(_start, other._start);
-		std::swap(_end, other._end);
-		std::swap(_start_ptr, other._start_ptr);
-		std::swap(_end_ptr, other._end_ptr);
 		std::swap(_comp, other._comp);
 		std::swap(_alloc, other._alloc);
 		std::swap(_size, other._size);
-		add_bounds();
-		other.add_bounds();
 	}
 
 	// lookup
@@ -291,41 +261,8 @@ public:
 	key_compare key_comp() const { return _comp; } // ??
 	map::value_compare value_comp() const { return _comp; } // ??
 private:
-	void add_bounds() {
-		node_type* ptr;
-		if (!_tree._root)
-			return;
-		
-		ptr = _tree._root;
-		while (ptr->left)
-			ptr = ptr->left;
-		ptr->left = &_start;
-		_start.parent = ptr;
-		_start_ptr = &ptr->left;
-
-		ptr = _tree._root;
-		while (ptr->right)
-			ptr = ptr->right;
-		ptr->right = &_end;
-		_end.parent = ptr;
-		_end_ptr = &ptr->right;		
-	}
-
-	void remove_bounds() {
-		_start.parent = NULL;
-		_end.parent = NULL;
-		if (_start_ptr)
-			*_start_ptr = NULL;
-		if (_end_ptr)
-			*_end_ptr = NULL;
-		// print();
-	}
 
 	RBTree<value_type>		_tree;
-	node_type				_start;
-	node_type				_end;
-	node_type**				_start_ptr;
-	node_type**				_end_ptr;
 	key_compare				_comp;
 	allocator_type			_alloc;
 	size_type				_size;
