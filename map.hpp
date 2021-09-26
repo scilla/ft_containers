@@ -92,21 +92,21 @@ public:
 	// access
 	T& at( const Key& key ) {
 		node_type *res = _tree.find(key);
-		if (!res)
+		if (res == end().base())
 			throw outOfBoundException();
 		return res->data->second;
 	}
 
 	const T& at( const Key& key ) const {
 		node_type *res = _tree.find(key);
-		if (!res)
+		if (res == end().base())
 			throw outOfBoundException();
 		return res->data->second;
 	}
 
 	T& operator[]( const Key& key ) {
 		node_type *res = _tree.find(ft::make_pair(key, T()));
-		if (!res)
+		if (res == end().base())
 			return insert(ft::make_pair(key, T())).first->second;
 		return res->data.second;
 	};
@@ -131,7 +131,7 @@ public:
 	// 	return const_iterator(*pt);
 	// };
 
-	const iterator end() const { return iterator(_tree.getEnd()); };
+	iterator end() const { return iterator(_tree.getEnd()); };
 	// const_iterator end() const { return iterator(_tree.getEnd()); }
 	reverse_iterator rbegin() const { return reverse_iterator(end()); }
 	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
@@ -151,7 +151,7 @@ public:
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
 		node_type* nd = _tree.find(value);
-		if (nd)
+		if (nd != end().base())
 			return ft::make_pair(iterator(*nd), false);
 		nd = &_tree.insert(value);
 		_size++;
@@ -162,7 +162,7 @@ public:
 	iterator insert( iterator hint, const value_type& value ) {
 		(void)hint;
 		node_type* nd = _tree.find(value);
-		if (nd)
+		if (nd != end().base())
 			return iterator(*nd);
 		nd = &_tree.insert(value);
 		_size++;
@@ -182,8 +182,8 @@ public:
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
-		if (found.base() && found != end()) {
-			_tree.deleteNode(_tree.find(*found));
+		if (/*found.base() &&*/ found != end()) {
+			_tree.deleteNode(found.base());
 			_size--;
 			return 1;
 		}
@@ -222,7 +222,7 @@ public:
 		return iterator(*_tree.find(ft::make_pair(key, T())));
 	}
 	const_iterator find( const Key& key ) const {
-		return const_iterator(_tree.find(ft::make_pair(key, T())));
+		return const_iterator(*_tree.find(ft::make_pair(key, T())));
 	}
 	ft::pair<iterator,iterator> equal_range( const Key& key ) {
 		return ft::make_pair(iterator(lower_bound(key)), iterator(upper_bound(key)));

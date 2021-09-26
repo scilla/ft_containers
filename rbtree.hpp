@@ -291,8 +291,10 @@ private:
 	allocator_type		_alloc;
 	node				_start;
 	node				_end;
-	node**				_start_ptr;
-	node**				_end_ptr;
+	node*				_start_ptr;
+	node*				_end_ptr;
+	node**				_start_placed;
+	node**				_end_placed;
 public:
 
 	size_type	max_size() const { return _alloc.max_size(); }
@@ -357,7 +359,7 @@ public:
 			else
 				start = start->right;
 		}
-		return NULL;
+		return _end_ptr;
 	}
 
 	node* find(const T& data) const {
@@ -371,7 +373,7 @@ public:
 			else
 				start = start->right;
 		}
-		return NULL;
+		return _end_ptr;
 	}
 
 	void fixTree(node* N) {
@@ -634,8 +636,10 @@ public:
 	void initialize_bounds() {
 		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
 		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
-		_end_ptr = NULL;
-		_start_ptr = NULL;
+		_end_ptr = &_end;
+		_start_ptr = &_start;
+		_end_placed = NULL;
+		_start_placed = NULL;
 	}
 	
 	void add_bounds() {
@@ -643,8 +647,8 @@ public:
 		if (!_root) {
 			_start.parent = NULL;
 			_end.parent = NULL;
-			_start_ptr = NULL;
-			_end_ptr = NULL;	
+			_start_placed = NULL;
+			_end_placed = NULL;	
 			return;
 		}
 		
@@ -653,23 +657,23 @@ public:
 			ptr = ptr->left;
 		ptr->left = &_start;
 		_start.parent = ptr;
-		_start_ptr = &ptr->left;
+		_start_placed = &ptr->left;
 
 		ptr = _root;
 		while (ptr->right)
 			ptr = ptr->right;
 		ptr->right = &_end;
 		_end.parent = ptr;
-		_end_ptr = &ptr->right;		
+		_end_placed = &ptr->right;		
 	}
 
 	void remove_bounds() {
 		_start.parent = NULL;
 		_end.parent = NULL;
-		if (_start_ptr)
-			*_start_ptr = NULL;
-		if (_end_ptr)
-			*_end_ptr = NULL;
+		if (_start_placed)
+			*_start_placed = NULL;
+		if (_end_placed)
+			*_end_placed = NULL;
 	}
 
 	void print_tree(std::string s = "") {
