@@ -15,36 +15,37 @@ int main(void)
 	ft_map.print();
 	for (int i = 0; i < 10; i++)
 	{
-		std::cout << "inserting " << (i < 5 ? range_int[i] : i) << std::endl;
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
-		ft_map.print();
 	}
 	ft_map.print();
-	ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
-	ft::map<int, std::string>::iterator ft_it_end = ft_map.end();
+	// ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
+	// ft::map<int, std::string>::iterator ft_it_end = ft_map.end();
 
-	for (int i = 0; i < 2; i++)
-	{
-		ft_it_beg++;
-	}
-	ft_it_end--;
+	// for (int i = 0; i < 2; i++)
+	// {
+	// 	ft_it_beg++;
+	// }
+	// ft_it_end--;
 
-	ft_map.erase(ft_it_beg, ft_it_end);
+	// ft_map.erase(ft_it_beg, ft_it_end);
 
-	ft::map<int, std::string>::iterator ft_it;
-	int i = 0;
-	for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 200; ++ft_it, ++i)
-	{
-		if (!(i % 5)) fs << "	";
-		fs << "[";
-		fs << (*ft_it).first;
-		fs << ", ";
-		fs << (*ft_it).second;
-		fs << "]";
-		fs << ", ";
-		if ((i % 5) == 4) fs << std::endl;
-	}
+	// ft::map<int, std::string>::iterator ft_it;
+	// int i = 0;
+	// for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 200; ++ft_it, ++i)
+	// {
+	// 	if (!(i % 5)) fs << "	";
+	// 	fs << "[";
+	// 	fs << (*ft_it).first;
+	// 	fs << ", ";
+	// 	fs << (*ft_it).second;
+	// 	fs << "]";
+	// 	fs << ", ";
+	// 	if ((i % 5) == 4) fs << std::endl;
+	// }
 
-	ft_map.print();
+	// ft_map.print();
+
+	ft::map<int, std::string> ft_map_copy(ft_map);
+
 	return 0;
 }

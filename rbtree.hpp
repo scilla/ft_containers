@@ -303,9 +303,14 @@ public:
 		initialize_bounds();
 		*this = tree;
 	}
-	~RBTree() {remove_bounds(); _nuke(_root);}
+	~RBTree() {
+		remove_bounds();
+		_nuke(_root);
+	}
 	void recursive_insert(node* new_node) {
 		if (!new_node)
+			return;
+		if (new_node->color == FLUO)
 			return;
 		insert(new_node->data);
 		recursive_insert(new_node->left);
@@ -431,7 +436,7 @@ public:
 			n->right->parent = n;
 	}
 
-	void replaceNode(node* a, node* b) {
+	void swapNode(node* a, node* b) {
 		*selfParentPtr(a) = b;
 		*selfParentPtr(b) = a;
 		std::swap(a->parent, b->parent);
@@ -440,6 +445,17 @@ public:
 		std::swap(a->color, b->color);
 		fixDependencies(a);
 		fixDependencies(b);
+	}
+
+	void replaceNodeWithLoneChild(node* a, node* b) {
+		if (b->parent != a)
+			throw std::exception();
+		if (a->left && a->right)
+			throw std::exception();
+		if (!a->left && !a->right)
+			throw std::exception();
+		b->parent = a->parent;
+		*selfParentPtr(a) = b;
 	}
 
 	void deleteNode(node* n) {
@@ -462,14 +478,12 @@ public:
 				throw std::exception();
 		} else if (n->left && n->right) {
 			x = minimumNode(n->right);
-			replaceNode(n, x);
+			swapNode(n, x);
 			_deleteNode(n);
 		} else if (!n->left) {
-			replaceNode(n, n->right);
-			_deleteNode(n);
+			replaceNodeWithLoneChild(n, n->right);
 		} else if (!n->right) {
-			replaceNode(n, n->left);
-			_deleteNode(n);
+			replaceNodeWithLoneChild(n, n->left);
 		} else
 			throw std::exception();
 	}
@@ -675,7 +689,7 @@ public:
 		}
 		std::cout << coll << std::string(l * 4,' ');
 		if (n->parent) {
-			//std::cout << "(" << n->parent->data.first << ") ";
+			std::cout << "(" << n->parent->data.first << ")";
 			if (n->isLeft())
 				std::cout << "\\";
 			else

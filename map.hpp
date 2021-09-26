@@ -196,10 +196,10 @@ public:
 		{
 			//print("bef");
 			todel = first;
-			std::cout << "removing " << (*todel).first << "\n";
+			// std::cout << "removing " << (*todel).first << "\n";
 			++first;
 			erase(todel);
-			print("aft");
+			// print("aft");
 		}
 	}
 
