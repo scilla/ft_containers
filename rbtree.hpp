@@ -612,7 +612,7 @@ public:
 		x->parent = y;
 	}
 
-	void _nuke(node* n) {			// todo: handle boundaries reset 
+	void _nuke(node* n) {
 		if (!n || n->color == FLUO)
 			return;
 		_nuke(n->left);
