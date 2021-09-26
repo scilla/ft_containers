@@ -12,10 +12,12 @@ int main(void)
 	const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
 	ft::map<int, std::string> ft_map;
-
-	for (int i = 0; i < 30; i++)
+	ft_map.print();
+	for (int i = 0; i < 10; i++)
 	{
+		std::cout << "inserting " << (i < 5 ? range_int[i] : i) << std::endl;
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
+		ft_map.print();
 	}
 	ft_map.print();
 	ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
