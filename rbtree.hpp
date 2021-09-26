@@ -330,6 +330,8 @@ public:
 	void clear() {
 		remove_bounds();
 		_nuke(_root);
+		_root = NULL;
+		add_bounds();
 	}
 
 	node& insert(T newdata) {
@@ -638,8 +640,13 @@ public:
 	
 	void add_bounds() {
 		node* ptr;
-		if (!_root)
+		if (!_root) {
+			_start.parent = NULL;
+			_end.parent = NULL;
+			_start_ptr = NULL;
+			_end_ptr = NULL;	
 			return;
+		}
 		
 		ptr = _root;
 		while (ptr->left)
@@ -663,15 +670,14 @@ public:
 			*_start_ptr = NULL;
 		if (_end_ptr)
 			*_end_ptr = NULL;
-		// print();
 	}
 
 	void print_tree(std::string s = "") {
 		(void)s;
 		//return;
-		std::cout << BLUE << s << "#####################################################" << std::endl;
+		std::cout << BLUE << "<< " << s << " ####################" << std::endl;
 		_print_tree(_root);
-		std::cout << BLUE << s << "#####################################################" << std::endl;
+		std::cout << BLUE << s << " >> ####################" << std::endl;
 	}
 
 	void _print_tree(node* n, size_t l = 0) {
