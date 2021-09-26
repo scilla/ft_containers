@@ -305,8 +305,7 @@ public:
 	}
 	
 	~RBTree() {
-		remove_bounds();
-		_nuke(_root);
+		clear();
 	}
 
 	void recursive_insert(node* new_node) {
@@ -323,7 +322,7 @@ public:
 	const node& getStart() const { return _start; }
 
 	RBTree& operator=(const RBTree& tree) {
-		_nuke(_root);
+		clear();
 		recursive_insert(tree._root);
 		return *this;
 	}
@@ -331,6 +330,8 @@ public:
 	void clear() {
 		remove_bounds();
 		_nuke(_root);
+		_root = NULL;
+		add_bounds();
 	}
 
 	node& insert(T newdata) {
@@ -547,6 +548,14 @@ public:
 		}
 	}
 
+	class duplicateElementException: public std::exception
+	{
+	public:
+		virtual const char* what() const throw() {
+			return "Duplicate element exception";
+		}
+	};
+
 	void binaryInsert(node* N) {
 		node** current = &_root;
 		node* parent = NULL;
@@ -555,8 +564,10 @@ public:
 			parent = *current;
 			if (N->data < parent->data)
 				current = &parent->left;
-			else
+			else if (N->data > parent->data)
 				current = &parent->right;
+			else
+				throw duplicateElementException();
 		}
 		*current = N;
 		N->parent = parent;
@@ -629,8 +640,13 @@ public:
 	
 	void add_bounds() {
 		node* ptr;
-		if (!_root)
+		if (!_root) {
+			_start.parent = NULL;
+			_end.parent = NULL;
+			_start_ptr = NULL;
+			_end_ptr = NULL;	
 			return;
+		}
 		
 		ptr = _root;
 		while (ptr->left)
@@ -654,15 +670,14 @@ public:
 			*_start_ptr = NULL;
 		if (_end_ptr)
 			*_end_ptr = NULL;
-		// print();
 	}
 
 	void print_tree(std::string s = "") {
 		(void)s;
 		//return;
-		std::cout << BLUE << s << "#####################################################" << std::endl;
+		std::cout << BLUE << "<< " << s << " ####################" << std::endl;
 		_print_tree(_root);
-		std::cout << BLUE << s << "#####################################################" << std::endl;
+		std::cout << BLUE << s << " >> ####################" << std::endl;
 	}
 
 	void _print_tree(node* n, size_t l = 0) {
