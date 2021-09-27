@@ -5,14 +5,14 @@
 
 namespace ft {
 
-	template < class Key, class Compare = std::less<Key>, class Alloc = std::allocator<const Key> >
+	template < class Key, class Compare = std::less<Key>, class Allocator = std::allocator<const Key> >
 	class set {
 	public:
 		// --- Definitions
 		typedef Key													key_type;
 		typedef key_type											mapped_type;
 		typedef Compare												key_compare;
-		typedef Alloc												allocator_type;
+		typedef Allocator											allocator_type;
 		typedef typename allocator_type::reference					reference;
 		typedef typename allocator_type::const_reference			const_reference;
 		typedef typename allocator_type::pointer					pointer;
