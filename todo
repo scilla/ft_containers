@@ -14,4 +14,4 @@ swap
 std::binary_function<value_type, value_type, bool>
 
 
-SET: Iterator insert
+SET: Iterator insert hint

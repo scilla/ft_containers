@@ -40,15 +40,15 @@ namespace ft {
 
 		typedef ft::rbt_iterator<Node<value_type> >				iterator;
 		typedef ft::rbt_iterator<Node<value_type> >				const_iterator;
-		//typedef ft::rbt_reverse_iterator<iterator>						reverse_iterator;
-		//typedef ft::rbt_reverse_iterator<const_iterator>				const_reverse_iterator; non definiti??
+		typedef ft::reverse_iterator<iterator>						reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator; non definiti??
 
 
 		typedef RBTree<value_type, Key>								tree;
 		typedef Node<value_type>*									node_ptr;
 
 		//CON|DESTRUCTOR
-		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
+		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Alloc()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
 
 		template< class It >
 		set( It first, It last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0)
