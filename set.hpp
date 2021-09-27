@@ -125,7 +125,56 @@ namespace ft {
 				//non capisco che intenda con punto più vicino se è sorted (?!)
 		};
 
-		
+		void erase( iterator pos ) {
+			_tree.remove_bounds();
+			_tree.deleteNode(pos);
+			_tree.add_bounds();
+		};
+
+		void erase( iterator first, iterator last ) {
+			iterator todel = first;
+			while(first != last)
+			{
+				erase(first);
+				first++;
+			}
+		};
+
+
+		void swap( set& other ) {
+			std::swap(_tree, other._tree);
+			std::swap(_comp, other._comp);
+			std::swap(_alloc, other._alloc);
+			std::swap(_size, other._size);
+		};
+
+		//LOOKUP
+
+		size_type count( const Key& key ) const;
+
+		iterator find( const Key& key );
+
+		const_iterator find( const Key& key ) const;
+
+		std::pair<iterator,iterator> equal_range( const Key& key );
+
+		std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
+
+		iterator lower_bound( const Key& key );
+
+		const_iterator lower_bound( const Key& key ) const;
+
+		iterator upper_bound( const Key& key );
+
+		const_iterator upper_bound( const Key& key ) const;
+
+		//OBSERVERS
+
+		key_compare key_comp() const;
+
+		std::set::value_compare value_comp() const;
+
+
 
 
 		
