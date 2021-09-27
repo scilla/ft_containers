@@ -150,29 +150,68 @@ namespace ft {
 
 		//LOOKUP
 
-		size_type count( const Key& key ) const;
+		size_type count( const Key& key ) const{
+			size_type s = 0;
+			for (const_iterator it = begin(); it != end(); it++)
+				if ((*it).first == key)
+					s++;
+			return s;
+		};
 
-		iterator find( const Key& key );
+		iterator find( const Key& key ) {
+			return iterator(*_tree.find(key));
+		};
 
-		const_iterator find( const Key& key ) const;
+		const_iterator find( const Key& key ) const {
+			return const_iterator(*_tree.find(key));
+		};
 
-		std::pair<iterator,iterator> equal_range( const Key& key );
+		ft::pair<iterator,iterator> equal_range( const Key& key ) {
+			return ft::make_pair(iterator(lower_bound(key)), iterator(upper_bound(key)));
+		};
 
-		std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
+		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
+			return ft::make_pair(const_iterator(lower_bound(key)), const_iterator(upper_bound(key)));
 
-		iterator lower_bound( const Key& key );
+		};
 
-		const_iterator lower_bound( const Key& key ) const;
+		iterator lower_bound( const Key& key ) {
+			iterator beg = end();
+			beg--;
+			while ((*beg).first > key)
+				beg--;
+			return beg;
+		};
 
-		iterator upper_bound( const Key& key );
+		const_iterator lower_bound( const Key& key ) const {
+			iterator beg = end();
+			beg--;
+			while ((*beg).first > key)
+				beg--;
+			return beg;
+		};
 
-		const_iterator upper_bound( const Key& key ) const;
+		iterator upper_bound( const Key& key ) {
+			iterator beg = begin();
+			while ((*beg).first <= key)
+				beg++;
+			return beg;	
+		};
+
+		const_iterator upper_bound( const Key& key ) const {
+			iterator beg = begin();
+			while ((*beg).first <= key)
+				beg++;
+			return beg;
+		};
 
 		//OBSERVERS
 
-		key_compare key_comp() const;
+		key_compare key_comp() const; //BOH
 
-		std::set::value_compare value_comp() const;
+		std::set::value_compare value_comp() const; //BOH
+
+		
 
 
 
