@@ -4,34 +4,27 @@
 #include "utils.hpp"
 #include <stdlib.h>
 #include <iostream>
+#include <map>
 #define fs std::cout
 
 int main(void)
 {
-	const int range_int[] = {-854, -1, -965, -9, -755};
+	const int range_int[] = {-351, -999, -5, -76, 81};
 	const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
+
 	ft::map<int, std::string> ft_map;
+	std::map<int, std::string> stl_map;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
-	ft_map.print();
+		stl_map.insert(std::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));
+		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));
 	}
-	ft::map<int, std::string>::iterator ft_it_beg = ft_map.begin();
-	ft::map<int, std::string>::iterator ft_it_end = ft_map.end();
-
-	ft::map<int, std::string> ft_map_copy(ft_it_beg, ft_it_end);
 	ft_map.print();
-
-	// for (int i = 0; i < 2; i++)
-	// {
-	// 	ft_it_beg++;
-	// }
-	// ft_it_end--;
-
-	// ft_map.erase(ft_it_beg, ft_it_end);
-
+	// for (int i = -20; i < 101; i++)
+	std::cout << " > " << ft_map.lower_bound(80)->first << std::endl;
+	std::cout << " > " << stl_map.lower_bound(80)->first << std::endl;
 	// ft::map<int, std::string>::iterator ft_it;
 	// int i = 0;
 	// for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 200; ++ft_it, ++i)

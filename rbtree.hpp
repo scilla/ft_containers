@@ -168,8 +168,8 @@ public:
 	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit const_rbt_iterator(): _ptr(NULL) {}
-	explicit const_rbt_iterator(struct Node<T>& ptr): _ptr(&ptr) {}
-	explicit const_rbt_iterator(const struct Node<T>& ptr): _ptr(&ptr) {}
+	explicit const_rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
+	explicit const_rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
 	const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
 	const_rbt_iterator(const rbt_iterator<T>& newit) { *this = newit; } 
@@ -212,8 +212,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			//exception
-			// return(NULL);
 			throw outOfBoundException();
 		}
 	}
@@ -240,8 +238,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			//exception
-			//return(NULL);
 			throw outOfBoundException();
 		}
 	}

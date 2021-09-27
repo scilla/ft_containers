@@ -231,30 +231,100 @@ public:
 		return ft::make_pair(const_iterator(lower_bound(key)), const_iterator(upper_bound(key)));
 	}
 	iterator lower_bound( const Key& key ) {
-		iterator beg = end();
-		beg--;
-		while ((*beg).first > key)
-			beg--;
-		return beg;
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data.first == key) {
+				res = n;
+				break;
+			}
+			else if ((*n).data.first > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data.first < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
 	}
 	const_iterator lower_bound( const Key& key ) const {
-		iterator beg = end();
-		beg--;
-		while ((*beg).first > key)
-			beg--;
-		return beg;
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data.first == key) {
+				res = n;
+				break;
+			}
+			else if ((*n).data.first > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data.first < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
 	}
 	iterator upper_bound( const Key& key ) {
-		iterator beg = begin();
-		while ((*beg).first <= key)
-			beg++;
-		return beg;
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data.first >= key) {
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data.first < key) {
+				res = n;
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
 	}
 	const_iterator upper_bound( const Key& key ) const {
-		iterator beg = begin();
-		while ((*beg).first <= key)
-			beg++;
-		return beg;
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data.first >= key) {
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data.first < key) {
+				res = n;
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
 	}
 
 	// observer
