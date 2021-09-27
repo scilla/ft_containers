@@ -3,6 +3,7 @@
 
 #include "pair.hpp"
 #include "colors.h"
+#include "iterator.hpp"
 #include <iostream>
 
 enum COLOR {

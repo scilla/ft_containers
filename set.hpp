@@ -1,6 +1,23 @@
-#include "rbtree.hpp"
+#ifndef SET_HPP
+#define SET_HPP
+
+
+#include "iterator.hpp"
+#include <functional>
+#include <iostream>
+#include <limits>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+#include <iterator>
+#include <exception>
 #include "utils.hpp"
 #include "enable_if.hpp"
+#include <stdio.h>
+#include "rbtree.hpp"
+#include "pair.hpp"
+#include "colors.h"
 
 
 namespace ft {
@@ -13,13 +30,13 @@ namespace ft {
 		typedef key_type											mapped_type;
 		typedef Compare												key_compare;
 		typedef Allocator											allocator_type;
-		typedef typename allocator_type::reference					reference;
-		typedef typename allocator_type::const_reference			const_reference;
-		typedef typename allocator_type::pointer					pointer;
+		//typedef typename allocator_type::reference					reference;
+		//typedef typename allocator_type::const_reference			const_reference;
+		//typedef typename allocator_type::pointer					pointer;
 		typedef typename allocator_type::value_type					value_type;
-		typedef typename allocator_type::const_pointer				const_pointer;
-		typedef typename allocator_type::size_type					size_type;
-		typedef typename allocator_type::difference_type			difference_type;
+		//typedef typename allocator_type::const_pointer				const_pointer;
+		typedef size_t										size_type;
+		//typedef typename allocator_type::difference_type			difference_type;
 
 		typedef ft::rbt_iterator<Node<value_type> >				iterator;
 		typedef ft::rbt_iterator<Node<value_type> >				const_iterator;
@@ -31,10 +48,10 @@ namespace ft {
 		typedef Node<value_type>*									node_ptr;
 
 		//CON|DESTRUCTOR
-		explicit set( const Compare& comp = Compare(), const Alloc& alloc = Alloc()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
+		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
 
 		template< class It >
-		set( It first, It last, const Compare& comp = Compare(), const Alloc& alloc = Alloc()) : _tree(), _comp(comp), _alloc(alloc), _size(0)
+		set( It first, It last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0)
 		{
 			for (; first != last; ++first)
 				_tree.insert(*first);
@@ -121,9 +138,9 @@ namespace ft {
 			return res;
 		};
 
-		iterator insert( iterator hint, const value_type& value ) {
-				//non capisco che intenda con punto più vicino se è sorted (?!)
-		};
+		//iterator insert( iterator hint, const value_type& value ) {
+		//		//non capisco che intenda con punto più vicino se è sorted (?!)
+		//};
 
 		void erase( iterator pos ) {
 			_tree.remove_bounds();
@@ -207,9 +224,9 @@ namespace ft {
 
 		//OBSERVERS
 
-		key_compare key_comp() const; //BOH
+		//key_compare key_comp() const {}; //BOH
 
-		std::set::value_compare value_comp() const; //BOH
+		//set::value_compare value_comp() const {}; //BOH
 
 
 
@@ -273,3 +290,5 @@ namespace ft {
 		return (!(lhs < rhs));
 	}
 }
+
+#endif /* SET_HPP */

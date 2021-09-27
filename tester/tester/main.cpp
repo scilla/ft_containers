@@ -20,5 +20,6 @@ int main()
 	test_map();
 	std::cout << "\n";
 	test_stack();
+	std::cout << "\n";
 	// sleep(100);
 }
