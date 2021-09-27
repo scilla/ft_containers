@@ -211,7 +211,7 @@ namespace ft {
 
 		std::set::value_compare value_comp() const; //BOH
 
-		
+
 
 
 
@@ -226,5 +226,50 @@ namespace ft {
 
 
 
+	};
+
+
+	//OPERATOR OVERLOADS
+
+	template <typename Key, typename Compare>
+	void swap(ft::set<Key, Compare> &x, ft::set<Key, Compare> &y)
+	{
+		x.swap(y);
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator== (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator!= (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return (!(lhs == rhs));
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator<  (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator<= (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return !(rhs < lhs);
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator>  (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template <class Key, class Compare, class Alloc>
+	bool operator>= (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
+	{
+		return (!(lhs < rhs));
 	}
 }
