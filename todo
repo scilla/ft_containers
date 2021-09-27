@@ -12,3 +12,6 @@ pare, std::pair, std::make_pair, must be reimplemented.
 swap
 
 std::binary_function<value_type, value_type, bool>
+
+
+SET: Iterator insert

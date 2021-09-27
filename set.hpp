@@ -48,7 +48,85 @@ namespace ft {
 			_tree._nuke(_tree._root);
 		}
 
+		allocator_type get_allocator() const {
+			return(_alloc);
+		};
+
+		//Iterators
+
+		iterator begin() {
+			if (!_tree._root)
+				return _tree.end();
+			return iterator(_tree.getStart());
+		}
+
+		const_iterator begin() const {
+			if (!_tree._root)
+				return _tree._end;
+			return iterator(_tree.getStart());
+		}
+
+		iterator end() {
+			return iterator(_tree.getEnd());
+		}
+
+		const_iterator end() const {
+			return iterator(_tree.getEnd());
+		}
+
+	/*	reverse_iterator rbegin() {
+			return reverse_iterator(_tree.getEnd());
+		}
+
+		const_reverse_iterator rbegin() const {
+			return reverse_iterator(_tree.getEnd());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(_tree.getStart());
+		}
+
+		const_reverse_iterator rend()   const {
+			return reverse_iterator(_tree.getStart());
+		} */
+
+		// CAPACITY
+
+		bool empty() const {
+			return !_size;
+		}
+
+		size_type size() const {
+			return _size;
+		}
+
+		size_type max_size() const {
+			return _tree.max_size();
+		}
+
 		//MODIFIERS
+
+		void clear() {
+			_tree.nuke();
+			_size = 0;
+		}
+
+		ft::pair<iterator,bool> insert( const value_type& value ) {
+			ft::pair<iterator, bool> res = ft::make_pair(iterator(NULL), false);
+			_tree.insert(value);
+			if(!(res->first = _tree.find(value)))
+				res->second = false;
+			else
+				res->second = true;
+			return res;
+		};
+
+		iterator insert( iterator hint, const value_type& value ) {
+				//non capisco che intenda con punto più vicino se è sorted (?!)
+		};
+
+		
+
 
 		
 
