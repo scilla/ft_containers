@@ -291,12 +291,17 @@ public:
 		n = _tree._root;
 		while (1)
 		{
-			if ((*n).data.first >= key) {
+			if ((*n).data.first == key) {
+				if (!n->right || n->right->color == FLUO)
+					break;
+				n = n->right;
+			}
+			else if ((*n).data.first > key) {
+				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
 			} else if ((*n).data.first < key) {
-				res = n;
 				if (!n->right)
 					break;
 				n = n->right;
@@ -313,12 +318,17 @@ public:
 		n = _tree._root;
 		while (1)
 		{
-			if ((*n).data.first >= key) {
+			if ((*n).data.first == key) {
+				if (!n->right || n->right->color == FLUO)
+					break;
+				n = n->right;
+			}
+			else if ((*n).data.first > key) {
+				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
 			} else if ((*n).data.first < key) {
-				res = n;
 				if (!n->right)
 					break;
 				n = n->right;

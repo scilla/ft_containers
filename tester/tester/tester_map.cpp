@@ -1575,11 +1575,11 @@ void test_map()
 
 		fs << "\nUPPER BOUND\nCode executed:\n";
 		fs << "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n";
-		fs << "const int range_int[] = {45, -84, 957, 966, 3};\n";
+		fs << "const int range_int[] = {-351, -999, -5, -76, -61};\n";
 		fs << "const std::string range_str[] = {\"One\", \"Two\", \"Three\", \"Four\", \"Five\"};\n";
 		fs << "ft::map<int, std::string> ft_map;\n";
 		fs << "for (int i = 0; i < 5; i++)\n";
-		fs << "    ft_map.insert(ft::make_pair(range_int[i], range_str[i]));\n";
+		fs << "    ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));\n";
 		fs << "ft::map<int, std::string>::iterator ft_it = ft_map.upper_bound(950);\n";
 		fs << "\nCompared with:\n";
 		fs << "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n";
@@ -1587,7 +1587,7 @@ void test_map()
 		fs << "const std::string range_str[] = {\"One\", \"Two\", \"Three\", \"Four\", \"Five\"};\n";
 		fs << "std::map<int, std::string> stl_map;\n";
 		fs << "for (int i = 0; i < 5; i++)\n";
-		fs << "    stl_map.insert(std::make_pair(range_int[i], range_str[i]));\n";
+		fs << "    stl_map.insert(std::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));\n";
 		fs << "std::map<int, std::string>::iterator stl_it = stl_map.upper_bound(950);\n";
 		std::cout << std::setw(30) << std::left << "Upper bound: " << std::setw(0) << "[";
 		std::cout << ((printSingleValue(fs, (*stl_it).first, (*ft_it).first) == true) ? "\033[32m[OK]\033[0m" : "\033[31m[NOP]\033[0m");

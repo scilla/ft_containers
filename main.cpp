@@ -9,22 +9,26 @@
 
 int main(void)
 {
-	const int range_int[] = {-351, -999, -5, -76, 81};
+	const int range_int[] = {-351, -999, -5, -76, 101};
 	const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
 
 	ft::map<int, std::string> ft_map;
 	std::map<int, std::string> stl_map;
-
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 101; i++)
 	{
 		stl_map.insert(std::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));
 		ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i * (i % 50), range_str[i % 5]));
 	}
-	ft_map.print();
-	// for (int i = -20; i < 101; i++)
-	std::cout << " > " << ft_map.lower_bound(80)->first << std::endl;
-	std::cout << " > " << stl_map.lower_bound(80)->first << std::endl;
+	// if (stl_map.lower_bound(k)->first != ft_map.lower_bound(k)->first)
+	// 	std::cout << " discr " << k << std::endl;
+	// if (stl_map.upper_bound(k)->first != ft_map.upper_bound(k)->first)
+	// 	std::cout << " discr " << k << std::endl;
+		ft_map.print();
+	std::cout << " stl lower> " << stl_map.lower_bound(101)->first << std::endl;
+	std::cout << " ft lower > " << ft_map.lower_bound(101)->first << std::endl;
+	std::cout << " stl upper> " << stl_map.upper_bound(101)->first << std::endl;
+	std::cout << " ft upper > " << ft_map.upper_bound(101)->first << std::endl;
 	// ft::map<int, std::string>::iterator ft_it;
 	// int i = 0;
 	// for(ft_it = ft_map.begin(); ft_it != ft_map.end() && i < 200; ++ft_it, ++i)

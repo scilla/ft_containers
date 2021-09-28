@@ -630,8 +630,8 @@ public:
 	}
 
 	void initialize_bounds() {
-		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(666, "END*")};
-		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(665, "*START")};
+		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "END*")};
+		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "*START")};
 		_end_ptr = &_end;
 		_start_ptr = &_start;
 		_end_placed = NULL;
@@ -704,7 +704,7 @@ public:
 		}
 		std::cout << coll << std::string(l * 4,' ');
 		if (n->parent) {
-			std::cout << "(" << n->parent->data.first << ")";
+			//std::cout << "(" << n->parent->data.first << ")";
 			if (n->isLeft())
 				std::cout << "\\";
 			else
