@@ -159,14 +159,11 @@ public:
 		return ft::make_pair(iterator(*nd), true);
 	}
 
+	// any kind of optimization is useless with binary insertion
+	// thus we'll just ignore hint
 	iterator insert( iterator hint, const value_type& value ) {
 		(void)hint;
-		node_type* nd = _tree.find(value);
-		if (nd != end().base())
-			return iterator(*nd);
-		nd = &_tree.insert(value);
-		_size++;
-		return iterator(*nd);
+		return insert(value).first;
 	}
 
 	template< class InputIt >
