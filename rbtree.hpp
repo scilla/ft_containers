@@ -22,6 +22,7 @@ struct Node {
 	enum COLOR		color;
 	T				data;
 
+	typedef T		value_type;
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }
 	struct Node<T>* sibling() {
@@ -45,10 +46,10 @@ template <class T>
 class rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
-	typedef T												iterator_type;
-	typedef T*												iterator_value;
-	typedef T&												reference;
-	typedef T*												pointer;
+	typedef T							iterator_type;
+	typedef T*							iterator_value;
+	typedef T&							reference;
+	typedef T*							pointer;
 	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
@@ -631,8 +632,10 @@ public:
 	}
 
 	void initialize_bounds() {
-		_end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "END*")};
-		_start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "*START")};
+		// _end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "END*")};
+		// _start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "*START")};
+		_end = (node){NULL, NULL, NULL, FLUO, T()};
+		_start = (node){NULL, NULL, NULL, FLUO, T()};
 		_end_ptr = &_end;
 		_start_ptr = &_start;
 		_end_placed = NULL;

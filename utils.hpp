@@ -1,10 +1,14 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 #include "rbtree.hpp"
+//#include "set.hpp"
 #include <iostream>
 
 namespace ft
 {
+
+// template<class T>
+// void printSet(ft::set<T>& x) {(void)x;}
 
 template <class InputIterator1, class InputIterator2>
 bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,

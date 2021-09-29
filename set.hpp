@@ -36,8 +36,8 @@ namespace ft {
 		typedef typename allocator_type::const_reference		const_reference;
 		typedef typename allocator_type::pointer				pointer;
 		typedef typename allocator_type::const_pointer			const_pointer;
-		typedef ft::rbt_iterator<Node<value_type> >				iterator;
-		typedef ft::const_rbt_iterator<Node<value_type> >		const_iterator;
+		typedef ft::rbt_iterator<value_type>				iterator;
+		typedef ft::const_rbt_iterator<value_type>		const_iterator;
 		typedef ft::reverse_iterator<iterator>					reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator; // non definiti??
 		typedef typename allocator_type::size_type			size_type;
@@ -71,14 +71,14 @@ namespace ft {
 
 		iterator begin() {
 			if (!_tree._root)
-				return _tree.end();
+				return end();
 			return iterator(_tree.getStart());
 		}
 
 		const_iterator begin() const {
 			if (!_tree._root)
-				return _tree._end;
-			return iterator(_tree.getStart());
+				return const_iterator(_tree.getEnd());
+			return const_iterator(_tree.getStart());
 		}
 
 		iterator end() {
@@ -122,17 +122,17 @@ namespace ft {
 		//MODIFIERS
 
 		void clear() {
-			_tree.nuke();
+			_tree.clear();
 			_size = 0;
 		}
 
 		ft::pair<iterator,bool> insert( const value_type& value ) {
-			ft::pair<iterator, bool> res = ft::make_pair(iterator(NULL), false);
+			ft::pair<iterator, bool> res = ft::make_pair(iterator(end()), false);
 			_tree.insert(value);
-			if(!(res->first = _tree.find(value)))
-				res->second = false;
+			if(res.first != find(value))
+				res.second = false;
 			else
-				res->second = true;
+				res.second = true;
 			return res;
 		};
 			
@@ -160,7 +160,7 @@ namespace ft {
 		}
 
 		void erase( iterator pos ) {
-			_tree.deleteNode(pos);
+			_tree.deleteNode(pos.base());
 			_size--;
 		};
 
@@ -212,7 +212,7 @@ namespace ft {
 		iterator lower_bound( const Key& key ) {
 			iterator beg = end();
 			beg--;
-			while ((*beg).first > key)
+			while (*beg > key)
 				beg--;
 			return beg;
 		};
@@ -220,21 +220,21 @@ namespace ft {
 		const_iterator lower_bound( const Key& key ) const {
 			iterator beg = end();
 			beg--;
-			while ((*beg).first > key)
+			while (*beg > key)
 				beg--;
 			return beg;
 		};
 
 		iterator upper_bound( const Key& key ) {
 			iterator beg = begin();
-			while ((*beg).first <= key)
+			while (*beg <= key)
 				beg++;
 			return beg;	
 		};
 
 		const_iterator upper_bound( const Key& key ) const {
 			iterator beg = begin();
-			while ((*beg).first <= key)
+			while (*beg <= key)
 				beg++;
 			return beg;
 		};
