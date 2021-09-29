@@ -36,7 +36,7 @@ TEST_SET = set_test
 
 all: $(NAME)# $(TEST_SET) $(TEST_SET_S)
 
-set: $(TEST_SET) $(TEST_SET_S)
+set: fclean $(TEST_SET) $(TEST_SET_S)
 
 $(NAME): $(OBJS)
 	$(CPP) $(OBJS) -o $(NAME)

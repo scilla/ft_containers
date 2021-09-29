@@ -662,8 +662,8 @@ class Tester {
 		                throw std::invalid_argument("invalid arguments )");
 		            print_r(cmd, pos_open + 1, pos_close);
 		        }
-		        // else
-		        //     ft::printSet<VALUE_TYPE>()(this->ft_set);
+		        else
+		            printSet(this->ft_set);
 		    }
             catch (std::exception &e) {
                 std::cout << e.what() << std::endl;

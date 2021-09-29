@@ -22,7 +22,9 @@
 
 namespace ft {
 
-	template < class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key> >
+	template < typename Key,
+	class Compare = std::less<Key>,
+	class Allocator = std::allocator<Key> >
 	class set {
 	public:
 		// --- Definitions
@@ -44,6 +46,7 @@ namespace ft {
 
 		typedef RBTree<value_type, Key>								tree;
 		typedef Node<value_type>*									node_ptr;
+		typedef Node<value_type>					node_type;
 
 		//CON|DESTRUCTOR
 		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
@@ -126,15 +129,15 @@ namespace ft {
 			_size = 0;
 		}
 
-		ft::pair<iterator,bool> insert( const value_type& value ) {
-			ft::pair<iterator, bool> res = ft::make_pair(iterator(end()), false);
-			_tree.insert(value);
-			if(res.first != find(value))
-				res.second = false;
-			else
-				res.second = true;
-			return res;
-		};
+		ft::pair<iterator, bool> insert(const value_type& value ) {
+		node_type* nd = _tree.find(value);
+		if (nd != end().base())
+			return ft::make_pair(iterator(*nd), false);
+		nd = &_tree.insert(value);
+		_size++;
+		// print();
+		return ft::make_pair(iterator(*nd), true);
+	}
 			
 		// any kind of optimization is useless with binary insertion
 		// thus we'll just ignore hint
@@ -210,34 +213,111 @@ namespace ft {
 		};
 
 		iterator lower_bound( const Key& key ) {
-			iterator beg = end();
-			beg--;
-			while (*beg > key)
-				beg--;
-			return beg;
-		};
-
-		const_iterator lower_bound( const Key& key ) const {
-			iterator beg = end();
-			beg--;
-			while (*beg > key)
-				beg--;
-			return beg;
-		};
-
-		iterator upper_bound( const Key& key ) {
-			iterator beg = begin();
-			while (*beg <= key)
-				beg++;
-			return beg;	
-		};
-
-		const_iterator upper_bound( const Key& key ) const {
-			iterator beg = begin();
-			while (*beg <= key)
-				beg++;
-			return beg;
-		};
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data == key) {
+				res = n;
+				break;
+			}
+			else if ((*n).data > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
+	}
+	const_iterator lower_bound( const Key& key ) const {
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data == key) {
+				res = n;
+				break;
+			}
+			else if ((*n).data > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
+	}
+	iterator upper_bound( const Key& key ) {
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data == key) {
+				if (!n->right || n->right->color == FLUO)
+					break;
+				n = n->right;
+			}
+			else if ((*n).data > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
+	}
+	const_iterator upper_bound( const Key& key ) const {
+		node_type* n;
+		node_type* res;
+		res = end().base();
+		if (!_size)
+			return iterator(*res);
+		n = _tree._root;
+		while (1)
+		{
+			if ((*n).data.first == key) {
+				if (!n->right || n->right->color == FLUO)
+					break;
+				n = n->right;
+			}
+			else if ((*n).data.first > key) {
+				res = n;
+				if (!n->left || n->left->color == FLUO)
+					break;
+				n = n->left;
+			} else if ((*n).data.first < key) {
+				if (!n->right)
+					break;
+				n = n->right;
+			}
+		}
+		return iterator(*res);
+	}
 
 		//OBSERVERS
 
@@ -295,6 +375,19 @@ namespace ft {
 	bool operator>= (const ft::set<Key,Compare,Alloc> & lhs, const ft::set<Key,Compare,Alloc> & rhs)
 	{
 		return (!(lhs < rhs));
+	}
+
+	template<typename T>
+	void printSet(ft::set<T>& x) {
+		for (typename ft::set<T>::iterator it = x.begin(); it != x.end(); it++)
+			std::cout << *it << " ";
+		std::cout << std::endl;
+	}
+	template<typename T>
+	void printSet(std::set<T>& x) {
+		for (typename std::set<T>::iterator it = x.begin(); it != x.end(); it++)
+			std::cout << *it << " ";
+		std::cout << std::endl;
 	}
 }
 
