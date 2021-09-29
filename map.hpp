@@ -191,12 +191,9 @@ public:
 		iterator todel;
 		while (first != last)
 		{
-			//print("bef");
 			todel = first;
-			// std::cout << "removing " << (*todel).first << "\n";
 			++first;
 			erase(todel);
-			// print("aft");
 		}
 	}
 

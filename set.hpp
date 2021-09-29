@@ -22,33 +22,31 @@
 
 namespace ft {
 
-	template < class Key, class Compare = std::less<Key>, class Allocator = std::allocator<const Key> >
+	template < class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key> >
 	class set {
 	public:
 		// --- Definitions
-		typedef Key													key_type;
-		typedef key_type											mapped_type;
-		typedef Compare												key_compare;
-		typedef Allocator											allocator_type;
-		//typedef typename allocator_type::reference					reference;
-		//typedef typename allocator_type::const_reference			const_reference;
-		//typedef typename allocator_type::pointer					pointer;
-		typedef typename allocator_type::value_type					value_type;
-		//typedef typename allocator_type::const_pointer				const_pointer;
-		typedef size_t										size_type;
-		//typedef typename allocator_type::difference_type			difference_type;
-
+		typedef Key												key_type;
+		typedef Key												value_type;
+		typedef key_type										mapped_type;
+		typedef Compare											key_compare;
+		typedef Compare											value_compare;
+		typedef Allocator										allocator_type;
+		typedef typename allocator_type::reference				reference;
+		typedef typename allocator_type::const_reference		const_reference;
+		typedef typename allocator_type::pointer				pointer;
+		typedef typename allocator_type::const_pointer			const_pointer;
 		typedef ft::rbt_iterator<Node<value_type> >				iterator;
-		typedef ft::rbt_iterator<Node<value_type> >				const_iterator;
-		typedef ft::reverse_iterator<iterator>						reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator; non definiti??
-
+		typedef ft::const_rbt_iterator<Node<value_type> >		const_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator; // non definiti??
+		typedef typename allocator_type::size_type			size_type;
 
 		typedef RBTree<value_type, Key>								tree;
 		typedef Node<value_type>*									node_ptr;
 
 		//CON|DESTRUCTOR
-		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Alloc()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
+		explicit set( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0) {}
 
 		template< class It >
 		set( It first, It last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _alloc(alloc), _size(0)
@@ -91,7 +89,7 @@ namespace ft {
 			return iterator(_tree.getEnd());
 		}
 
-	/*	reverse_iterator rbegin() {
+		reverse_iterator rbegin() {
 			return reverse_iterator(_tree.getEnd());
 		}
 
@@ -105,7 +103,7 @@ namespace ft {
 
 		const_reverse_iterator rend()   const {
 			return reverse_iterator(_tree.getStart());
-		} */
+		}
 
 		// CAPACITY
 
@@ -137,25 +135,44 @@ namespace ft {
 				res->second = true;
 			return res;
 		};
+			
+		// any kind of optimization is useless with binary insertion
+		// thus we'll just ignore hint
+		iterator insert( iterator hint, const value_type& value ) {
+			(void)hint;
+			return insert(value).first;
+		}
 
-		//iterator insert( iterator hint, const value_type& value ) {
-		//		//non capisco che intenda con punto più vicino se è sorted (?!)
-		//};
+		template< class InputIt >
+		void insert( InputIt first, InputIt last, typename enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0 ) {
+			for (; first != last; first++)
+				insert(*first);
+		}
+
+		size_type erase (const key_type& k) {
+			iterator found = find(k);
+			if (/*found.base() &&*/ found != end()) {
+				_tree.deleteNode(found.base());
+				_size--;
+				return 1;
+			}
+			return 0;
+		}
 
 		void erase( iterator pos ) {
-			_tree.remove_bounds();
 			_tree.deleteNode(pos);
-			_tree.add_bounds();
+			_size--;
 		};
 
-		void erase( iterator first, iterator last ) {
-			iterator todel = first;
-			while(first != last)
+		void erase (iterator first, iterator last) {
+			iterator todel;
+			while (first != last)
 			{
-				erase(first);
-				first++;
+				todel = first;
+				++first;
+				erase(todel);
 			}
-		};
+		}	
 
 
 		void swap( set& other ) {
@@ -227,22 +244,12 @@ namespace ft {
 		//key_compare key_comp() const {}; //BOH
 
 		//set::value_compare value_comp() const {}; //BOH
-
-
-
-
-
-
 		
-
 	private:
 		tree			_tree;
 		key_compare		_comp;
 		allocator_type	_alloc;
 		size_type		_size;
-
-
-
 	};
 
 

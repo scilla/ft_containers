@@ -20,7 +20,7 @@ OBJS_SET = $(SRCS_SET:.cpp=.o)
 
 CPP = clang++
 
-FLAGS = -g -Wall -Wextra -Werror -std=c++98 -ferror-limit=1 -fstandalone-debug
+FLAGS = -g -Wall -Wextra -Werror -std=c++98 -ferror-limit=10 -fstandalone-debug
 
 NAME = ft_containers_tests
 
@@ -34,7 +34,7 @@ TEST_SET = set_test
 %.os : %.cpp
 	$(CPP) -DSTRING_SET $(FLAGS) -c $< -o $(<:.cpp=.os)
 
-all: $(NAME) # $(TEST_SET) $(TEST_SET_S)
+all: $(NAME) $(TEST_SET) $(TEST_SET_S)
 
 set: $(TEST_SET) $(TEST_SET_S)
 

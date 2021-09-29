@@ -1,6 +1,7 @@
 #include "vector.hpp"
 #include "rbtree.hpp"
 #include "map.hpp"
+#include "set.hpp"
 #include "utils.hpp"
 #include <stdlib.h>
 #include <iostream>
