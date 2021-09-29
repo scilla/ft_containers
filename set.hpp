@@ -119,7 +119,7 @@ namespace ft {
 		}
 
 		size_type max_size() const {
-			return _tree.max_size();
+			return _alloc.max_size();
 		}
 
 		//MODIFIERS
