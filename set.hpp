@@ -75,13 +75,13 @@ namespace ft {
 		iterator begin() {
 			if (!_tree._root)
 				return end();
-			return iterator(_tree.getStart());
+			return ++iterator(_tree.getStart());
 		}
 
 		const_iterator begin() const {
 			if (!_tree._root)
 				return const_iterator(_tree.getEnd());
-			return const_iterator(_tree.getStart());
+			return ++const_iterator(_tree.getStart());
 		}
 
 		iterator end() {
