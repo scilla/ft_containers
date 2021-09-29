@@ -6,6 +6,22 @@
 namespace ft
 {
 
+template<typename T, typename U, typename R>
+struct binary_function
+{
+	typedef T 	first_argument_type; 
+	typedef U 	second_argument_type;
+	typedef R 	result_type;
+};
+
+template<typename T>
+struct less: public binary_function<T, T, bool>
+{
+	bool operator()(const T& x, const T& y) const {
+		return x < y;
+	}
+};
+
 template <class InputIterator1, class InputIterator2>
 bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
 								InputIterator2 first2, InputIterator2 last2)
