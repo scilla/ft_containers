@@ -125,6 +125,11 @@ public:
 	typedef reverse_iterator<const_iterator>		const_reverse_iterator; //da correggere
 	typedef reverse_iterator<iterator>				reverse_iterator; //da correggere
 
+	class out_of_range: public std::out_of_range {
+	public:
+		explicit out_of_range(std::string str): std::out_of_range(str) {}
+	};
+
 	// (con|des)tructors
 	explicit vector (const allocator_type& alloc = allocator_type()):
 					_alloc(alloc),
@@ -154,7 +159,11 @@ public:
 			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
 			_alloc(alloc)
 	{
-		_size = last - first /*/ sizeof(inputType)*/;
+		//_size = last - first /*/ sizeof(inputType)*/;
+		size_t i = 0;
+		for(inputType it = first; it != last; it++)
+			i++;
+		_size = i;
 		_capacity = _size;
 		_vector = _alloc.allocate(_size);
 		for (size_t i = 0; i < _size; i++)
@@ -262,6 +271,19 @@ public:
 	};
 */
 	// access
+
+	reference at(size_type index) {
+		if (index >= _size)
+			throw out_of_range("Out of range exception!");
+		return _vector[index];
+	}
+	
+	const_reference	at(size_type index) const {
+		if (index >= _size)
+			throw out_of_range("Out of range exception!");
+		return _vector[index];
+	}
+
 	vector& operator= (const vector& alt) {
 		_alloc.deallocate(_vector, _size);
 		_size = alt.size();
@@ -280,20 +302,12 @@ public:
 		return(*(_vector + n));
 	};
 
-	reference at (size_type n) {
-		return(*(_vector + n));
-	};
-
-	const_reference at (size_type n) const {
-		return(*(_vector + n));
-	};
-
 	reference front() {
 		return(*_vector);
 	};
 	
 	const_reference front() const {
-		return(_vector);
+		return(*_vector);
 	};
 
 	reference back() {
@@ -314,12 +328,17 @@ public:
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		clear();
-		_size = last - first;
+		size_t i = 0;
+		InputIterator tmp = first;
+		for(; tmp != last; tmp++)
+			i++;
+		_size = i;
 		_vector = _alloc.allocate(_size);
-		if(_capacity == 0)
+		if(_capacity < _size)
 			_capacity = _size;
-		for (size_t i = 0; first + i < last; i++)
-			_vector[i] = *(first + i);
+		InputIterator tmp2 = first;
+		for(size_t j = 0; tmp2 != last; tmp2++, j++)
+			_vector[j] = *(tmp2);
 	};
 	
 	void assign (size_type n, const value_type& val) {
@@ -350,22 +369,24 @@ public:
 		_size--;
 	}
 
-	iterator erase (iterator position){
-		for (size_t i = 0; position + i + 1 != end(); i++)
-			*(position + i) = *(position + i + 1);
-		_size--;
+	iterator erase (iterator const &position) {
+		size_type index = position - begin();
+		_alloc.destroy(_vector + index);
+		std::move(_vector + index + 1, _vector + _size, _vector + index);
+		_size -= 1;
 		return position;
-	};
+}
 
-
-	iterator erase (iterator first, iterator last){
-		size_type distance = last - first;
-		// for (size_t i = 0; first + i + distance != end(); i++)
-		// 	*(first + i) = *(first + i + distance);
-		memmove(&(*first), &(*last), end() - last);
-		_size -= distance;
+	iterator erase (iterator first, iterator last) {
+		size_type diff = last - first;
+		pointer nBegin = first.operator->() + diff;
+		pointer lastP = last.operator->();
+		for (pointer i = first.operator->(); i != lastP; i++)
+			_alloc.destroy(i);
+		std::move(nBegin, end().operator->(), first.operator->());
+		_size -= diff;
 		return first;
-	};
+	}
 
 	void swap (vector& x) { // cambiare a ft::swap
 		std::swap(_vector, x._vector);
@@ -398,7 +419,11 @@ public:
 	
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		size_t dist = last - first;
+		//size_t dist = last - first;
+		size_t dist = 0;
+		for(InputIterator it = first; it != last; it++)
+			dist++;
+		//_size = i;
 		size_type index = position - begin();
 		if (_size + dist > _capacity) {
 			if (_size + dist > capacity() * 2)
@@ -410,8 +435,8 @@ public:
 		for(size_t i = _size - 1; i >= index; i--)
 			_vector[i] = _vector[i - dist];
 		iterator porcaputtena = begin() + index - 1;
-		for (; first != last; first++)
-			*(porcaputtena++) = *(first);
+		for (InputIterator it = first; it != last; it++)
+			*(porcaputtena++) = *(it);
 	};
 
 	void clear() {
@@ -429,7 +454,6 @@ protected:
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;
-
 	void recapacity (size_type n) {
 		if (n > _capacity)
 		{
