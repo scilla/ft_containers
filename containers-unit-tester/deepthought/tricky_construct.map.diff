@@ -1,0 +1,15 @@
+12,23c12
+< size: 7
+< max_size: 288230376151711743
+< 
+< Content is:
+< - key: 21 | value: fizz
+< - key: 35 | value: funny
+< - key: 38 | value: buzz
+< - key: 42 | value: lol
+< - key: 45 | value: bunny
+< - key: 50 | value: mdr
+< - key: 55 | value: fuzzy
+< ###############################################
+---
+> libc++abi.dylib: terminating with uncaught exception of type ft::RBTree<ft::pair<int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::less<ft::pair<int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >, std::__1::allocator<ft::Node<ft::pair<int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > > > >::duplicateElementException: Duplicate element exception

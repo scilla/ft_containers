@@ -1,0 +1,28 @@
+67a68,70
+> - FFFBB
+> - DDDDDDD
+> - EEEEEE
+69,71d71
+< - GGGG
+< - HHH
+< - II
+79,80c79,80
+< - FFFFF
+< - II
+---
+> - FFFBB
+> - DDDDD
+87,88c87,88
+< - FFFFF
+< - II
+---
+> - FFFBB
+> - DDDDD
+98c98
+< - FFFFF
+---
+> - FFFBB
+105c105
+< - FFFFF
+---
+> - FFFBB

@@ -1,0 +1,10 @@
+0a1,9
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
+> foo::operator=(foo) CALLED
