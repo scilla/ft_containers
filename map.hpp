@@ -112,7 +112,7 @@ public:
 	};
 
 	// iterators
-	iterator begin() const {  //da controllare
+	iterator begin() {  //da controllare
 		if (!_tree._root)
 			return end();
 		iterator pt = iterator(*_tree._root);
@@ -122,21 +122,22 @@ public:
 		return pt;
 	};
 
-	// const_iterator begin() const {
-	// 	node_type* pt = _tree._root;
-	// 	if(!_tree._root)
-	// 		return end();
-	// 	while (pt->color != FLUO)
-	// 		pt--;
-	// 	return const_iterator(*pt);
-	// };
+	const_iterator begin() const {
+		if (!_tree._root)
+			return end();
+		iterator pt = iterator(*_tree._root);
+		while (pt.base()->color != FLUO)
+			pt--;
+		pt++;
+		return pt;
+	};
 
-	iterator end() const { return iterator(_tree.getEnd()); };
-	// const_iterator end() const { return iterator(_tree.getEnd()); }
-	reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	reverse_iterator rend() const { return reverse_iterator(begin()); } // 			why not getStart()?
-	// const_reverse_iterator rend() const { return reverse_iterator(begin()); }
+	iterator end() { return iterator(_tree.getEnd()); };
+	const_iterator end() const { return iterator(_tree.getEnd()); }
+	reverse_iterator rbegin() { return reverse_iterator(end()); }
+	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
+	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
@@ -237,12 +238,12 @@ public:
 				res = n;
 				break;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if (key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -252,7 +253,7 @@ public:
 	}
 	const_iterator lower_bound( const Key& key ) const {
 		node_type* n;
-		node_type* res;
+		const node_type* res;
 		res = end().base();
 		if (!_size)
 			return iterator(*res);
@@ -263,12 +264,12 @@ public:
 				res = n;
 				break;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -290,12 +291,12 @@ public:
 					break;
 				n = n->right;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -305,7 +306,7 @@ public:
 	}
 	const_iterator upper_bound( const Key& key ) const {
 		node_type* n;
-		node_type* res;
+		const node_type* res;
 		res = end().base();
 		if (!_size)
 			return iterator(*res);
@@ -317,12 +318,12 @@ public:
 					break;
 				n = n->right;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -332,8 +333,8 @@ public:
 	}
 
 	// observer
-	key_compare key_comp() const { return _comp; } // ??
-	map::value_compare value_comp() const { return _comp; } // ??
+	key_compare key_comp() const { return Compare(); } // ??
+	map::value_compare value_comp() const { return value_compare(key_comp()); } // ??
 private:
 
 	RBTree<value_type>		_tree;
