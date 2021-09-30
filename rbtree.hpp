@@ -4,6 +4,7 @@
 #include "pair.hpp"
 #include "colors.h"
 #include "iterator.hpp"
+#include "utils.hpp"
 #include <iostream>
 
 enum COLOR {
@@ -272,7 +273,7 @@ private:
 	const struct Node<T>*		_ptr;
 };
 
-template <class T, class Compare = std::less<T>, class Alloc = std::allocator<Node<T> > >
+template <class T, class Compare = ft::less<T>, class Alloc = std::allocator<Node<T> > >
 class RBTree
 {
 	typedef struct ft::Node<T>									node;
@@ -293,6 +294,8 @@ private:
 	node*				_end_ptr;
 	node**				_start_placed;
 	node**				_end_placed;
+	Compare				_comp;
+	
 public:
 
 	size_type	max_size() const { return _alloc.max_size(); }
@@ -352,7 +355,7 @@ public:
 		{
 			if (data == start->data)
 				return start;
-			else if (data < start->data)
+			else if (_comp(data, start->data))
 				start = start->left;
 			else
 				start = start->right;
@@ -366,7 +369,7 @@ public:
 		{
 			if (data == start->data)
 				return start;
-			else if (data < start->data)
+			else if (_comp(data, start->data))
 				start = start->left;
 			else
 				start = start->right;
@@ -562,12 +565,12 @@ public:
 		while (*current)
 		{
 			parent = *current;
-			if (N->data < parent->data)
-				current = &parent->left;
-			else if (N->data > parent->data)
-				current = &parent->right;
-			else
+			if (N->data == parent->data)
 				throw duplicateElementException();
+			else if (_comp(N->data, parent->data))
+				current = &parent->left;
+			else
+				current = &parent->right;
 		}
 		*current = N;
 		N->parent = parent;

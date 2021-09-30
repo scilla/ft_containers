@@ -39,7 +39,7 @@ public:
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	typedef Node<value_type>					node_type;
 	
-	class value_compare: public std::binary_function<value_type, value_type, bool>
+	class value_compare: public ft::binary_function<value_type, value_type, bool>
 	{
 		friend class map;
 	protected:
@@ -333,14 +333,14 @@ public:
 	}
 
 	// observer
-	key_compare key_comp() const { return Compare(); } // ??
-	map::value_compare value_comp() const { return value_compare(key_comp()); } // ??
+	key_compare key_comp() const { return Compare(); }
+	value_compare value_comp() const { return value_compare(key_comp()); }
 private:
 
-	RBTree<value_type>		_tree;
-	key_compare				_comp;
-	allocator_type			_alloc;
-	size_type				_size;
+	RBTree<value_type, Compare>	_tree;
+	key_compare					_comp;
+	allocator_type				_alloc;
+	size_type					_size;
 };
 
 template< class Key, class T, class Compare, class Alloc >
