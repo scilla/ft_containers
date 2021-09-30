@@ -18,6 +18,7 @@
 #include "rbtree.hpp"
 #include "pair.hpp"
 #include "colors.h"
+#include <set>
 
 
 namespace ft {
@@ -119,7 +120,7 @@ namespace ft {
 		}
 
 		size_type max_size() const {
-			return _alloc.max_size();
+			return _tree.max_size(); // sizeof(node_ptr);
 		}
 
 		//MODIFIERS
