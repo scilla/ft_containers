@@ -4,11 +4,9 @@
 #include <functional>
 #include <iostream>
 #include <limits>
+#include <utility>
 #include <memory>
 #include <string>
-#include <utility>
-#include <vector>
-#include <iterator>
 #include "utils.hpp"
 #include "enable_if.hpp"
 #include <stdio.h>
@@ -136,7 +134,9 @@ public:
 					_vector(NULL),
 					_size(0),
 					_capacity(0)
-	{};
+	{
+		reserve(10);
+	};
 	explicit vector (unsigned int n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()):
 					_alloc(alloc),
@@ -394,36 +394,36 @@ public:
 		std::swap(_capacity, x._capacity);
 	};
 
-	iterator insert (iterator position, const value_type& val) {
-		size_type index = position - begin();
-		if(_size == _capacity)
-			reserve(_capacity * 2);
-		_size++;
-		for(size_t i = _size - 1; i >= index; i--)
-			_vector[i] = _vector[i - 1];
-		for (size_t i = 0; i < 1; i++)
-			_vector[index + i] = val;
-		return position;
-	};
+	iterator insert(iterator position, const value_type &val)
+	{
+		size_type equal = position - begin();
+		push_back(value_type());
+		position = iterator(_vector + equal);
+		iterator next = end() - 2, last = position - 1;
+		memmove((position + 1).base(), position.base(), (_size - equal) * sizeof(T));
+		_alloc.construct(position.base(), val);
+		return (position);
+	}
 
-    void insert (iterator position, size_type n, const value_type& val){
-		size_type index = position - begin();
-		while(_size + n > _capacity)
-			reserve(_capacity * 2);
-		for(size_t i = _size - 1; i >= index; i--)
-			_vector[i] = _vector[i - n];
-		for (size_t i = 0; i < n; i++)
-			_vector[index + i] = val;
+	void insert(iterator position, size_type n, const value_type &val)
+	{
+		size_type equal = position.base() - begin().base();
+		size_type new_size = _size + n;
+		if (new_size > _capacity)
+			reserve(new_size);
+		position = iterator(_vector + equal);
+		iterator end_ = position - 1;
+		memmove((position + n).base(), position.base(), (_size - equal) * sizeof(T));
+		for (size_type j = 0; j < n; ++j, ++position)
+			_alloc.construct((position).base(), val);
 		_size += n;
-	};
+	}
 	
 	template <class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		//size_t dist = last - first;
 		size_t dist = 0;
 		for(InputIterator it = first; it != last; it++)
 			dist++;
-		//_size = i;
 		size_type index = position - begin();
 		if (_size + dist > _capacity) {
 			if (_size + dist > capacity() * 2)
