@@ -1,9 +1,9 @@
 size: 5
 capacity: OK
-max_size: 2305843009213693951
+max_size: 4611686018427387903
 
 Content is:
-- -1400066104
+- 0
 - 5
 - 4
 - 3

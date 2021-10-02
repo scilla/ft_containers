@@ -58,18 +58,18 @@ class vector_iterator
 		}
 		vector_iterator operator-=(difference_type n) {
 			_ptr -= n;
-			return _ptr;
+			return vector_iterator(_ptr);
 		}
 		vector_iterator operator+(difference_type n) const {
 			return vector_iterator(_ptr + n);
 		}
 		vector_iterator operator+=(difference_type n) {
 			_ptr += n;
-			return _ptr;
+			return vector_iterator(_ptr);
 		}
 
 		reference operator[](size_t i) {
-			return (*(_ptr + i));
+			return reference(*(_ptr + i));
 		}
 
 		template <class K>
@@ -88,7 +88,11 @@ std::ptrdiff_t operator-(const vector_iterator<T>& left, const vector_iterator<U
 template <class T, class U>
 std::ptrdiff_t operator+(const vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() + right.base()); }
 template <class T, class U>
-vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { return left + right; }
+vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { 
+	vector_iterator<U> it = right;
+	for(T i = 0; i < left; i++)
+		it++;
+	return it; }
 template <class T, class U>
 bool operator== (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() == right.base()); }
 template <class T, class U>
@@ -420,24 +424,21 @@ public:
 	}
 	
 	template <class InputIterator>
-    void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		size_t dist = 0;
+	void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+	{
+		size_type	dist = 0;
 		for(InputIterator it = first; it != last; it++)
 			dist++;
-		size_type index = position - begin();
-		if (_size + dist > _capacity) {
-			if (_size + dist > capacity() * 2)
-				reserve(_size + dist);
-			else
-				reserve(capacity() * 2);
-		}
+		size_type	equal = position.base() - _vector;
+		size_type	new_size = _size + dist;
+		if (new_size > _capacity)
+			reserve(new_size);
+		position = iterator(_vector + equal);
+		memmove((position + dist).base(), (position).base(), (_size - equal) * sizeof(T));
+		for (size_type j = 0; j < dist; ++j, ++position, ++first)
+			_alloc.construct((position).base(), *first);
 		_size += dist;
-		for(size_t i = _size - 1; i >= index; i--)
-			_vector[i] = _vector[i - dist];
-		iterator porcaputtena = begin() + index - 1;
-		for (InputIterator it = first; it != last; it++)
-			*(porcaputtena++) = *(it);
-	};
+	}
 
 	void clear() {
 		_size = 0;
