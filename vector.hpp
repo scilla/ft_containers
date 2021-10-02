@@ -10,6 +10,7 @@
 #include "utils.hpp"
 #include "enable_if.hpp"
 #include <stdio.h>
+#include <vector>
 #include <string.h>
 
 namespace ft
@@ -28,7 +29,7 @@ class vector_iterator
 		explicit	vector_iterator(): _ptr(NULL) {};
 		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		template<class U>
-		vector_iterator(const vector_iterator<U>& vect): _ptr(vect.base()) { *this = vect; } 
+		vector_iterator(const vector_iterator<U>& vect) { *this = vect; }
 		~vector_iterator() {}
 
 		reference operator*() const { return *_ptr; }
@@ -41,7 +42,7 @@ class vector_iterator
 		vector_iterator operator++(int) {
 			vector_iterator tmp = *this;
 			++_ptr;
-			return *this;
+			return tmp;
 		}
 		vector_iterator& operator--() {
 			--_ptr;
@@ -50,7 +51,7 @@ class vector_iterator
 		vector_iterator operator--(int) {
 			vector_iterator tmp = *this;
 			--_ptr;
-			return *this;
+			return tmp;
 		}
 
 		vector_iterator operator-(difference_type n) const {
@@ -73,12 +74,20 @@ class vector_iterator
 		}
 
 		template <class K>
-		vector_iterator&	operator=(const vector_iterator<K> & other) {
-			_ptr = other.base();
+		vector_iterator&	operator=(vector_iterator<K> const& other) const{
+			_ptr = static_cast<pointer>(other.base());
 			return *this;
 		}
 
-		pointer		base() const { return _ptr; }
+		template <class K>
+		vector_iterator&	operator=(vector_iterator<K> const& other) {
+			_ptr = static_cast<pointer>(other.base());
+			return *this;
+		}
+
+
+		pointer		base() { return _ptr; }
+		const pointer		base() const { return _ptr; }
 	private:
 		pointer		_ptr;
 };
@@ -147,14 +156,10 @@ public:
 					_size(n),
 					_capacity(n)
 	{
-		/*_vector = _alloc.allocate(n);
-		for (size_t i = 0; i < n; i++) {
-			_vector[i] = val;
-		}*/
-					    if (n)
-				    _vector = _alloc.allocate(n);
-				while (n--)
-					_alloc.construct(_vector + n, val);
+		if (n)
+			_vector = _alloc.allocate(n);
+		while (n--)
+			_alloc.construct(_vector + n, val);
 	};
 
 	template <class inputType>
@@ -188,12 +193,22 @@ public:
 	};
 
 	// iterators
-	iterator begin() const {
+	iterator begin() {
 		return(iterator(_vector));
 	};
-	iterator end() const {
+
+	const_iterator begin() const {
+		return(const_iterator(_vector));
+	};
+
+	iterator end() {
 		return(iterator(_vector + _size));
 	};
+
+	const_iterator end() const {
+		return(const_iterator(_vector + _size));
+	};
+
 	reverse_iterator rbegin() const {
 		return(reverse_iterator(end()));
 	};
@@ -373,23 +388,27 @@ public:
 		_size--;
 	}
 
-	iterator erase (iterator const &position) {
-		size_type index = position - begin();
-		_alloc.destroy(_vector + index);
-		std::move(_vector + index + 1, _vector + _size, _vector + index);
-		_size -= 1;
-		return position;
-}
+	iterator erase(iterator position)
+	{
+		if (position == --end())
+		{
+			pop_back();
+			return (end());
+		}
+		size_type	dis_end_pos = _size - (position.base() - _vector + 1);
+		memmove(position.base(), (position + 1).base(), dis_end_pos * sizeof(value_type));
+		--_size;
+		return(position);
+	}
 
-	iterator erase (iterator first, iterator last) {
-		size_type diff = last - first;
-		pointer nBegin = first.operator->() + diff;
-		pointer lastP = last.operator->();
-		for (pointer i = first.operator->(); i != lastP; i++)
-			_alloc.destroy(i);
-		std::move(nBegin, end().operator->(), first.operator->());
-		_size -= diff;
-		return first;
+	iterator erase(iterator first, iterator last)
+	{
+		size_type	dist = last - first;
+		iterator	after_last = last;
+		size_type	dis_end_pos = (end().base() - last.base());
+		memmove(first.base(), last.base(), dis_end_pos * sizeof(value_type));
+		_size -= dist;
+		return(first);
 	}
 
 	void swap (vector& x) { // cambiare a ft::swap
