@@ -9,6 +9,7 @@
 #define fs std::cout
 
 #define TESTED_NAMESPACE ft
+#define TESTED_TYPE int
 #define T1 int
 #define T2 std::string
 
@@ -21,15 +22,23 @@ struct ft_more {
 int main(void)
 {
 
-	TESTED_NAMESPACE::map<T1, T2> mp;
-	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin();
-	TESTED_NAMESPACE::map<T1, T2>::const_iterator cit = mp.begin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_two(4);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_three;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_four;
 
-	TESTED_NAMESPACE::map<T1, T2>::reverse_iterator rit(it);
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < vct_two.size(); ++i)
+		vct_two[i] = (vct_two.size() - i) * 5;
 
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit(rit);
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_(it);
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_2(cit);
+	
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it = vct.begin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator ite = vct.end();
+	std::cout << std::endl << "Content is:" << std::endl;
+	for (; it != ite; ++it)
+		std::cout << "- " << *it << std::endl;
+	return 0;
 	// int range_int[] = {-351, -999, -5, -76, 101};
 	std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 

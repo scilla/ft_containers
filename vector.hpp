@@ -19,20 +19,34 @@ template <class T>
 class vector_iterator
 {
 	public:
-		typedef T												iterator_type;
-		typedef typename iterator_traits<T>::difference_type	difference_type;
-		typedef typename iterator_traits<T>::value_type			value_type;
-		typedef typename iterator_traits<T>::reference			reference;
-		typedef typename iterator_traits<T>::pointer			pointer;
+		typedef T							iterator_type;
+		typedef T*							iterator_value;
+		typedef T&							reference;
+		typedef T*							pointer;
+		typedef std::ptrdiff_t				difference_type; // std:: cause linux
+		// typedef T												iterator_type;
+		// typedef typename iterator_traits<T>::difference_type	difference_type;
+		// typedef typename iterator_traits<T>::value_type			value_type;
+		// typedef typename iterator_traits<T>::reference			reference;
+		// typedef typename iterator_traits<T>::pointer			pointer;
 		typedef random_access_iterator_tag						iterator_category;
 
 		explicit	vector_iterator(): _ptr(NULL) {};
-		explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
-		template<class U>
-		vector_iterator(const vector_iterator<U>& vect) { *this = vect; }
+		// explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
+		explicit vector_iterator(T& newnode): _ptr(newnode) {}
+		explicit vector_iterator(const T& newnode): _ptr(newnode) {}
+
+		vector_iterator(const vector_iterator& newit): _ptr(NULL) { *this = newit; } 
+
+		template<class Iter>
+		vector_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+
+		// template<class U>
+		// vector_iterator(const vector_iterator<U>& vect) { *this = vect; }
 		~vector_iterator() {}
 
 		reference operator*() const { return *_ptr; }
+		//const reference operator*() const { return *_ptr; }
 		pointer operator->() const { return _ptr; }
 
 		vector_iterator& operator++() {
@@ -75,13 +89,13 @@ class vector_iterator
 
 		template <class K>
 		vector_iterator&	operator=(vector_iterator<K> const& other) const{
-			_ptr = static_cast<pointer>(other.base());
+			_ptr = other.base();
 			return *this;
 		}
 
 		template <class K>
 		vector_iterator&	operator=(vector_iterator<K> const& other) {
-			_ptr = static_cast<pointer>(other.base());
+			_ptr = other.base();
 			return *this;
 		}
 
@@ -131,8 +145,8 @@ public:
 	//typedef std::ptrdiff_t						difference_type;
 	//typedef size_t								size_type;
 
-	typedef vector_iterator<pointer>				iterator;
-	typedef vector_iterator<const_pointer>			const_iterator;
+	typedef vector_iterator<T>				iterator;
+	typedef vector_iterator<T>			const_iterator;
 	typedef reverse_iterator<const_iterator>		const_reverse_iterator; //da correggere
 	typedef reverse_iterator<iterator>				reverse_iterator; //da correggere
 
@@ -338,7 +352,7 @@ public:
 			_capacity = _size;
 		InputIterator tmp2 = first;
 		for(size_t j = 0; tmp2 != last; tmp2++, j++)
-			_vector[j] = *(tmp2);
+			_vector[j] = *tmp2;
 	};
 	
 	void assign (size_type n, const value_type& val) {
