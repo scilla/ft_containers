@@ -60,8 +60,7 @@ public:
 	template< class InputIt >
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc), _size(0) {
 		for (; first != last; first++) {
-			_tree.insert(*first);
-			_size++;
+			insert(*first);
 		}
 	}
 
@@ -109,9 +108,10 @@ public:
 	}
 
 	T& operator[]( const Key& key ) {
-		node_type *res = _tree.find(ft::make_pair(key, T()));
+		T* nt = new T;
+		node_type *res = _tree.find(ft::make_pair(key, *nt));
 		if (res == end().base())
-			return insert(ft::make_pair(key, T())).first->second;
+			return insert(ft::make_pair(key, *nt)).first->second;
 		return res->data.second;
 	};
 
@@ -139,10 +139,10 @@ public:
 
 	iterator end() { return iterator(_tree.getEnd()); };
 	const_iterator end() const { return const_iterator(_tree.getEnd()); }
-	reverse_iterator rbegin() { return reverse_iterator(end()); }
-	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
-	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
-	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+	reverse_iterator rbegin() { return reverse_iterator(--end()); }
+	const_reverse_iterator rbegin() const { return const_reverse_iterator(--end()); }
+	reverse_iterator rend() { return reverse_iterator(--begin()); } // why not getStart()?
+	const_reverse_iterator rend() const { return const_reverse_iterator(--begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }

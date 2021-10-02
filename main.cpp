@@ -8,7 +8,7 @@
 #include <map>
 #define fs std::cout
 
-
+#define TESTED_NAMESPACE ft
 #define T1 int
 #define T2 std::string
 
@@ -20,6 +20,16 @@ struct ft_more {
 
 int main(void)
 {
+
+	TESTED_NAMESPACE::map<T1, T2> mp;
+	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin();
+	TESTED_NAMESPACE::map<T1, T2>::const_iterator cit = mp.begin();
+
+	TESTED_NAMESPACE::map<T1, T2>::reverse_iterator rit(it);
+
+	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit(rit);
+	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_(it);
+	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_2(cit);
 	// int range_int[] = {-351, -999, -5, -76, 101};
 	std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 

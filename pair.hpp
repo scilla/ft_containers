@@ -28,28 +28,28 @@ template <class T1,class T2>
 		return ( pair<T1,T2>(x,y) );
 }
 
-template <class T, class U>
-bool operator== (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return (lhs.first==rhs.first && lhs.second==rhs.second); }
+template <class T1, class T2>
+bool operator== (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
+{ return lhs.first==rhs.first && lhs.second==rhs.second; }
 
-template <class T, class U>
-bool operator!= (const pair<T,U>& lhs, const pair<T,U>& rhs)
+template <class T1, class T2>
+bool operator!= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 { return !(lhs==rhs); }
 
-template <class T, class U>
-bool operator<  (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return (lhs.first<rhs.first) || (lhs.first==rhs.first && lhs.second<rhs.second); }
+template <class T1, class T2>
+bool operator<  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
+{ return lhs.first<rhs.first || (!(rhs.first<lhs.first) && lhs.second<rhs.second); }
 
-template <class T, class U>
-bool operator<= (const pair<T,U>& lhs, const pair<T,U>& rhs)
+template <class T1, class T2>
+bool operator<= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 { return !(rhs<lhs); }
 
-template <class T, class U>
-bool operator>  (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return rhs!=lhs && rhs<lhs; }
+template <class T1, class T2>
+bool operator>  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
+{ return rhs<lhs; }
 
-template <class T, class U>
-bool operator>= (const pair<T,U>& lhs, const pair<T,U>& rhs)
+template <class T1, class T2>
+bool operator>= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 { return !(lhs<rhs); }
 
 } //namespace ft

@@ -218,7 +218,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _ptr->parent->data != _ptr->data)) {
+				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _comp(_ptr->data, _ptr->parent->data))) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -575,7 +575,7 @@ public:
 		while (*current)
 		{
 			parent = *current;
-			if (N->data == parent->data)
+			if (!_comp(N->data, parent->data) &&  !_comp(parent->data, N->data))
 				throw duplicateElementException();
 			else if (_comp(N->data, parent->data))
 				current = &parent->left;
