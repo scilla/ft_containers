@@ -70,8 +70,8 @@ public:
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
 
-	// template<class Iter>
-	// rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+	template<class Iter>
+	rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
 	reference operator*() const { return _ptr->data; }
@@ -181,17 +181,19 @@ public:
 	explicit const_rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit const_rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
-	const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
-	const_rbt_iterator(const rbt_iterator<T>& newit) { *this = newit; } 
+	// const_rbt_iterator(rbt_iterator<T>& newit) { *this = newit; } 
+	// const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
 	// const_rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
-	// template<class U>
-	// const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
-	// template<class U>
-	// const_rbt_iterator(const rbt_iterator<U>& newit) { *this = newit; } 
+	template<class U, class V >
+	const_rbt_iterator(const const_rbt_iterator<U, V>& newit) { *this = newit; } 
+	template<class U, class V >
+	const_rbt_iterator(const rbt_iterator<U, V>& newit) { *this = newit; } 
 
 	// template<class Iter>
 	// const_rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
+// rbt_iterator<pair<char, foo<float> >, ft::map<char, foo<float>, ft::less<char>, std::__1::allocator<ft::pair<const char, foo<float> > > >::value_compare>
+// rbt_iterator<ft::pair<char, foo<float> > > &
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
@@ -309,8 +311,8 @@ public:
 	size_type	max_size() const { return _alloc.max_size(); }
 
 	node*	_root;
-	RBTree(): _root(NULL) { initialize_bounds(); }
-	RBTree(RBTree& tree): _root(NULL) {
+	RBTree(): _comp(), _root(NULL) { initialize_bounds(); }
+	RBTree(RBTree& tree): _comp(), _root(NULL) {
 		initialize_bounds();
 		*this = tree;
 	}
@@ -361,7 +363,7 @@ public:
 		node* start = _root;
 		while (start && start->color != FLUO)
 		{
-			if (data == start->data)
+			if (!_comp(data, start->data) && !_comp(start->data, data))
 				return start;
 			else if (_comp(data, start->data))
 				start = start->left;
@@ -375,7 +377,7 @@ public:
 		node* start = _root;
 		while (start && start->color != FLUO)
 		{
-			if (data == start->data)
+			if (!_comp(data, start->data) && !_comp(start->data, data))
 				return start;
 			else if (_comp(data, start->data))
 				start = start->left;

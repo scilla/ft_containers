@@ -40,9 +40,9 @@ public:
 		friend class map;
 	protected:
 		key_compare comp;
-		//value_compare(key_compare c): comp(c) {}
 	public:
 		value_compare(): comp() {}
+		value_compare(key_compare c): comp(c) {}
 		bool operator()(value_type& lhs, value_type& rhs) {
 			return comp(lhs.first, rhs.first);
 		}
@@ -129,15 +129,16 @@ public:
 	const_iterator begin() const {
 		if (!_tree._root)
 			return end();
-		iterator pt = iterator(*_tree._root);
+		const_iterator pt = const_iterator(*_tree._root);
 		while (pt.base()->color != FLUO)
 			pt--;
 		pt++;
 		return pt;
 	};
 
+
 	iterator end() { return iterator(_tree.getEnd()); };
-	const_iterator end() const { return iterator(_tree.getEnd()); }
+	const_iterator end() const { return const_iterator(_tree.getEnd()); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
 	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
@@ -260,7 +261,7 @@ public:
 		const node_type* res;
 		res = end().base();
 		if (!_size)
-			return iterator(*res);
+			return const_iterator(*res);
 		n = _tree._root;
 		while (1)
 		{
@@ -279,7 +280,7 @@ public:
 				n = n->right;
 			}
 		}
-		return iterator(*res);
+		return const_iterator(*res);
 	}
 	iterator upper_bound( const Key& key ) {
 		node_type* n;
@@ -313,7 +314,7 @@ public:
 		const node_type* res;
 		res = end().base();
 		if (!_size)
-			return iterator(*res);
+			return const_iterator(*res);
 		n = _tree._root;
 		while (1)
 		{
@@ -333,15 +334,15 @@ public:
 				n = n->right;
 			}
 		}
-		return iterator(*res);
+		return const_iterator(*res);
 	}
 
 	// observer
 	key_compare key_comp() const { return Compare(); }
-	value_compare value_comp() const { return value_compare(key_comp()); }
+	value_compare value_comp() const { return value_compare(); }
 private:
 
-	RBTree<value_type, value_compare >	_tree;
+	RBTree<value_type, value_compare>	_tree;
 	key_compare					_comp;
 	allocator_type				_alloc;
 	size_type					_size;
