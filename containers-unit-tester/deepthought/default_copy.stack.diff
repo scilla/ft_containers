@@ -1,9 +1,0 @@
-0a1,8
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
-> foo::operator=(foo) CALLED
