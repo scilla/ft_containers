@@ -58,7 +58,7 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			return *this;
+			// return *this;
 		}
 		else
 		{
@@ -70,8 +70,9 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 
 	rbt_iterator operator++(int) {
@@ -86,7 +87,7 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			return *this;
+			// return *this;
 		}
 		else
 		{
@@ -98,8 +99,9 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 
 	rbt_iterator operator--(int) {
@@ -176,7 +178,7 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			return *this;
+			// return *this;
 		}
 		else
 		{
@@ -188,8 +190,9 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 	const_rbt_iterator operator++(int) {
 		const_rbt_iterator tmp = *this;
@@ -202,7 +205,7 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			return *this;
+			// return *this;
 		}
 		else
 		{
@@ -214,8 +217,9 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 	const_rbt_iterator operator--(int) {
 		const_rbt_iterator tmp = *this;

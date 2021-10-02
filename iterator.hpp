@@ -63,9 +63,9 @@ public:
 	//
 	reverse_iterator(): _current() {};
 	reverse_iterator(value_type* p) { _current = Iterator(p); }
-	reverse_iterator(const Iterator& x) { _current = x; /*--(*this);*/ }
+	reverse_iterator(const Iterator& x) { _current = x; --_current; }
 
-	Iterator base() const {return Iterator(_current);}
+	Iterator base() const {return ++Iterator(_current);}
 	Iterator getCurrent() const {return _current;}
 
 	template< class U >
@@ -77,7 +77,7 @@ public:
 		return *this;
 	}
 	const value_type& operator*() const { return *(_current); }
-	value_type* operator->() const { return _current.operator->(); }
+	const value_type* operator->() const { return _current.operator->(); }
 	reference operator[](difference_type n) const { return *(_current - n); }
 
 	reverse_iterator& operator++() {
