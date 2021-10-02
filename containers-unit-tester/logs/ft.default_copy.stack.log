@@ -6,7 +6,6 @@ foo::operator=(foo) CALLED
 foo::operator=(foo) CALLED
 foo::operator=(foo) CALLED
 foo::operator=(foo) CALLED
-foo::operator=(foo) CALLED
 empty: 0
 size: 6
 Added some elements

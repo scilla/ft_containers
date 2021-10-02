@@ -1,6 +1,7 @@
 empty: 1
 size: 0
 foo::operator=(foo) CALLED
+foo::operator=(foo) CALLED
 Added some elements
 empty: 0
 size: 4
