@@ -46,7 +46,7 @@ bool operator<= (const pair<T,U>& lhs, const pair<T,U>& rhs)
 
 template <class T, class U>
 bool operator>  (const pair<T,U>& lhs, const pair<T,U>& rhs)
-{ return rhs<lhs; }
+{ return rhs!=lhs && rhs<lhs; }
 
 template <class T, class U>
 bool operator>= (const pair<T,U>& lhs, const pair<T,U>& rhs)
