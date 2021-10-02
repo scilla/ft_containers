@@ -226,34 +226,15 @@ public:
 		return(_alloc.max_size());
 	};
 
-	void resize (size_type n, value_type val = value_type()) {
-		
-		if(n < _size)
-		{
-			_size = n;
-			/*
-			pointer temp = _alloc.allocate(n * 2);
-			for (unsigned int i = 0; i < n; i++)
-				temp[i] = _vector[i];
-			_alloc.deallocate(_vector, _capacity);
-			_vector = temp;
-			_capacity = n * 2;
-			*/
-		}
-		else if (n > _capacity)
-		{
-			pointer temp = _alloc.allocate(n);
-			int i = -1;
-			while((unsigned int)++i < _size)
-				temp[i] = _vector[i];
-			while((unsigned int)++i < n)
-				temp[i] = val;
-			_alloc.deallocate(_vector, _capacity);
-			_vector = temp;
-			_size = n;
-			_capacity = n;
-		}
-	};
+	void resize(size_type n, value_type val = value_type())
+	{
+		if (n > max_size())
+			return ;
+		while (n < _size)
+			_alloc.destroy(_vector + --_size);
+		if (n > _size)
+			insert(end(), n - _size, val);
+	}
 
 
 	size_type capacity() const{
