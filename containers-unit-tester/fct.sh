@@ -42,7 +42,7 @@ KOc=0
 
 compile () {
 	# 1=file 2=define used {ft/std} 3=output_file 4=compile_log
-	$CC $CFLAGS -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
+	$CC $CFLAGS -g -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
 	return $?
 }
 

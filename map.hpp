@@ -33,10 +33,6 @@ public:
 	typedef const value_type&					const_reference;
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
-	typedef rbt_iterator<value_type>			iterator;
-	typedef const_rbt_iterator<value_type> 		const_iterator;
-	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
-	typedef reverse_iterator<iterator>			reverse_iterator;
 	typedef Node<value_type>					node_type;
 	
 	class value_compare: public ft::binary_function<value_type, value_type, bool>
@@ -44,13 +40,21 @@ public:
 		friend class map;
 	protected:
 		key_compare comp;
-		value_compare(key_compare c): comp(c) {}
+		//value_compare(key_compare c): comp(c) {}
 	public:
+		value_compare(): comp() {}
+		bool operator()(value_type& lhs, value_type& rhs) {
+			return comp(lhs.first, rhs.first);
+		}
 		bool operator()(const value_type& lhs, const value_type& rhs) const {
 			return comp(lhs.first, rhs.first);
 		}
 	};
 
+	typedef rbt_iterator<value_type, value_compare>			iterator;
+	typedef const_rbt_iterator<value_type, value_compare> 		const_iterator;
+	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef reverse_iterator<iterator>			reverse_iterator;
 	// (con|de)structor
 	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {}
 	template< class InputIt >
@@ -337,7 +341,7 @@ public:
 	value_compare value_comp() const { return value_compare(key_comp()); }
 private:
 
-	RBTree<value_type, Compare>	_tree;
+	RBTree<value_type, value_compare >	_tree;
 	key_compare					_comp;
 	allocator_type				_alloc;
 	size_type					_size;

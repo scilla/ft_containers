@@ -43,7 +43,13 @@ struct Node {
 	}
 };
 
-template <class T>
+template< class T, class U >
+bool operator<(const ft::Node<ft::pair<T, U> >& lhs, const ft::Node<ft::pair<T, U> >& rhs )
+{
+	return lhs.first < rhs.second;
+};
+
+template <class T, class Comparare = ft::less<T> >
 class rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -53,11 +59,11 @@ public:
 	typedef T*							pointer;
 	//typedef bidirectional_iterator_tag						iterator_category;
 
-	explicit rbt_iterator(): _ptr(NULL) {}
+	explicit rbt_iterator(): _ptr(NULL){}
 	explicit rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
-	rbt_iterator(const rbt_iterator& newit) { *this = newit; } 
+	rbt_iterator(const rbt_iterator& newit): _ptr(NULL) { *this = newit; } 
 	// rbt_iterator(const const_rbt_iterator<T>& newit) { *this = newit; } 
 	// rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
 	//template<class U>
@@ -91,7 +97,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _ptr->parent->data != _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -119,7 +125,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _comp(_ptr->parent->data, _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -155,10 +161,11 @@ public:
 	bool operator==(const rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
 private:
-	struct Node<T>*		_ptr;
+	struct Node<T>*	_ptr;
+	Comparare		_comp;
 };
 
-template <class T>
+template <class T, class Comparare = ft::less<T> >
 class const_rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -209,7 +216,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _ptr->parent->data != _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -235,7 +242,7 @@ public:
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _comp(_ptr->parent->data, _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
@@ -270,10 +277,11 @@ public:
 	bool operator==(const const_rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const const_rbt_iterator &other) { return _ptr != other.base(); }
 private:
-	const struct Node<T>*		_ptr;
+	const struct Node<T>*	_ptr;
+	Comparare				_comp;
 };
 
-template <class T, class Compare = ft::less<T>, class Alloc = std::allocator<Node<T> > >
+template <class T, class Compare = ft::less<ft::Node<T> >, class Alloc = std::allocator<Node<T> > >
 class RBTree
 {
 	typedef struct ft::Node<T>									node;
@@ -711,7 +719,7 @@ public:
 		}
 		std::cout << coll << std::string(l * 4,' ');
 		if (n->parent) {
-			//std::cout << "(" << n->parent->data.first << ")";
+			std::cout << "(" << n->parent->data.first << ")";
 			if (n->isLeft())
 				std::cout << "\\";
 			else
