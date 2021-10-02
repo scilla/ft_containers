@@ -37,17 +37,41 @@ printf "\e[0;1;94m\
 \e[0m"
 }
 
+OKc=0
+KOc=0
+
 compile () {
 	# 1=file 2=define used {ft/std} 3=output_file 4=compile_log
-	$CC $CFLAGS -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
+	$CC $CFLAGS -g -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
 	return $?
 }
 
 printRes () {
+	
 	# 1=file 2=compile 3=bin 4=output 5=std_compile
 	b[0]="${BOLD}${GREEN}✅${EOC}"; b[1]="${BOLD}${RED}❌${EOC}";
 	s_bool[0]="Y"; s_bool[1]="N";
-	printf "%-35s: COMPILE: ${b[$2]} | RET: ${b[$3]} | OUT: ${b[$4]} | STD: [${s_bool[$5]}]\n" $1
+	if [ $2 -eq 0 ];
+	then
+		((OKc=OKc+1))
+	else
+		((KOc=KOc+1))
+	fi
+	if [ $3 -eq 0 ];
+	then
+		((OKc=OKc+1))
+	else
+		((KOc=KOc+1))
+	fi
+	if [ $4 -eq 0 ];
+	then
+		((OKc=OKc+1))
+	else
+		((KOc=KOc+1))
+	fi
+	printf "%-35s: COMPILE: ${b[$2]} | RET: ${b[$3]} | OUT: ${b[$4]} | STD: [${s_bool[$5]}]\n" $1;
+
+	printf "OK: ${OKc} KO: ${KOc}\n";
 }
 
 isEq () {
@@ -111,7 +135,8 @@ do_test () {
 
 function main () {
 	pheader
-	containers=(vector map stack set)
+	containers=(map)
+	# containers=(vector map stack set)
 	# containers=(vector list map stack queue deque multimap set multiset)
 	if [ $# -ne 0 ]; then
 		containers=($@);

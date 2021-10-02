@@ -4,6 +4,7 @@
 #include "pair.hpp"
 #include "colors.h"
 #include "iterator.hpp"
+#include "utils.hpp"
 #include <iostream>
 
 enum COLOR {
@@ -42,7 +43,13 @@ struct Node {
 	}
 };
 
-template <class T>
+template< class T, class U >
+bool operator<(const ft::Node<ft::pair<T, U> >& lhs, const ft::Node<ft::pair<T, U> >& rhs )
+{
+	return lhs.first < rhs.second;
+};
+
+template <class T, class Comparare = ft::less<T> >
 class rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -52,19 +59,19 @@ public:
 	typedef T*							pointer;
 	//typedef bidirectional_iterator_tag						iterator_category;
 
-	explicit rbt_iterator(): _ptr(NULL) {}
+	explicit rbt_iterator(): _ptr(NULL){}
 	explicit rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
-	rbt_iterator(const rbt_iterator& newit) { *this = newit; } 
+	rbt_iterator(const rbt_iterator& newit): _ptr(NULL) { *this = newit; } 
 	// rbt_iterator(const const_rbt_iterator<T>& newit) { *this = newit; } 
 	// rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
 	//template<class U>
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
 
-	// template<class Iter>
-	// rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+	template<class Iter>
+	rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
 	reference operator*() const { return _ptr->data; }
@@ -84,20 +91,22 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			return *this;
+			// return *this;
 		}
 		else
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _ptr->parent->data != _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
+
 	}
 
 	rbt_iterator operator++(int) {
@@ -112,20 +121,21 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			return *this;
+			// return *this;
 		}
 		else
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _comp(_ptr->parent->data, _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 
 	rbt_iterator operator--(int) {
@@ -154,10 +164,11 @@ public:
 	bool operator==(const rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
 private:
-	struct Node<T>*		_ptr;
+	struct Node<T>*	_ptr;
+	Comparare		_comp;
 };
 
-template <class T>
+template <class T, class Comparare = ft::less<T> >
 class const_rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -173,17 +184,19 @@ public:
 	explicit const_rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit const_rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
 
-	const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
-	const_rbt_iterator(const rbt_iterator<T>& newit) { *this = newit; } 
+	// const_rbt_iterator(rbt_iterator<T>& newit) { *this = newit; } 
+	// const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
 	// const_rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
-	// template<class U>
-	// const_rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
-	// template<class U>
-	// const_rbt_iterator(const rbt_iterator<U>& newit) { *this = newit; } 
+	template<class U, class V >
+	const_rbt_iterator(const const_rbt_iterator<U, V>& newit) { *this = newit; } 
+	template<class U, class V >
+	const_rbt_iterator(const rbt_iterator<U, V>& newit) { *this = newit; } 
 
 	// template<class Iter>
 	// const_rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
+// rbt_iterator<pair<char, foo<float> >, ft::map<char, foo<float>, ft::less<char>, std::__1::allocator<ft::pair<const char, foo<float> > > >::value_compare>
+// rbt_iterator<ft::pair<char, foo<float> > > &
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
@@ -202,20 +215,21 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			return *this;
+			// return *this;
 		}
 		else
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data > _ptr->data) {
+				if (_ptr->color == FLUO || (!_comp(_ptr->parent->data, _ptr->data) && _comp(_ptr->data, _ptr->parent->data))) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 	const_rbt_iterator operator++(int) {
 		const_rbt_iterator tmp = *this;
@@ -228,20 +242,21 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			return *this;
+			// return *this;
 		}
 		else
 		{
 			while(_ptr->parent)
 			{
-				if (_ptr->color == FLUO || _ptr->parent->data < _ptr->data) {
+				if (_ptr->color == FLUO || _comp(_ptr->parent->data, _ptr->data)) {
 					_ptr = _ptr->parent;
 					return (*this);
 				}
 				_ptr = _ptr->parent;
 			}
-			throw outOfBoundException();
+			// throw outOfBoundException();
 		}
+		return *this;
 	}
 	const_rbt_iterator operator--(int) {
 		const_rbt_iterator tmp = *this;
@@ -269,10 +284,11 @@ public:
 	bool operator==(const const_rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const const_rbt_iterator &other) { return _ptr != other.base(); }
 private:
-	const struct Node<T>*		_ptr;
+	const struct Node<T>*	_ptr;
+	Comparare				_comp;
 };
 
-template <class T, class Compare = std::less<T>, class Alloc = std::allocator<Node<T> > >
+template <class T, class Compare = ft::less<ft::Node<T> >, class Alloc = std::allocator<Node<T> > >
 class RBTree
 {
 	typedef struct ft::Node<T>									node;
@@ -293,13 +309,15 @@ private:
 	node*				_end_ptr;
 	node**				_start_placed;
 	node**				_end_placed;
+	Compare				_comp;
+	
 public:
 
 	size_type	max_size() const { return _alloc.max_size(); }
 
 	node*	_root;
-	RBTree(): _root(NULL) { initialize_bounds(); }
-	RBTree(RBTree& tree): _root(NULL) {
+	RBTree(): _comp(), _root(NULL) { initialize_bounds(); }
+	RBTree(RBTree& tree): _comp(), _root(NULL) {
 		initialize_bounds();
 		*this = tree;
 	}
@@ -350,9 +368,9 @@ public:
 		node* start = _root;
 		while (start && start->color != FLUO)
 		{
-			if (data == start->data)
+			if (!_comp(data, start->data) && !_comp(start->data, data))
 				return start;
-			else if (data < start->data)
+			else if (_comp(data, start->data))
 				start = start->left;
 			else
 				start = start->right;
@@ -364,9 +382,9 @@ public:
 		node* start = _root;
 		while (start && start->color != FLUO)
 		{
-			if (data == start->data)
+			if (!_comp(data, start->data) && !_comp(start->data, data))
 				return start;
-			else if (data < start->data)
+			else if (_comp(data, start->data))
 				start = start->left;
 			else
 				start = start->right;
@@ -562,12 +580,12 @@ public:
 		while (*current)
 		{
 			parent = *current;
-			if (N->data < parent->data)
-				current = &parent->left;
-			else if (N->data > parent->data)
-				current = &parent->right;
-			else
+			if (!_comp(N->data, parent->data) &&  !_comp(parent->data, N->data))
 				throw duplicateElementException();
+			else if (_comp(N->data, parent->data))
+				current = &parent->left;
+			else
+				current = &parent->right;
 		}
 		*current = N;
 		N->parent = parent;
@@ -708,7 +726,7 @@ public:
 		}
 		std::cout << coll << std::string(l * 4,' ');
 		if (n->parent) {
-			//std::cout << "(" << n->parent->data.first << ")";
+			std::cout << "(" << n->parent->data.first << ")";
 			if (n->isLeft())
 				std::cout << "\\";
 			else

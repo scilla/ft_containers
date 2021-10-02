@@ -33,31 +33,34 @@ public:
 	typedef const value_type&					const_reference;
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
-	typedef rbt_iterator<value_type>			iterator;
-	typedef const_rbt_iterator<value_type> 		const_iterator;
-	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
-	typedef reverse_iterator<iterator>			reverse_iterator;
 	typedef Node<value_type>					node_type;
 	
-	class value_compare: public std::binary_function<value_type, value_type, bool>
+	class value_compare: public ft::binary_function<value_type, value_type, bool>
 	{
 		friend class map;
 	protected:
 		key_compare comp;
-		value_compare(key_compare c): comp(c) {}
 	public:
+		value_compare(): comp() {}
+		value_compare(key_compare c): comp(c) {}
+		bool operator()(value_type& lhs, value_type& rhs) {
+			return comp(lhs.first, rhs.first);
+		}
 		bool operator()(const value_type& lhs, const value_type& rhs) const {
 			return comp(lhs.first, rhs.first);
 		}
 	};
 
+	typedef rbt_iterator<value_type, value_compare>			iterator;
+	typedef const_rbt_iterator<value_type, value_compare> 		const_iterator;
+	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef reverse_iterator<iterator>			reverse_iterator;
 	// (con|de)structor
 	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {}
 	template< class InputIt >
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc), _size(0) {
 		for (; first != last; first++) {
-			_tree.insert(*first);
-			_size++;
+			insert(*first);
 		}
 	}
 
@@ -105,14 +108,15 @@ public:
 	}
 
 	T& operator[]( const Key& key ) {
-		node_type *res = _tree.find(ft::make_pair(key, T()));
+		T* nt = new T;
+		node_type *res = _tree.find(ft::make_pair(key, *nt));
 		if (res == end().base())
-			return insert(ft::make_pair(key, T())).first->second;
+			return insert(ft::make_pair(key, *nt)).first->second;
 		return res->data.second;
 	};
 
 	// iterators
-	iterator begin() const {  //da controllare
+	iterator begin() {  //da controllare
 		if (!_tree._root)
 			return end();
 		iterator pt = iterator(*_tree._root);
@@ -122,21 +126,23 @@ public:
 		return pt;
 	};
 
-	// const_iterator begin() const {
-	// 	node_type* pt = _tree._root;
-	// 	if(!_tree._root)
-	// 		return end();
-	// 	while (pt->color != FLUO)
-	// 		pt--;
-	// 	return const_iterator(*pt);
-	// };
+	const_iterator begin() const {
+		if (!_tree._root)
+			return end();
+		const_iterator pt = const_iterator(*_tree._root);
+		while (pt.base()->color != FLUO)
+			pt--;
+		pt++;
+		return pt;
+	};
 
-	iterator end() const { return iterator(_tree.getEnd()); };
-	// const_iterator end() const { return iterator(_tree.getEnd()); }
-	reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	// const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
-	reverse_iterator rend() const { return reverse_iterator(begin()); } // 			why not getStart()?
-	// const_reverse_iterator rend() const { return reverse_iterator(begin()); }
+
+	iterator end() { return iterator(_tree.getEnd()); };
+	const_iterator end() const { return const_iterator(_tree.getEnd()); }
+	reverse_iterator rbegin() { return reverse_iterator(end()); }
+	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
+	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	// capacity
 	bool empty() const { return !_size; }
@@ -237,12 +243,12 @@ public:
 				res = n;
 				break;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if (key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -252,10 +258,10 @@ public:
 	}
 	const_iterator lower_bound( const Key& key ) const {
 		node_type* n;
-		node_type* res;
+		const node_type* res;
 		res = end().base();
 		if (!_size)
-			return iterator(*res);
+			return const_iterator(*res);
 		n = _tree._root;
 		while (1)
 		{
@@ -263,18 +269,18 @@ public:
 				res = n;
 				break;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
 			}
 		}
-		return iterator(*res);
+		return const_iterator(*res);
 	}
 	iterator upper_bound( const Key& key ) {
 		node_type* n;
@@ -290,12 +296,12 @@ public:
 					break;
 				n = n->right;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
@@ -305,10 +311,10 @@ public:
 	}
 	const_iterator upper_bound( const Key& key ) const {
 		node_type* n;
-		node_type* res;
+		const node_type* res;
 		res = end().base();
 		if (!_size)
-			return iterator(*res);
+			return const_iterator(*res);
 		n = _tree._root;
 		while (1)
 		{
@@ -317,29 +323,29 @@ public:
 					break;
 				n = n->right;
 			}
-			else if ((*n).data.first > key) {
+			else if ( !key_comp()((*n).data.first, key)) {
 				res = n;
 				if (!n->left || n->left->color == FLUO)
 					break;
 				n = n->left;
-			} else if ((*n).data.first < key) {
+			} else if ( key_comp()((*n).data.first, key)) {
 				if (!n->right)
 					break;
 				n = n->right;
 			}
 		}
-		return iterator(*res);
+		return const_iterator(*res);
 	}
 
 	// observer
-	key_compare key_comp() const { return _comp; } // ??
-	map::value_compare value_comp() const { return _comp; } // ??
+	key_compare key_comp() const { return Compare(); }
+	value_compare value_comp() const { return value_compare(); }
 private:
 
-	RBTree<value_type>		_tree;
-	key_compare				_comp;
-	allocator_type			_alloc;
-	size_type				_size;
+	RBTree<value_type, value_compare>	_tree;
+	key_compare					_comp;
+	allocator_type				_alloc;
+	size_type					_size;
 };
 
 template< class Key, class T, class Compare, class Alloc >

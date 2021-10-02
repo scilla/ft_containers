@@ -33,7 +33,7 @@ If your project does not fit the expected tree (e.g. has sub-directories and/or 
 Please edit the first line of `./<container>/common.hpp` (for filenames) \
 Or the variable `tested_path` in `fct.sh` (for special path)
 
-Then what? \
+Then what? \./cm	
 There are a three executables! How do we use them?
 
 ```bash

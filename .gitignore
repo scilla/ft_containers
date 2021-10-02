@@ -12,3 +12,7 @@ tester/tester/*_output
 tester/set_test
 tester/set_test_string
 tester/tester/
+containers-unit-tester/deepthought/
+containers-unit-tester/logs/
+containers-unit-tester/ft.map.out.dSYM/
+containers-unit-tester/std.map.out.dSYM/
