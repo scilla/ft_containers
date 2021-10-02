@@ -1,6 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 #include <iostream>
+#include <set>
 
 namespace ft
 {
@@ -51,4 +52,10 @@ bool equal (InputIterator1 lit, InputIterator1 lend, InputIterator2 rit, InputIt
 
 }
 
+template<typename T>
+void printSet(std::set<T>& x) {
+	for (typename std::set<T>::iterator it = x.begin(); it != x.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
 #endif
