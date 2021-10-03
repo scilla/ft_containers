@@ -215,15 +215,15 @@ public:
 	size_type count( const T& key ) const {
 		size_type s = 0;
 		for (const_iterator it = begin(); it != end(); it++)
-			if ((*it).first == key)
+			if (*it == key)
 				s++;
 		return s;
 	}
 	iterator find( const T& key ) {
-		return iterator(*_tree.find(ft::make_pair(key, T())));
+		return iterator(*_tree.find(key));
 	}
 	const_iterator find( const T& key ) const {
-		return const_iterator(*_tree.find(ft::make_pair(key, T())));
+		return const_iterator(*_tree.find(key));
 	}
 	ft::pair<iterator,iterator> equal_range( const T& key ) {
 		return ft::make_pair(iterator(lower_bound(key)), iterator(upper_bound(key)));

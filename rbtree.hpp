@@ -56,6 +56,7 @@ public:
 	typedef T							iterator_type;
 	typedef T*							iterator_value;
 	typedef T&							reference;
+	typedef const T&							const_reference;
 	typedef T*							pointer;
 	//typedef bidirectional_iterator_tag						iterator_category;
 
@@ -74,7 +75,7 @@ public:
 	rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
-	reference operator*() const { return _ptr->data; }
+	const_reference operator*() const { return _ptr->data; }
 	pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
