@@ -248,7 +248,7 @@ class const_vector_iterator
 		const pointer		base() const { return _ptr; }
 
 		// bool operator==(const const_vector_iterator &other) { return _ptr == other.base(); }
-		bool operator!=(const const_vector_iterator &other) { return _ptr != other.base(); }
+		// bool operator!=(const const_vector_iterator &other) { return _ptr != other.base(); }
 
 	private:
 		pointer		_ptr;

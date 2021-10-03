@@ -160,7 +160,7 @@ public:
 	// pointer		base() const { return _ptr; }
 
 	struct ft::Node<T>* base() { return _ptr; }
-	struct ft::Node<T>* base() const { return _ptr; }
+	const struct ft::Node<T>* base() const { return _ptr; }
 
 	bool operator==(const rbt_iterator &other) { return _ptr == other.base(); }
 	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
