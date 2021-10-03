@@ -217,8 +217,8 @@ class const_vector_iterator
 			return const_vector_iterator(_ptr);
 		}
 
-		reference operator[](size_t i) {
-			return reference(*(_ptr + i));
+		const_reference operator[](size_t i) {
+			return const_reference(*(_ptr + i));
 		}
 
 		template <class K>
