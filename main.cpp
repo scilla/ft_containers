@@ -7,7 +7,7 @@
 #include <iostream>
 #include <map>
 #define fs std::cout
-
+#define TESTED_TYPE std::string
 #define TESTED_NAMESPACE ft
 #define T1 int
 #define T2 std::string
@@ -20,24 +20,21 @@ struct ft_more {
 
 int main(void)
 {
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
-	TESTED_NAMESPACE::map<T1, T2> mp;
-	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin();
-	TESTED_NAMESPACE::map<T1, T2>::const_iterator cit = mp.begin();
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = std::string((vct.size() - i), i + 65);
 
-	TESTED_NAMESPACE::map<T1, T2>::reverse_iterator rit(it);
+	vct.erase(vct.begin() + 2);
 
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit(rit);
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_(it);
-	TESTED_NAMESPACE::map<T1, T2>::const_reverse_iterator crit_2(cit);
-	// int range_int[] = {-351, -999, -5, -76, 101};
-	std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
+	vct.erase(vct.begin());
+	vct.erase(vct.end() - 1);
 
+	vct.erase(vct.begin(), vct.begin() + 3);
+	vct.erase(vct.end() - 3, vct.end() - 1);
 
-	ft::map<int, std::string, ft_more> ft_map;
-	ft_map.insert(ft::make_pair(42, range_str[0]));
-	ft_map.insert(ft::make_pair(42, range_str[1]));
-	ft_map.print();
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
 	// std::map<int, std::string, ft_more> stl_map;
 	// for (int i = 0; i < 101; i++)
 	// {

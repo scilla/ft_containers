@@ -1,6 +1,7 @@
 *.o
 *.out
-.git
+.git1
+*.log
 containers
 .vscode
 .DS_Store
