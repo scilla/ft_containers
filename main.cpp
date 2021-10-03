@@ -7,9 +7,8 @@
 #include <iostream>
 #include <map>
 #define fs std::cout
-
+#define TESTED_TYPE std::string
 #define TESTED_NAMESPACE ft
-#define TESTED_TYPE int
 #define T1 int
 #define T2 std::string
 
@@ -21,38 +20,21 @@ struct ft_more {
 
 int main(void)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_two(4);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_three;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_four;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 3;
-	for (unsigned long int i = 0; i < vct_two.size(); ++i)
-		vct_two[i] = (vct_two.size() - i) * 5;
+		vct[i] = std::string((vct.size() - i), i + 65);
 
-	vct_three.assign(vct.begin(), vct.end());
-	vct.assign(vct_two.begin(), vct_two.end());
-	vct_two.assign(2, 42);
-	vct_four.assign(4, 21);
-		
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it = vct.begin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator ite = vct.end();
+	vct.erase(vct.begin() + 2);
 
-	std::cout << std::endl << "Content is:" << std::endl;
-	for (; it != ite; ++it)
-		std::cout << "- " << *it << std::endl;
-	return 0;
+	vct.erase(vct.begin());
+	vct.erase(vct.end() - 1);
 
+	vct.erase(vct.begin(), vct.begin() + 3);
+	vct.erase(vct.end() - 3, vct.end() - 1);
 
-	// int range_int[] = {-351, -999, -5, -76, 101};
-	std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
-
-
-	ft::map<int, std::string, ft_more> ft_map;
-	ft_map.insert(ft::make_pair(42, range_str[0]));
-	ft_map.insert(ft::make_pair(42, range_str[1]));
-	ft_map.print();
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
 	// std::map<int, std::string, ft_more> stl_map;
 	// for (int i = 0; i < 101; i++)
 	// {
