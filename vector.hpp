@@ -35,6 +35,7 @@ class vector_iterator
 		// explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		explicit vector_iterator(T& newnode): _ptr(newnode) {}
 		explicit vector_iterator(const T& newnode): _ptr(newnode) {}
+		explicit vector_iterator(const pointer newnode): _ptr(newnode) {}
 
 		vector_iterator(const vector_iterator& newit): _ptr(NULL) { *this = newit; } 
 

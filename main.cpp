@@ -21,7 +21,6 @@ struct ft_more {
 
 int main(void)
 {
-
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_two(4);
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_three;
@@ -32,13 +31,20 @@ int main(void)
 	for (unsigned long int i = 0; i < vct_two.size(); ++i)
 		vct_two[i] = (vct_two.size() - i) * 5;
 
-	
+	vct_three.assign(vct.begin(), vct.end());
+	vct.assign(vct_two.begin(), vct_two.end());
+	vct_two.assign(2, 42);
+	vct_four.assign(4, 21);
+		
 	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it = vct.begin();
 	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator ite = vct.end();
+
 	std::cout << std::endl << "Content is:" << std::endl;
 	for (; it != ite; ++it)
 		std::cout << "- " << *it << std::endl;
 	return 0;
+
+
 	// int range_int[] = {-351, -999, -5, -76, 101};
 	std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
