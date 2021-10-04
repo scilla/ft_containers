@@ -77,7 +77,7 @@ public:
 		return *this;
 	}
 	// value_type& operator*() { return *(_current); }
-	const value_type& operator*() const { return *(_current); }
+	value_type& operator*() { return *(_current); }
 	const value_type* operator->() const { return _current.operator->(); }
 	reference operator[](difference_type n) const { return *(_current - n); }
 

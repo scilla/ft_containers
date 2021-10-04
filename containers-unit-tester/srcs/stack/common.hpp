@@ -35,8 +35,6 @@ class foo {
 		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
 		foo &operator=(value_type src) { this->value = src; return *this; };
 		foo &operator=(foo const &src) {
-			if (this->_verbose || src._verbose)
-				std::cout << "foo::operator=(foo) CALLED" << std::endl;
 			this->value = src.value;
 			return *this;
 		};

@@ -578,8 +578,6 @@ public:
 			return (end());
 		}
 		size_type index = position - begin();
-		// size_type	dis_end_pos = _size - (position.base() - _vector + 1);
-		//memmove(position.base(), (position + 1).base(), dis_end_pos * sizeof(value_type));
 		for (size_type i = index; i < _size-1; i++)
 			_vector[i] = _vector[i+1];
 		--_size;
@@ -589,11 +587,7 @@ public:
 	iterator erase(iterator first, iterator last)
 	{
 		size_type	dist = last - first;
-		//iterator	after_last = last;
-		//size_type	dis_end_pos = (end().base() - last.base());
 		size_type 	index = first - begin();
-		//memmove(first.base(), last.base(), dis_end_pos * sizeof(value_type));
-		
 		for (size_type i = index; i < _size-dist; i++)
 			_vector[i] = _vector[i+dist];
 		_size -= dist;
