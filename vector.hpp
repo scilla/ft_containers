@@ -42,8 +42,8 @@ class vector_iterator
 
 		vector_iterator(const vector_iterator& newit): _ptr(NULL) { *this = newit; } 
 
-		template<class Iter>
-		vector_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+		//template<class Iter>
+		//vector_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 		// template<class U>
 		// vector_iterator(const vector_iterator<U>& vect) { *this = vect; }
@@ -174,9 +174,6 @@ class const_vector_iterator
 
 		template<class Iter>
 		const_vector_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
-
-		// template<class U>
-		// const_vector_iterator(const const_vector_iterator<U>& vect) { *this = vect; }
 		~const_vector_iterator() {}
 
 		const_reference operator*() const { return *_ptr; }
@@ -223,12 +220,6 @@ class const_vector_iterator
 
 		template <class K>
 		const_vector_iterator&	operator=(const_vector_iterator<K> const& other) const{
-			_ptr = other.base();
-			return *this;
-		}
-
-		template <class K>
-		const_vector_iterator&	operator=(const_vector_iterator<K> const& other) {
 			_ptr = other.base();
 			return *this;
 		}
