@@ -52,7 +52,7 @@ public:
 	// };
 
 	typedef set_rbt_iterator<value_type, value_compare>			iterator;
-	typedef const_rbt_iterator<value_type, value_compare> 		const_iterator;
+	typedef set_rbt_iterator<value_type, value_compare> 		const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	// (con|de)structor
