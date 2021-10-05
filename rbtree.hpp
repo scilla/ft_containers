@@ -76,7 +76,7 @@ public:
 
 	~rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
-	pointer operator->() const { return &_ptr->data; }
+	const pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{
@@ -201,6 +201,8 @@ public:
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
+	const_reference operator*() { return _ptr->data; }
+	const_pointer operator->() { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{

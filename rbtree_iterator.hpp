@@ -41,7 +41,7 @@ public:
 	// rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
-	reference operator*() const { return _ptr->data; }
+	const_reference operator*() const { return _ptr->data; }
 	pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
