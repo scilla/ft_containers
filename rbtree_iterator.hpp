@@ -37,8 +37,8 @@ public:
 	// template<class U>
 	// rbt_iterator(const const_rbt_iterator<U>& newit) { *this = newit; } 
 
-	// template<class Iter>
-	// rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
+	template<class Iter>
+	rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
 
 	~rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
