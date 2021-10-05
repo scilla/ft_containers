@@ -19,12 +19,13 @@
 
 namespace ft {
 
+
 template< class T, class Compare = ft::less<T>, class Allocator = std::allocator<T> >
 class set {
 public:
 	typedef T									key_type;
 	typedef T									mapped_key;
-	typedef key_type			value_type;
+	typedef key_type							value_type;
 	typedef size_t								size_type;
 	typedef std::ptrdiff_t						difference_type; // std:: cause linux
 	typedef Compare								key_compare;
@@ -53,7 +54,7 @@ public:
 	// };
 
 	typedef rbt_iterator<value_type, value_compare>			iterator;
-	typedef const_rbt_iterator<value_type, value_compare> 		const_iterator;
+	typedef rbt_iterator<value_type, value_compare> 		const_iterator;
 	typedef reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	// (con|de)structor
