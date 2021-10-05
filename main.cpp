@@ -20,6 +20,10 @@ struct ft_more {
 
 int main(void)
 {
+	
+	TESTED_NAMESPACE::map<int, int> const mp;
+	TESTED_NAMESPACE::map<int, int>::iterator it = mp.begin(); // <-- error expected
+	return 0;
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
