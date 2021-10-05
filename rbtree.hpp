@@ -153,7 +153,7 @@ public:
 
 	template <class K>
 	rbt_iterator& operator=(const K& other) {
-		_ptr = other.base();
+		_ptr = const_cast<struct Node<T>*>(other.base());
 		return *this;
 	}
 
