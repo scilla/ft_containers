@@ -408,8 +408,8 @@ public:
 	const struct Node<T>* base() { return _ptr; }
 	const struct Node<T>* base() const { return _ptr; }
 
-	bool operator==(const const_rbt_iterator &other) { return _ptr == other.base(); }
-	bool operator!=(const const_rbt_iterator &other) { return _ptr != other.base(); }
+	bool operator==(const const_rbt_iterator &other) { return (_ptr->color == FLUO && other._ptr->color == FLUO) || _ptr == other.base(); }
+	bool operator!=(const const_rbt_iterator &other) { return !(_ptr->color == FLUO && other._ptr->color == FLUO) && _ptr != other.base(); }
 private:
 	const struct Node<T>*	_ptr;
 	Comparare				_comp;
@@ -428,7 +428,7 @@ class RBTree
 	typedef typename allocator_type::size_type					size_type;
 	typedef typename allocator_type::difference_type			difference_type;
 
-private:
+protected:
 	allocator_type		_alloc;
 	node				_start;
 	node				_end;
@@ -439,10 +439,10 @@ private:
 	Compare				_comp;
 	
 public:
+	node*	_root;
 
 	size_type	max_size() const { return _alloc.max_size(); }
 
-	node*	_root;
 	RBTree(): _comp(), _root(NULL) { initialize_bounds(); }
 	RBTree(RBTree& tree): _comp(), _root(NULL) {
 		initialize_bounds();
@@ -469,6 +469,15 @@ public:
 	RBTree& operator=(const RBTree& tree) {
 		clear();
 		recursive_insert(tree._root);
+		// _root = tree._root;
+		// _start = tree._start;
+		// _end = tree._end;
+		// _start_ptr = tree._start_ptr;
+		// _end_ptr = tree._end_ptr;
+		// _start_placed = tree._start_placed;
+		// _end_placed = tree._end_placed;
+		// _alloc = tree._alloc;
+		// _comp = tree._comp;
 		return *this;
 	}
 
@@ -632,6 +641,7 @@ public:
 			replaceNodeWithLoneChild(n, n->left);
 		} else
 			throw std::exception();
+		// fixDeletion(n);
 	}
 
 	void fixDeletion(node* N) {
@@ -777,6 +787,8 @@ public:
 	}
 
 	void initialize_bounds() {
+		// _end = new node((node){NULL, NULL, NULL, FLUO, T()});
+		// _start = new node((node){NULL, NULL, NULL, FLUO, T()});
 		// _end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "END*")};
 		// _start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "*START")};
 		_end = (node){NULL, NULL, NULL, FLUO, T()};

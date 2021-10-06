@@ -56,27 +56,35 @@ public:
 	typedef const_reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef const_reverse_iterator			reverse_iterator;
 	// (con|de)structor
-	explicit set(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {}
+	explicit set(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {
+		_tree = new RBTree<value_type, value_compare>();
+	}
 	template< class InputIt >
 	set(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc), _size(0) {
+		_tree = new RBTree<value_type, value_compare>();
 		for (; first != last; first++) {
 			insert(*first);
 		}
 	}
 
-	set(set& new_map) {
-		*this = new_map;
+	set(set& new_map)
+	: _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
+	{
+		_tree = new RBTree<value_type, value_compare>();
+		*_tree = *new_map._tree;
+		//*this = new_map;
 	}
 
 	~set() {}
 
 	void print(std::string s = "") {
-		_tree.print_tree(s);
+		_tree->print_tree(s);
 	}
 
 	// cose
 	set& operator=( set& other ) {
-		_tree = other._tree;
+		_tree = new RBTree<value_type, value_compare>();
+		*_tree = *other._tree;
 		_comp = other._comp;
 		_alloc = other._alloc;
 		_size = other._size;
@@ -94,14 +102,14 @@ public:
 	
 	// access
 	T& at( const T& key ) {
-		node_type *res = _tree.find(key);
+		node_type *res = _tree->find(key);
 		if (res == end().base())
 			throw outOfBoundException();
 		return res->data->second;
 	}
 
 	const T& at( const T& key ) const {
-		node_type *res = _tree.find(key);
+		node_type *res = _tree->find(key);
 		if (res == end().base())
 			throw outOfBoundException();
 		return res->data->second;
@@ -109,7 +117,7 @@ public:
 
 	T& operator[]( const T& key ) {
 		T* nt = new T;
-		node_type *res = _tree.find(ft::make_pair(key, *nt));
+		node_type *res = _tree->find(ft::make_pair(key, *nt));
 		if (res == end().base())
 			return insert(ft::make_pair(key, *nt)).first->second;
 		return res->data.second;
@@ -117,9 +125,9 @@ public:
 
 	// iterators
 	iterator begin() {  //da controllare
-		if (!_tree._root)
+		if (!_tree->_root)
 			return end();
-		iterator pt = iterator(*_tree._root);
+		iterator pt = iterator(*_tree->_root);
 		while (pt.base()->color != FLUO)
 			pt--;
 		pt++;
@@ -127,9 +135,9 @@ public:
 	};
 
 	const_iterator begin() const {
-		if (!_tree._root)
+		if (!_tree->_root)
 			return end();
-		const_iterator pt = const_iterator(*_tree._root);
+		const_iterator pt = const_iterator(*_tree->_root);
 		while (pt.base()->color != FLUO)
 			pt--;
 		pt++;
@@ -137,8 +145,8 @@ public:
 	};
 
 
-	iterator end() { return iterator(_tree.getEnd()); };
-	const_iterator end() const { return const_iterator(_tree.getEnd()); }
+	iterator end() { return iterator(_tree->getEnd()); };
+	const_iterator end() const { return const_iterator(_tree->getEnd()); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
 	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
@@ -147,19 +155,19 @@ public:
 	// capacity
 	bool empty() const { return !_size; }
 	size_type size() const { return _size; }
-	size_type max_size() const { return _tree.max_size(); }
+	size_type max_size() const { return _tree->max_size(); }
 
 	// modifiers
 	void clear() {
 		_size = 0;
-		_tree.clear();
+		_tree->clear();
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
-		node_type* nd = _tree.find(value);
+		node_type* nd = _tree->find(value);
 		if (nd != end().base())
 			return ft::make_pair(iterator(*nd), false);
-		nd = &_tree.insert(value);
+		nd = &_tree->insert(value);
 		_size++;
 		// print();
 		return ft::make_pair(iterator(*nd), true);
@@ -179,14 +187,14 @@ public:
 	}
 
 	void erase( iterator pos ) {
-		_tree.deleteNode(pos.base());
+		_tree->deleteNode(pos.base());
 		_size--;
 	}
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
 		if (/*found.base() &&*/ found != end()) {
-			_tree.deleteNode(found.base());
+			_tree->deleteNode(found.base());
 			_size--;
 			return 1;
 		}
@@ -219,10 +227,10 @@ public:
 		return s;
 	}
 	iterator find( const T& key ) {
-		return iterator(*_tree.find(key));
+		return iterator(*_tree->find(key));
 	}
 	const_iterator find( const T& key ) const {
-		return const_iterator(*_tree.find(key));
+		return const_iterator(*_tree->find(key));
 	}
 	ft::pair<iterator,iterator> equal_range( const T& key ) {
 		return ft::make_pair(iterator(lower_bound(key)), iterator(upper_bound(key)));
@@ -236,7 +244,7 @@ public:
 		res = end().base();
 		if (!_size)
 			return iterator(*res);
-		n = _tree._root;
+		n = _tree->_root;
 		while (1)
 		{
 			if ((*n).data == key) {
@@ -262,7 +270,7 @@ public:
 		res = end().base();
 		if (!_size)
 			return const_iterator(*res);
-		n = _tree._root;
+		n = _tree->_root;
 		while (1)
 		{
 			if ((*n).data == key) {
@@ -288,7 +296,7 @@ public:
 		res = end().base();
 		if (!_size)
 			return iterator(*res);
-		n = _tree._root;
+		n = _tree->_root;
 		while (1)
 		{
 			if ((*n).data == key) {
@@ -315,7 +323,7 @@ public:
 		res = end().base();
 		if (!_size)
 			return const_iterator(*res);
-		n = _tree._root;
+		n = _tree->_root;
 		while (1)
 		{
 			if ((*n).data == key) {
@@ -342,7 +350,7 @@ public:
 	value_compare value_comp() const { return value_compare(); }
 private:
 
-	RBTree<value_type, value_compare>	_tree;
+	RBTree<value_type, value_compare>*	_tree;
 	key_compare					_comp;
 	allocator_type				_alloc;
 	size_type					_size;
