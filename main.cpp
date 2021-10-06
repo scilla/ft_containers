@@ -7,7 +7,7 @@
 #include <iostream>
 #include <map>
 #define fs std::cout
-#define TESTED_TYPE std::string
+#define TESTED_TYPE int
 #define TESTED_NAMESPACE ft
 #define T1 int
 #define T2 std::string
@@ -18,27 +18,39 @@ struct ft_more {
 	}
 };
 
+void printVector(TESTED_NAMESPACE::vector<TESTED_TYPE>& vect) {
+	for (unsigned int i = 0; i < vect.size(); i++)
+		std::cout << vect[i] << std::endl;
+}
+
 int main(void)
 {
-	
-	TESTED_NAMESPACE::map<int, int> const mp;
-	TESTED_NAMESPACE::map<int, int>::iterator it = mp.begin(); // <-- error expected
-	return 0;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = std::string((vct.size() - i), i + 65);
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
 
-	vct.erase(vct.begin() + 2);
+	printVector(vct);
+	it = it + 5;
+	printVector(vct);
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
 
-	vct.erase(vct.begin());
-	vct.erase(vct.end() - 1);
+	*(it -= 2) = 42;
+	printVector(vct);
+	*(it += 2) = 21;
+	printVector(vct);
 
-	vct.erase(vct.begin(), vct.begin() + 3);
-	vct.erase(vct.end() - 3, vct.end() - 1);
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
 
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
 	// std::map<int, std::string, ft_more> stl_map;
 	// for (int i = 0; i < 101; i++)
 	// {

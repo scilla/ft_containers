@@ -103,7 +103,7 @@ public:
 		return tmp;
 	}
 	reverse_iterator operator+( difference_type n ) const {
-		return (_current - n + 1);
+		return (_current - (n + 1));
 	}
 	reverse_iterator operator-( difference_type n ) const {
 		return (_current + n + 1);
@@ -186,7 +186,7 @@ public:
 		return tmp;
 	}
 	const_reverse_iterator operator+( difference_type n ) const {
-		return (_current - n + 1);
+		return (_current - (n + 1));
 	}
 	const_reverse_iterator operator-( difference_type n ) const {
 		return (_current + n + 1);

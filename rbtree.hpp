@@ -181,6 +181,7 @@ public:
 	typedef T&							reference;
 	typedef const T&							const_reference;
 	typedef T*							pointer;
+	typedef const T*							const_pointer;
 
 	//typedef bidirectional_iterator_tag						iterator_category;
 
@@ -199,7 +200,7 @@ public:
 
 	~set_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
-	const pointer operator->() const { return &_ptr->data; }
+	const_pointer operator->() const { return &_ptr->data; }
 
 	class outOfBoundException: public std::exception
 	{
