@@ -75,6 +75,8 @@ public:
 	// } 
 
 	~rbt_iterator() {}
+	reference operator*() { return _ptr->data; }
+	pointer operator->() { return &_ptr->data; }
 	const_reference operator*() const { return _ptr->data; }
 	const pointer operator->() const { return &_ptr->data; }
 
