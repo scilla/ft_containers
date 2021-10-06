@@ -334,7 +334,7 @@ public:
 
 	typedef vector_iterator<T>				iterator;
 	typedef const_vector_iterator<T>			const_iterator;
-	typedef reverse_iterator<const_iterator>		const_reverse_iterator;
+	typedef const_reverse_iterator<const_iterator>		const_reverse_iterator;
 	typedef reverse_iterator<iterator>				reverse_iterator;
 
 	class out_of_range: public std::out_of_range {
@@ -410,11 +410,17 @@ public:
 		return(const_iterator(_vector + _size));
 	};
 
-	reverse_iterator rbegin() const {
+	reverse_iterator rbegin() {
 		return(reverse_iterator(end()));
 	};
-	reverse_iterator rend() const {
+	const_reverse_iterator rbegin() const {
+		return(const_reverse_iterator(end()));
+	};
+	reverse_iterator rend() {
 		return(reverse_iterator(begin()));
+	};
+	const_reverse_iterator rend() const {
+		return(const_reverse_iterator(begin()));
 	};
 
 	// capacity
