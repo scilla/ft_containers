@@ -35,43 +35,67 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
 		std::cout << std::endl << "Content is:" << std::endl;
 		for (; it != ite; ++it)
-			std::cout << "- " << (*it).first << std::endl;
+			std::cout << "- " << (*it) << std::endl;
 	}
 	std::cout << "###############################################" << std::endl;
 }
-int main(void)
+template <typename Ite_1, typename Ite_2>
+void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 {
-	std::list<T3> lst;
-	unsigned int lst_size = 7;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(lst_size - i, i));
-
-	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-
-	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 5;
-
-	it = mp.begin(); ite = --(--mp.end());
-	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 7;
-
-	std::cout << "\t-- PART ONE --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
-
-	mp = mp_copy;
-	mp_copy = mp_range;
-	mp_range.clear();
-
-	std::cout << "\t-- PART TWO --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
-	return (0);
-
-	return 0;
+	std::cout << (first < second) << std::endl;
+	std::cout << (first <= second) << std::endl;
+	std::cout << (first > second) << std::endl;
+	std::cout << (first >= second) << std::endl;
+	if (redo)
+		ft_eq_ope(second, first, 0);
 }
+
+int		main(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_0(vct.rbegin());
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_1(vct.rend());
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_mid;
+
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_0 = vct.rbegin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_1;
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
+	printSize(vct, 1);
+	it_0 = vct.rbegin();
+	cit_1 = vct.rend();
+	it_mid = it_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	// regular it
+	std::cout << "\t\tregular it:" << std::endl;
+	std::cout << "\t\t1:" << std::endl;
+	// ft_eq_ope(it_0 + 3, it_mid);
+	std::cout << "\t\t2:" << std::endl;
+	// ft_eq_ope(it_0, it_1);
+	std::cout << "\t\t3:" << std::endl;
+	ft_eq_ope(it_1 - 3, it_mid);
+	// const it
+	std::cout << "\t\tconst it:" << std::endl;
+	ft_eq_ope(cit_0 + 3, cit_mid);
+	ft_eq_ope(cit_0, cit_1);
+	ft_eq_ope(cit_1 - 3, cit_mid);
+	// both it
+	std::cout << "\t\tboth it:" << std::endl;
+	ft_eq_ope(it_0 + 3, cit_mid);
+	ft_eq_ope(it_mid, cit_0 + 3);
+	ft_eq_ope(it_0, cit_1);
+	ft_eq_ope(it_1, cit_0);
+	ft_eq_ope(it_1 - 3, cit_mid);
+	ft_eq_ope(it_mid, cit_1 - 3);
+
+	return (0);
+}
+

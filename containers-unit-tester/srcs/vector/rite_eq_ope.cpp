@@ -38,14 +38,20 @@ int		main(void)
 
 	std::cout << "\t\tft_eq_ope:" << std::endl;
 	// regular it
+	std::cout << "\t\tregular it:" << std::endl;
+	std::cout << "\t\t1:" << std::endl;
 	ft_eq_ope(it_0 + 3, it_mid);
+	std::cout << "\t\t2:" << std::endl;
 	ft_eq_ope(it_0, it_1);
+	std::cout << "\t\t3:" << std::endl;
 	ft_eq_ope(it_1 - 3, it_mid);
 	// const it
+	std::cout << "\t\tconst it:" << std::endl;
 	ft_eq_ope(cit_0 + 3, cit_mid);
 	ft_eq_ope(cit_0, cit_1);
 	ft_eq_ope(cit_1 - 3, cit_mid);
 	// both it
+	std::cout << "\t\tboth it:" << std::endl;
 	ft_eq_ope(it_0 + 3, cit_mid);
 	ft_eq_ope(it_mid, cit_0 + 3);
 	ft_eq_ope(it_0, cit_1);
