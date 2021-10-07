@@ -63,9 +63,9 @@ public:
 	//
 	reverse_iterator(): _current() {};
 	reverse_iterator(value_type* p) { _current = Iterator(p); }
-	reverse_iterator(const Iterator& x) { _current = x; --_current; }
+	reverse_iterator(const Iterator& x) { _current = x; /* --_current */; }
 
-	Iterator base() const {return ++Iterator(_current);}
+	Iterator base() const {return Iterator(_current);}
 	Iterator getCurrent() const {return _current;}
 
 	template< class U >
@@ -77,12 +77,26 @@ public:
 		return *this;
 	}
 	// value_type& operator*() { return *(_current); }
-	value_type& operator*() { return _current.operator*(); }
-	const value_type& operator*() const { return _current.operator*(); }
-	value_type* operator->() { return _current.operator->(); }
-	const value_type* operator->() const { return _current.operator->(); }
+	value_type& operator*() {
+		Iterator tmp = _current;
+		return *--tmp;
+	}
+	const value_type& operator*() const {
+		Iterator tmp = _current;
+		return *--tmp;
+	}
+	value_type* operator->() { 
+		Iterator tmp = _current;
+		--tmp;
+		return tmp.operator->();
+	}
+	const value_type* operator->() const {
+		Iterator tmp = _current;
+		--tmp;
+		return tmp.operator->();
+	}
 
-	reference operator[](difference_type n) const { return *(_current - n); }
+	reference operator[](difference_type n) const { return *(*this + n); }
 
 	reverse_iterator& operator++() {
 		--_current;
@@ -103,10 +117,10 @@ public:
 		return tmp;
 	}
 	reverse_iterator operator+( difference_type n ) const {
-		return (_current - (n + 1));
+		return (_current - n);
 	}
 	reverse_iterator operator-( difference_type n ) const {
-		return (_current + n + 1);
+		return (_current + n);
 	}
 	reverse_iterator& operator+=( difference_type n ) {
 		_current -= n;
@@ -140,15 +154,15 @@ public:
 	//
 	const_reverse_iterator(): _current() {};
 	const_reverse_iterator(value_type* p) { _current = Iterator(p); }
-	const_reverse_iterator(const Iterator& x) { _current = x; --_current; }
+	const_reverse_iterator(const Iterator& x) { _current = x; /*--_current;*/ }
 
-	Iterator base() const {return ++Iterator(_current);}
+	Iterator base() const {return Iterator(_current);}
 	Iterator getCurrent() const {return _current;}
 
 	template< class U >
 	const_reverse_iterator( const const_reverse_iterator<U>& other ) { *this = other; }
 	template< class U >
-	const_reverse_iterator( const reverse_iterator<U>& other ) { *this = other; }
+	const_reverse_iterator( const reverse_iterator<U>& other ) { *this = other;}
 
 	template< class U >
 	const_reverse_iterator& operator=( const const_reverse_iterator<U>& other ) {
@@ -161,11 +175,23 @@ public:
 		return *this;
 	}
 	// value_type& operator*() { return *(_current); }
-	const value_type& operator*() const { return _current.operator*(); }
-	const value_type& operator*() { return _current.operator*(); }
-	const value_type* operator->() const { return _current.operator->(); }
+	// value_type& operator*() {
+	// 	Iterator tmp = _current;
+	// 	return *--tmp;
+	// }
+	
+	const value_type& operator*() const {
+		Iterator tmp = _current;
+		return *--tmp;
+	}
+	
+	const value_type* operator->() const {
+		Iterator tmp = _current;
+		--tmp;
+		return tmp.operator->();
+	}
 
-	reference operator[](difference_type n) const { return *(_current - n); }
+	reference operator[](difference_type n) const { return *(*this + n); }
 
 	const_reverse_iterator& operator++() {
 		--_current;
@@ -186,17 +212,17 @@ public:
 		return tmp;
 	}
 	const_reverse_iterator operator+( difference_type n ) const {
-		return (_current - (n + 1));
+		return const_reverse_iterator(_current - (n));
 	}
 	const_reverse_iterator operator-( difference_type n ) const {
-		return (_current + n + 1);
+		return const_reverse_iterator(_current + (n));
 	}
 	const_reverse_iterator& operator+=( difference_type n ) {
-		_current -= n;
+		_current -= (n);
 		return *this;
 	}
 	const_reverse_iterator& operator-=( difference_type n ) {
-		_current += n;
+		_current += (n);
 		return *this;
 	}
 };
@@ -236,7 +262,13 @@ template< class T >
 reverse_iterator<T> operator+(
 	typename reverse_iterator<T>::difference_type n,
 	const reverse_iterator<T>& it ) {
-				return reverse_iterator<T>(it - (n));
+				return (it + n);
+			}
+template< class T >
+reverse_iterator<T> operator-(
+	typename reverse_iterator<T>::difference_type n,
+	const reverse_iterator<T>& it ) {
+				return (it - n);
 			}
 template< class Iterator >
 typename reverse_iterator<Iterator>::difference_type operator-(
@@ -340,7 +372,13 @@ template< class Iterator >
 const_reverse_iterator<Iterator> operator+(
 	typename reverse_iterator<Iterator>::difference_type n,
 	const const_reverse_iterator<Iterator>& it ) {
-				return const_reverse_iterator<Iterator>(it.base() - (n + 1));
+				return (it + n);
+			}
+template< class Iterator >
+const_reverse_iterator<Iterator> operator-(
+	typename reverse_iterator<Iterator>::difference_type n,
+	const const_reverse_iterator<Iterator>& it ) {
+				return (it - n);
 			}
 template< class Iterator >
 typename reverse_iterator<Iterator>::difference_type operator-(

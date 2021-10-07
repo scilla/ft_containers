@@ -123,9 +123,13 @@ class vector_iterator
 };
 
 template <class T, class U>
-std::ptrdiff_t operator-(const vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() - right.base()); }
-template <class T, class U>
-std::ptrdiff_t operator+(const vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() + right.base()); }
+std::ptrdiff_t operator-(const vector_iterator<T>& left, const vector_iterator<U>& right) {
+	return (left.base() - right.base());
+}
+// template <class T, class U>
+// std::ptrdiff_t operator+(const vector_iterator<T>& left, const vector_iterator<U>& right) {
+// 	return (left.base() + right.base());
+// }
 // template <class T, class U>
 // vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { 
 // 	vector_iterator<U> it = right;
@@ -246,15 +250,21 @@ class const_vector_iterator
 };
 
 template <class T, class U>
-std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() - right.base()); }
-template <class T, class U>
-std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const vector_iterator<U>& right) { return (left.base() + right.base()); }
+std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const vector_iterator<U>& right) {
+	return (left.base() - right.base());
+}
+// template <class T, class U>
+// std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const vector_iterator<U>& right) {
+// 	return (left.base() + right.base());
+// }
 template <class T, class U>
 const_vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { 
-	const_vector_iterator<U> it = right;
-	for(T i = 0; i < left; i++)
-		it++;
-	return it; }
+	// const_vector_iterator<U> it = right;
+	// for(T i = 0; i < left; i++)
+	// 	++it;
+	// return it;
+	return (right + left);
+}
 template <class T, class U>
 bool operator== (const const_vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() == right.base()); }
 template <class T, class U>
@@ -269,15 +279,21 @@ template <class T, class U>
 bool operator>= (const const_vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() >= right.base()); }
 
 template <class T, class U>
-std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) { return (left.base() - right.base()); }
-template <class T, class U>
-std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) { return (left.base() + right.base()); }
+std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) {
+	return (left.base() - right.base());
+}
+// template <class T, class U>
+// std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) {
+// 	return (left.base() + right.base());
+// }
 template <class T, class U>
 const_vector_iterator<U> operator+(T left, const const_vector_iterator<U>& right) { 
-	const_vector_iterator<U> it = right;
-	for(T i = 0; i < left; i++)
-		it++;
-	return it; }
+	// const_vector_iterator<U> it = right;
+	// for(T i = 0; i < left; i++)
+	// 	it++;
+	// return it;
+	return (right + left);
+}
 template <class T, class U>
 bool operator== (const const_vector_iterator<T>& left,const const_vector_iterator<U>& right) { return (left.base() == right.base()); }
 template <class T, class U>
@@ -292,15 +308,21 @@ template <class T, class U>
 bool operator>= (const const_vector_iterator<T>& left,const const_vector_iterator<U>& right) { return (left.base() >= right.base()); }
 
 template <class T, class U>
-std::ptrdiff_t operator-(const vector_iterator<T>& left, const const_vector_iterator<U>& right) { return (left.base() - right.base()); }
-template <class T, class U>
-std::ptrdiff_t operator+(const vector_iterator<T>& left, const const_vector_iterator<U>& right) { return (left.base() + right.base()); }
+std::ptrdiff_t operator-(const vector_iterator<T>& left, const const_vector_iterator<U>& right) {
+	return (left.base() - right.base());
+}
+// template <class T, class U>
+// std::ptrdiff_t operator+(const vector_iterator<T>& left, const const_vector_iterator<U>& right) {
+// 	return (left.base() + right.base());
+// }
 template <class T, class U>
 vector_iterator<U> operator+(T left, const const_vector_iterator<U>& right) { 
-	vector_iterator<U> it = right;
-	for(T i = 0; i < left; i++)
-		it++;
-	return it; }
+	// vector_iterator<U> it = right;
+	// for(T i = 0; i < left; i++)
+	// 	it++;
+	// return it;
+	return (right + left);
+}
 template <class T, class U>
 bool operator== (const vector_iterator<T>& left,const const_vector_iterator<U>& right) { return (left.base() == right.base()); }
 template <class T, class U>
@@ -411,7 +433,7 @@ public:
 	};
 
 	reverse_iterator rbegin() {
-		return(reverse_iterator(end()));
+		return(end());
 	};
 	const_reverse_iterator rbegin() const {
 		return(const_reverse_iterator(end()));
