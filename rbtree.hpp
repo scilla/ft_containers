@@ -602,7 +602,7 @@ public:
 		fixDependencies(b);
 	}
 
-	void replaceNodeWithLoneChild(node* a, node* b) {
+	node* replaceNodeWithLoneChild(node* a, node* b) {
 		if (b->parent != a)
 			throw std::exception();
 		if (a->left && a->right)
@@ -611,6 +611,7 @@ public:
 			throw std::exception();
 		b->parent = a->parent;
 		*selfParentPtr(a) = b;
+		return b;
 	}
 
 	void deleteNode(node* n) {
@@ -636,12 +637,13 @@ public:
 			swapNode(n, x);
 			_deleteNode(n);
 		} else if (!n->left) {
-			replaceNodeWithLoneChild(n, n->right);
+			n = replaceNodeWithLoneChild(n, n->right);
+			fixDeletion(n);
 		} else if (!n->right) {
-			replaceNodeWithLoneChild(n, n->left);
+			n = replaceNodeWithLoneChild(n, n->left);
+			fixDeletion(n);
 		} else
 			throw std::exception();
-		// fixDeletion(n);
 	}
 
 	void fixDeletion(node* N) {
@@ -655,24 +657,24 @@ public:
 				else
 					rotateRight(N->parent);
 			}
-			if (N->parent->color == BLACK &&		// case 3
-				(!N->sibling() || N->sibling()->color == BLACK) &&
+			if (N->parent->color == BLACK && N->sibling() &&		// case 3
+				N->sibling()->color == BLACK &&
 				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
 				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				fixDeletion(N->parent);
 			}
-			else if (N->parent->color == RED &&		// case 4
-				(!N->sibling() || N->sibling()->color == BLACK) &&
+			else if (N->parent->color == RED &&	N->sibling() &&		// case 4
+				N->sibling()->color == BLACK &&
 				(!N->sibling()->left || N->sibling()->left->color == BLACK) &&	
 				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
 				N->sibling()->color = RED;
 				N->parent->color = BLACK;
 			}
-			else if (N->isLeft() &&					// case 5
-				(!N->sibling() || N->sibling()->color == BLACK) &&
+			else if (N->isLeft() &&	N->sibling() &&				// case 5
+				N->sibling()->color == BLACK &&
 				N->sibling()->left && N->sibling()->left->color == RED &&	
 				(!N->sibling()->right || N->sibling()->right->color == BLACK))
 			{
@@ -680,8 +682,8 @@ public:
 				N->sibling()->left->color = BLACK;
 				rotateRight(N->sibling());
 			}
-			else if (N->isRight() &&				// still case 5
-				(!N->sibling() || N->sibling()->color == BLACK) &&
+			else if (N->isRight() && N->sibling() &&			// still case 5
+				N->sibling()->color == BLACK &&
 				N->sibling()->right && N->sibling()->right->color == RED &&	
 				(!N->sibling()->left || N->sibling()->left->color == BLACK))
 			{
@@ -689,16 +691,20 @@ public:
 				N->sibling()->right->color = BLACK;
 				rotateLeft(N->sibling());
 			}
-			N->sibling()->color = N->parent->color; // case 6
+			if (N->sibling())
+				N->sibling()->color = N->parent->color; // case 6
 			N->parent->color = BLACK;
-			if (N->isLeft()) {
-				if (N->sibling()->right)
-					N->sibling()->right->color = BLACK;
-				rotateLeft(N->parent);
-			} else {
-				if (N->sibling()->right)
-					N->sibling()->left->color = BLACK;
-				rotateRight(N->parent);
+			
+			if (N->sibling()) {
+				if (N->isLeft()) {
+					if (N->sibling()->right)
+						N->sibling()->right->color = BLACK;
+					rotateLeft(N->parent);
+				} else {
+					if (N->sibling()->right)
+						N->sibling()->left->color = BLACK;
+					rotateRight(N->parent);
+				}
 			}
 		}
 	}

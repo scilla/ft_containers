@@ -3,7 +3,7 @@
 #include "tester.hpp"
 #include "../map.hpp"
 
-#define SIZE 10000
+#define SIZE 1000000
 
 template <class Ta, class Tb>
 std::string equalContent(
