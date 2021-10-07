@@ -371,7 +371,7 @@ public:
 					_size(0),
 					_capacity(0)
 	{
-		reserve(10);
+		// reserve(10);
 	};
 	explicit vector (unsigned int n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()):
@@ -380,7 +380,7 @@ public:
 					_capacity(n)
 	{
 		if (n)
-			_vector = _alloc.allocate(n);
+			_vector = _alloc.allocate(_capacity);
 		while (n--)
 			_alloc.construct(_vector + n, val);
 	};
@@ -643,8 +643,12 @@ public:
 	{
 		size_type equal = position.base() - begin().base();
 		size_type new_size = _size + n;
-		if (new_size > _capacity)
-			reserve(new_size);
+		if (new_size > _capacity) {
+			if (n >= _size)
+				reserve(_size + n);
+			else
+				reserve(_size * 2);
+		}
 		position = iterator(_vector + equal);
 		iterator end_ = position - 1;
 		memmove((position + n).base(), position.base(), (_size - equal) * sizeof(T));
@@ -661,8 +665,12 @@ public:
 			dist++;
 		size_type	equal = position.base() - _vector;
 		size_type	new_size = _size + dist;
-		if (new_size > _capacity)
-			reserve(new_size);
+		if (new_size > _capacity) {
+			if (_capacity > new_size || new_size > _capacity*2)
+				reserve(new_size);
+			else
+				reserve(_capacity*2);
+		}
 		position = iterator(_vector + equal);
 		memmove((position + dist).base(), (position).base(), (_size - equal) * sizeof(T));
 		for (size_type j = 0; j < dist; ++j, ++position, ++first)
