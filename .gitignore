@@ -18,3 +18,5 @@ containers-unit-tester/logs/
 containers-unit-tester/*dSYM/
 containers-unit-tester/out1.txt
 containers-unit-tester/out2.txt
+tester1/*_output/
+containers_stl

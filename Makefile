@@ -1,24 +1,29 @@
-SRCS			= main.cpp # main_from_subject.cpp
+SRCS			= main.cpp
 OBJ				= $(SRCS:.cpp=.o)
 
 CC				= clang++
 RM				= rm -f
-CFLAGS			= -std=c++98 -g -Wall -Wextra -Werror
+CFLAGS			= -std=c++98 -Wall -Wextra -Werror
+CFLAGS_STL		= -DTESTSTL
 NAME			= containers
+NAME_STL		= containers_stl
 
 %.o:			%.cpp
 				$(CC) $(CFLAGS) -c $< -o $@
 
 all:			$(NAME)
 
+stl:			$(OBJ)
+				$(CC) $(CFLAGS) $(CFLAGS_STL) -o $(NAME_STL) $(OBJ)
+
 $(NAME):		$(OBJ)
 				$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
 clean:
-				$(RM) $(OBJ) $(OBJ_BONUS)
+				$(RM) $(OBJ)
 
 fclean:			clean
-				$(RM) $(NAME) $(NAME_BONUS)
+				$(RM) $(NAME) $(NAME_STL)
 
 re:				fclean $(NAME)
 

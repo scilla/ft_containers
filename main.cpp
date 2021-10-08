@@ -1,101 +1,129 @@
-#include "vector.hpp"
-#include "rbtree.hpp"
-#include "map.hpp"
-#include "set.hpp"
-#include "utils.hpp"
-#include <stdlib.h>
 #include <iostream>
-#include <map>
-#include <list>
-#define fs std::cout
-#define TESTED_TYPE int
-#define TESTED_NAMESPACE ft
-#define T1 int
-#define T2 int
-typedef TESTED_NAMESPACE::pair<const T1, T2> T3;
+#include <string>
+#include <deque>
+#if TESTSTL //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
+	#define _container c
+#else
+	#include "./srcs/map.hpp"
+	#include "./srcs/stack.hpp"
+	#include "./srcs/vector.hpp"
+#endif
+#include <stdlib.h>
 
-struct ft_more {
-	bool	operator()(const T1 &first, const T1 &second) const {
-		return (first > second);
-	}
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
+{
+	int idx;
+	char buff[BUFFER_SIZE];
 };
 
-void printVector(TESTED_NAMESPACE::vector<TESTED_TYPE>& vect) {
-	for (unsigned int i = 0; i < vect.size(); i++)
-		std::cout << vect[i] << std::endl;
-}
 
-template <typename T_MAP>
-void	printSize(T_MAP const &mp, bool print_content = 1)
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+//#define COUNT 21
+
+template<typename T>
+class MutantStack : public ft::stack<T>
 {
-	std::cout << "size: " << mp.size() << std::endl;
-	// std::cout << "max_size: " << mp.max_size() << std::endl;
-	if (print_content)
+public:
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
 	{
-		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << (*it) << std::endl;
+		this->_container = rhs._container;
+		return *this;
 	}
-	std::cout << "###############################################" << std::endl;
-}
-template <typename Ite_1, typename Ite_2>
-void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
-{
-	std::cout << (first < second) << std::endl;
-	std::cout << (first <= second) << std::endl;
-	std::cout << (first > second) << std::endl;
-	std::cout << (first >= second) << std::endl;
-	if (redo)
-		ft_eq_ope(second, first, 0);
-}
+	~MutantStack() {}
 
-int		main(void)
-{
-	const int size = 5;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_0(vct.rbegin());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_1(vct.rend());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_mid;
+	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_0 = vct.rbegin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_1;
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_mid;
+	iterator begin() { return this->_container.begin(); }
+	iterator end() { return this->_container.end(); }
+};
 
-	for (int i = size; it_0 != it_1; --i)
-		*it_0++ = i;
-	printSize(vct, 1);
-	it_0 = vct.rbegin();
-	cit_1 = vct.rend();
-	it_mid = it_0 + 3;
-	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
+	}
+	const int seed = atoi(argv[1]);
+	srand(seed);
 
-	std::cout << std::boolalpha;
-	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
 
-	std::cout << "\t\tft_eq_ope:" << std::endl;
-	// regular it
-	std::cout << "\t\tregular it:" << std::endl;
-	std::cout << "\t\t1:" << std::endl;
-	// ft_eq_ope(it_0 + 3, it_mid);
-	std::cout << "\t\t2:" << std::endl;
-	// ft_eq_ope(it_0, it_1);
-	std::cout << "\t\t3:" << std::endl;
-	ft_eq_ope(it_1 - 3, it_mid);
-	// const it
-	std::cout << "\t\tconst it:" << std::endl;
-	ft_eq_ope(cit_0 + 3, cit_mid);
-	ft_eq_ope(cit_0, cit_1);
-	ft_eq_ope(cit_1 - 3, cit_mid);
-	// both it
-	std::cout << "\t\tboth it:" << std::endl;
-	ft_eq_ope(it_0 + 3, cit_mid);
-	ft_eq_ope(it_mid, cit_0 + 3);
-	ft_eq_ope(it_0, cit_1);
-	ft_eq_ope(it_1, cit_0);
-	ft_eq_ope(it_1 - 3, cit_mid);
-	ft_eq_ope(it_mid, cit_1 - 3);
+	ft::stack<int> stack_int;
+	ft::vector<Buffer> vector_buffer;
+	ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
+	ft::map<int, int> map_int;
 
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_int.push_back(i);
+	}
+
+	ft::vector<int> vector_int2(vector_int);
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		if (!(i % 3))
+			vector_int[i] = 5;
+	}
+	
+	for (size_t i = 0; i < vector_int.size(); i++)
+		std::cout << vector_int[i] << std::endl;
+
+	std::cout << std::endl;
+
+	vector_int.swap(vector_int2);
+
+	for (size_t i = 0; i < vector_int.size(); i++)
+		std::cout << vector_int[i] << std::endl;
+
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
+	
+	for (int i = 0; i < COUNT; ++i)
+	{
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
+
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
+
+	{
+		ft::map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
 	return (0);
 }
-
