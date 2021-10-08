@@ -309,9 +309,7 @@ public:
 					_vector(NULL),
 					_size(0),
 					_capacity(0)
-	{
-		// reserve(10);
-	};
+	{};
 	explicit vector (unsigned int n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()):
 					_alloc(alloc),
@@ -439,10 +437,10 @@ public:
 	}
 
 	vector& operator= (const vector& alt) {
-		_alloc.deallocate(_vector, _size);
+		_alloc.deallocate(_vector, _capacity);
 		_size = alt.size();
 		_capacity = _size;
-		_vector = _alloc.allocate(_size);
+		_vector = _alloc.allocate(_capacity);
 		for (size_t i = 0; i < _size; i++)
 			_vector[i] = alt[i];
 		return *this;
@@ -482,8 +480,7 @@ public:
 			i++;
 		_size = i;
 		_vector = _alloc.allocate(_size);
-		if(_capacity < _size)
-			_capacity = _size;
+		_capacity = _size;
 		InputIterator tmp2 = first;
 		for(size_t j = 0; tmp2 != last; tmp2++, j++)
 			_vector[j] = *tmp2;
@@ -506,7 +503,7 @@ public:
 			pointer tmp = _alloc.allocate(_capacity);
 			for (size_t i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			_alloc.deallocate(_vector, _size);
+			_alloc.deallocate(_vector, _capacity);
 			_vector = tmp;
 		}
 		_vector[_size] = val;
@@ -599,6 +596,9 @@ public:
 
 	void clear() {
 		_size = 0;
+		_alloc.deallocate(_vector, _capacity);
+		_capacity = 0;
+		_vector = _alloc.allocate(_capacity);
 	};
 
 	// allocator

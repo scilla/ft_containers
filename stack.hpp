@@ -16,8 +16,7 @@ public:
 	typedef typename Container::reference		reference;
 	typedef typename Container::const_reference	const_reference;
 
-	explicit stack (const container_type& ctnr = container_type()):
-		_container(ctnr)
+	explicit stack (const container_type& ctnr = container_type()): _container(ctnr)
 	{}
 
 	~stack() {}
