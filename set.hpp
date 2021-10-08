@@ -61,6 +61,7 @@ public:
 
 	~set() {
 		clear();
+		delete _tree;
 	}
 
 	void print(std::string s = "") {

@@ -76,6 +76,7 @@ public:
 
 	~map() {
 		clear();
+		delete _tree;
 	}
 
 	void print(std::string s = "") {
