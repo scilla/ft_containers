@@ -15,7 +15,8 @@
 # include <vector>
 # include "tester.hpp"
 # include "utils.hpp"
-# include "../../set.hpp"
+# include "../../srcs/utils.hpp"
+# include "../../srcs/set.hpp"
 
 # define NORMAL "\033[0;37m"
 # define UNDERLINE "\033[4m"

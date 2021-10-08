@@ -1,15 +1,16 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
+#if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
 	namespace ft = std;
+	#define _container c
 #else
-	#include "map.hpp"
-	#include "stack.hpp"
-	#include "vector.hpp"
+	#include "./srcs/map.hpp"
+	#include "./srcs/stack.hpp"
+	#include "./srcs/vector.hpp"
 #endif
 #include <stdlib.h>
 
@@ -33,15 +34,15 @@ public:
 	MutantStack(const MutantStack<T>& src) { *this = src; }
 	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
 	{
-		this->c = rhs.c;
+		this->_container = rhs._container;
 		return *this;
 	}
 	~MutantStack() {}
 
 	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-	iterator begin() { return this->c.begin(); }
-	iterator end() { return this->c.end(); }
+	iterator begin() { return this->_container.begin(); }
+	iterator end() { return this->_container.end(); }
 };
 
 int main(int argc, char** argv) {

@@ -10,7 +10,7 @@ PURPLE="\e[95m"
 CYAN="\e[96m"
 DGREY="\e[1;90m"
 
-tested_path="../"
+tested_path="../srcs/"
 incl_path="$tested_path"
 srcs="srcs"
 
@@ -135,7 +135,6 @@ do_test () {
 
 function main () {
 	pheader
-	# containers=(map)
 	containers=(vector map stack set)
 	# containers=(vector list map stack queue deque multimap set multiset)
 	if [ $# -ne 0 ]; then
