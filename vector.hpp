@@ -350,8 +350,8 @@ public:
 		*this = x;
 	};
 	~vector() {
-		if (_size)
-			_alloc.deallocate(_vector, _size);
+		if (_capacity)
+			_alloc.deallocate(_vector, _capacity);
 	};
 
 	// iterators
