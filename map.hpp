@@ -56,11 +56,11 @@ public:
 	typedef const_reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 	// (con|de)structor
-	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {
+	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc),  _size(0) {
 		_tree = new RBTree<value_type, value_compare>();
 	}
 	template< class InputIt >
-	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _comp(comp), _alloc(alloc), _size(0) {
+	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc), _size(0) {
 		_tree = new RBTree<value_type, value_compare>();
 		for (; first != last; first++) {
 			insert(*first);
@@ -68,7 +68,7 @@ public:
 	}
 
 	map(map& new_map)
-	: _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
+	: _tree(NULL), _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
 	{
 		_tree = new RBTree<value_type, value_compare>();
 		*_tree = *new_map._tree;
@@ -76,6 +76,7 @@ public:
 
 	~map() {
 		clear();
+		delete _tree;
 	}
 
 	void print(std::string s = "") {
@@ -85,6 +86,7 @@ public:
 	// cose
 	map& operator=( map& other ) {
 		clear();
+		delete _tree;
 		_tree = new RBTree<value_type, value_compare>();
 		*_tree = *other._tree;
 		_comp = other._comp;
@@ -162,7 +164,6 @@ public:
 	void clear() {
 		_size = 0;
 		_tree->clear();
-		delete _tree;
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
