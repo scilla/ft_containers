@@ -61,7 +61,6 @@ public:
 
 	~set() {
 		clear();
-		delete _tree;
 	}
 
 	void print(std::string s = "") {
@@ -149,6 +148,7 @@ public:
 	void clear() {
 		_size = 0;
 		_tree->clear();
+		delete _tree;
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& value ) {
