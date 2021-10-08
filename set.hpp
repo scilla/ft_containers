@@ -59,7 +59,9 @@ public:
 		//*this = new_map;
 	}
 
-	~set() {}
+	~set() {
+		clear();
+	}
 
 	void print(std::string s = "") {
 		_tree->print_tree(s);
@@ -67,6 +69,7 @@ public:
 
 	// cose
 	set& operator=( set& other ) {
+		clear();
 		_tree = new RBTree<value_type, value_compare>();
 		*_tree = *other._tree;
 		_comp = other._comp;

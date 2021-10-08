@@ -72,10 +72,11 @@ public:
 	{
 		_tree = new RBTree<value_type, value_compare>();
 		*_tree = *new_map._tree;
-		//*this = new_map;
 	}
 
-	~map() {}
+	~map() {
+		clear();
+	}
 
 	void print(std::string s = "") {
 		_tree->print_tree(s);
@@ -83,6 +84,7 @@ public:
 
 	// cose
 	map& operator=( map& other ) {
+		clear();
 		_tree = new RBTree<value_type, value_compare>();
 		*_tree = *other._tree;
 		_comp = other._comp;
