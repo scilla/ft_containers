@@ -1,27 +1,17 @@
 #!/bin/bash
 
-# customize with your own.
-options=("AAA" "BBB" "CCC" "DDD")
-
-menu() {
-    echo "Avaliable options:"
-    for i in ${!options[@]}; do 
-        printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${options[i]}"
-    done
-    if [[ "$msg" ]]; then echo "$msg"; fi
-}
-
-prompt="Check an option (again to uncheck, ENTER when done): "
-while menu && read -rp "$prompt" num && [[ "$num" ]]; do
-    [[ "$num" != *[![:digit:]]* ]] &&
-    (( num > 0 && num <= ${#options[@]} )) ||
-    { msg="Invalid option: $num"; continue; }
-    ((num--)); msg="${options[num]} was ${choices[num]:+un}checked"
-    [[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
-done
-
-printf "You selected"; msg=" nothing"
-for i in ${!options[@]}; do 
-    [[ "${choices[i]}" ]] && { printf " %s" "${options[i]}"; msg=""; }
-done
-echo "$msg"
+case $1 in
+    0)
+        echo "MAIN FT test:" && make re && time > /dev/null ./containers 42 > t1 && make fclean && make stl && echo "MAIN STL TEST:" && time > /dev/null ./containers_stl 42 > t2
+        echo "OUTPUT diff:" && diff t1 t2
+        ;;
+    1)
+        make -C tester1 re && ./tester1/ft_containers_tests
+        ;;
+    2)
+        cd tester2 && bash ./do.sh
+        ;;
+    *)
+        echo "Usage: ./test.sh [test index 0-2]"
+        ;;
+esac

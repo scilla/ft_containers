@@ -42,7 +42,7 @@ KOc=0
 
 compile () {
 	# 1=file 2=define used {ft/std} 3=output_file 4=compile_log
-	$CC $CFLAGS -g -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
+	$CC $CFLAGS -o "$3" -I./$incl_path -DTESTED_NAMESPACE=$2 $1 &>$4
 	return $?
 }
 
@@ -71,7 +71,7 @@ printRes () {
 	fi
 	printf "%-35s: COMPILE: ${b[$2]} | RET: ${b[$3]} | OUT: ${b[$4]} | STD: [${s_bool[$5]}]\n" $1;
 
-	printf "OK: ${OKc} KO: ${KOc}\n";
+	# printf "OK: ${OKc} KO: ${KOc}\n";
 }
 
 isEq () {

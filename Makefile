@@ -9,21 +9,22 @@ NAME			= containers
 NAME_STL		= containers_stl
 
 %.o:			%.cpp
-				$(CC) $(CFLAGS) -c $< -o $@
+				@$(CC) $(CFLAGS) -c $< -o $@
 
 all:			$(NAME)
+stl:			$(NAME_STL)
 
-stl:			$(OBJ)
-				$(CC) $(CFLAGS) $(CFLAGS_STL) -o $(NAME_STL) $(OBJ)
+$(NAME_STL):	clean $(OBJ)
+				@$(CC) $(CFLAGS) $(CFLAGS_STL) -o $(NAME_STL) $(OBJ)
 
 $(NAME):		$(OBJ)
-				$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+				@$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
 clean:
-				$(RM) $(OBJ)
+				@$(RM) $(OBJ)
 
 fclean:			clean
-				$(RM) $(NAME) $(NAME_STL)
+				@$(RM) $(NAME) $(NAME_STL)
 
 re:				fclean $(NAME)
 
