@@ -67,13 +67,6 @@ public:
 
 	rbt_iterator(const rbt_iterator& newit): _ptr(NULL) { *this = newit; } 
 
-	// template<class Iter>
-	// rbt_iterator(const Iter& newit)
-	// : _ptr(NULL)
-	// { 
-	// 	*this = newit;
-	// } 
-
 	~rbt_iterator() {}
 	reference operator*() { return _ptr->data; }
 	pointer operator->() { return &_ptr->data; }
@@ -94,7 +87,6 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			// return *this;
 		}
 		else
 		{
@@ -106,7 +98,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 
@@ -124,7 +115,6 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			// return *this;
 		}
 		else
 		{
@@ -136,7 +126,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 	}
@@ -147,19 +136,11 @@ public:
 		return tmp;
 	}
 
-	// template <class K>
-	// rbt_iterator&	operator=(const rbt_iterator<K> & other) {
-	// 	_ptr = other.base();
-	// 	return *this;
-	// }
-
 	template <class K>
 	rbt_iterator& operator=(const K& other) {
 		_ptr = const_cast<struct Node<T>*>(other.base());
 		return *this;
 	}
-
-	// pointer		base() const { return _ptr; }
 
 	struct ft::Node<T>* base() { return _ptr; }
 	const struct ft::Node<T>* base() const { return _ptr; }
@@ -182,8 +163,6 @@ public:
 	typedef const T&							const_reference;
 	typedef T*							pointer;
 	typedef const T*							const_pointer;
-
-	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit set_rbt_iterator(): _ptr(NULL) {}
 	explicit set_rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
@@ -216,7 +195,6 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			// return *this;
 		}
 		else
 		{
@@ -228,7 +206,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 
@@ -246,7 +223,6 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			// return *this;
 		}
 		else
 		{
@@ -258,7 +234,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 	}
@@ -268,20 +243,11 @@ public:
 		--*this;
 		return tmp;
 	}
-
-	// template <class K>
-	// set_rbt_iterator&	operator=(const set_rbt_iterator<K> & other) {
-	// 	_ptr = other.base();
-	// 	return *this;
-	// }
-
 	template <class K>
 	set_rbt_iterator& operator=(const K& other) {
 		_ptr = const_cast<struct Node<T>*>(other.base());
 		return *this;
 	}
-
-	// pointer		base() const { return _ptr; }
 
 	struct ft::Node<T>* base() { return _ptr; }
 	const struct ft::Node<T>* base() const { return _ptr; }
@@ -303,25 +269,15 @@ public:
 	typedef const T&										const_reference;
 	typedef T*												pointer;
 	typedef const T*										const_pointer;
-	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit const_rbt_iterator(): _ptr(NULL) {}
 	explicit const_rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
 	explicit const_rbt_iterator(const struct Node<T>& newnode): _ptr((struct Node<T>*)&newnode) {}
-
-	// const_rbt_iterator(rbt_iterator<T>& newit) { *this = newit; } 
-	// const_rbt_iterator(const const_rbt_iterator& newit) { *this = newit; } 
-	// const_rbt_iterator(const ft::iterator<ft::bidirectional_iterator_tag, T>& newit) { *this = newit; } 
 	template<class U, class V >
 	const_rbt_iterator(const const_rbt_iterator<U, V>& newit) { *this = newit; } 
 	template<class U, class V >
 	const_rbt_iterator(const rbt_iterator<U, V>& newit) { *this = newit; } 
 
-	// template<class Iter>
-	// const_rbt_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
-
-// rbt_iterator<pair<char, foo<float> >, ft::map<char, foo<float>, ft::less<char>, std::__1::allocator<ft::pair<const char, foo<float> > > >::value_compare>
-// rbt_iterator<ft::pair<char, foo<float> > > &
 	~const_rbt_iterator() {}
 	const_reference operator*() const { return _ptr->data; }
 	const_pointer operator->() const { return &_ptr->data; }
@@ -342,7 +298,6 @@ public:
 			_ptr = _ptr->right;
 			while(_ptr->left)
 				_ptr = _ptr->left;
-			// return *this;
 		}
 		else
 		{
@@ -354,7 +309,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 	}
@@ -369,7 +323,6 @@ public:
 			_ptr = _ptr->left;
 			while(_ptr->right)
 				_ptr = _ptr->right;
-			// return *this;
 		}
 		else
 		{
@@ -381,7 +334,6 @@ public:
 				}
 				_ptr = _ptr->parent;
 			}
-			// throw outOfBoundException();
 		}
 		return *this;
 	}
@@ -391,19 +343,11 @@ public:
 		return tmp;
 	}
 
-	// template <class K>
-	// const_rbt_iterator&	operator=(const const_rbt_iterator<K> & other) {
-	// 	_ptr = other.base();
-	// 	return *this;
-	// }
-
 	template <class K>
 	const_rbt_iterator&	operator=(const K& other) {
 		_ptr = other.base();
 		return *this;
 	}
-
-	// pointer		base() const { return _ptr; }
 
 	const struct Node<T>* base() { return _ptr; }
 	const struct Node<T>* base() const { return _ptr; }
@@ -469,15 +413,6 @@ public:
 	RBTree& operator=(const RBTree& tree) {
 		clear();
 		recursive_insert(tree._root);
-		// _root = tree._root;
-		// _start = tree._start;
-		// _end = tree._end;
-		// _start_ptr = tree._start_ptr;
-		// _end_ptr = tree._end_ptr;
-		// _start_placed = tree._start_placed;
-		// _end_placed = tree._end_placed;
-		// _alloc = tree._alloc;
-		// _comp = tree._comp;
 		return *this;
 	}
 
@@ -793,10 +728,6 @@ public:
 	}
 
 	void initialize_bounds() {
-		// _end = new node((node){NULL, NULL, NULL, FLUO, T()});
-		// _start = new node((node){NULL, NULL, NULL, FLUO, T()});
-		// _end = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "END*")};
-		// _start = (node){NULL, NULL, NULL, FLUO, ft::make_pair(0, "*START")};
 		_end = (node){NULL, NULL, NULL, FLUO, T()};
 		_start = (node){NULL, NULL, NULL, FLUO, T()};
 		_end_ptr = &_end;

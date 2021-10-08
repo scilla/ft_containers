@@ -174,11 +174,6 @@ public:
 		_current = other.getCurrent();
 		return *this;
 	}
-	// value_type& operator*() { return *(_current); }
-	// value_type& operator*() {
-	// 	Iterator tmp = _current;
-	// 	return *--tmp;
-	// }
 	
 	const value_type& operator*() const {
 		Iterator tmp = _current;

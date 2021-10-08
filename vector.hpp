@@ -27,11 +27,6 @@ class vector_iterator
 		typedef T&							reference;
 		typedef T*							pointer;
 		typedef std::ptrdiff_t				difference_type; // std:: cause linux
-		// typedef T												iterator_type;
-		// typedef typename iterator_traits<T>::difference_type	difference_type;
-		// typedef typename iterator_traits<T>::value_type			value_type;
-		// typedef typename iterator_traits<T>::reference			reference;
-		// typedef typename iterator_traits<T>::pointer			pointer;
 		typedef random_access_iterator_tag						iterator_category;
 
 		explicit	vector_iterator(): _ptr(NULL) {};
@@ -41,16 +36,9 @@ class vector_iterator
 		explicit vector_iterator(const pointer newnode): _ptr(newnode) {}
 
 		vector_iterator(const vector_iterator& newit): _ptr(NULL) { *this = newit; } 
-
-		//template<class Iter>
-		//vector_iterator(const Iter& newit): _ptr(NULL) { *this = newit; } 
-
-		// template<class U>
-		// vector_iterator(const vector_iterator<U>& vect) { *this = vect; }
 		~vector_iterator() {}
 
 		reference operator*() const { return *_ptr; }
-		//const reference operator*() const { return *_ptr; }
 		pointer operator->() const { return _ptr; }
 
 		vector_iterator& operator++() {
@@ -116,8 +104,6 @@ class vector_iterator
 
 		pointer		base() { return _ptr; }
 		const pointer		base() const { return _ptr; }
-		// bool operator==(const vector_iterator &other) { return _ptr == other.base(); }
-		// bool operator!=(const vector_iterator &other) { return _ptr != other.base(); }
 	private:
 		pointer		_ptr;
 };
@@ -126,16 +112,6 @@ template <class T, class U>
 std::ptrdiff_t operator-(const vector_iterator<T>& left, const vector_iterator<U>& right) {
 	return (left.base() - right.base());
 }
-// template <class T, class U>
-// std::ptrdiff_t operator+(const vector_iterator<T>& left, const vector_iterator<U>& right) {
-// 	return (left.base() + right.base());
-// }
-// template <class T, class U>
-// vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { 
-// 	vector_iterator<U> it = right;
-// 	for(T i = 0; i < left; i++)
-// 		it++;
-// 	return it; }
 template <class T, class U>
 bool operator== (const vector_iterator<T>& left,const vector_iterator<U>& right) { return (left.base() == right.base()); }
 template <class T, class U>
@@ -161,15 +137,9 @@ class const_vector_iterator
 		typedef T*							pointer;
 		typedef const T*							const_pointer;
 		typedef std::ptrdiff_t				difference_type; // std:: cause linux
-		// typedef T												iterator_type;
-		// typedef typename iterator_traits<T>::difference_type	difference_type;
-		// typedef typename iterator_traits<T>::value_type			value_type;
-		// typedef typename iterator_traits<T>::reference			reference;
-		// typedef typename iterator_traits<T>::pointer			pointer;
 		typedef random_access_iterator_tag						iterator_category;
 
 		explicit	const_vector_iterator(): _ptr(NULL) {};
-		// explicit	const_vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		explicit const_vector_iterator(T& newnode): _ptr(newnode) {}
 		explicit const_vector_iterator(const T& newnode): _ptr(newnode) {}
 		explicit const_vector_iterator(const pointer newnode): _ptr(newnode) {}
@@ -181,7 +151,6 @@ class const_vector_iterator
 		~const_vector_iterator() {}
 
 		const_reference operator*() const { return *_ptr; }
-		//const reference operator*() const { return *_ptr; }
 		const_pointer operator->() const { return _ptr; }
 
 		const_vector_iterator& operator++() {
@@ -241,10 +210,6 @@ class const_vector_iterator
 
 		pointer		base() { return _ptr; }
 		const pointer		base() const { return _ptr; }
-
-		// bool operator==(const const_vector_iterator &other) { return _ptr == other.base(); }
-		// bool operator!=(const const_vector_iterator &other) { return _ptr != other.base(); }
-
 	private:
 		pointer		_ptr;
 };
@@ -253,16 +218,8 @@ template <class T, class U>
 std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const vector_iterator<U>& right) {
 	return (left.base() - right.base());
 }
-// template <class T, class U>
-// std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const vector_iterator<U>& right) {
-// 	return (left.base() + right.base());
-// }
 template <class T, class U>
 const_vector_iterator<U> operator+(T left, const vector_iterator<U>& right) { 
-	// const_vector_iterator<U> it = right;
-	// for(T i = 0; i < left; i++)
-	// 	++it;
-	// return it;
 	return (right + left);
 }
 template <class T, class U>
@@ -282,16 +239,8 @@ template <class T, class U>
 std::ptrdiff_t operator-(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) {
 	return (left.base() - right.base());
 }
-// template <class T, class U>
-// std::ptrdiff_t operator+(const const_vector_iterator<T>& left, const const_vector_iterator<U>& right) {
-// 	return (left.base() + right.base());
-// }
 template <class T, class U>
 const_vector_iterator<U> operator+(T left, const const_vector_iterator<U>& right) { 
-	// const_vector_iterator<U> it = right;
-	// for(T i = 0; i < left; i++)
-	// 	it++;
-	// return it;
 	return (right + left);
 }
 template <class T, class U>
@@ -311,16 +260,8 @@ template <class T, class U>
 std::ptrdiff_t operator-(const vector_iterator<T>& left, const const_vector_iterator<U>& right) {
 	return (left.base() - right.base());
 }
-// template <class T, class U>
-// std::ptrdiff_t operator+(const vector_iterator<T>& left, const const_vector_iterator<U>& right) {
-// 	return (left.base() + right.base());
-// }
 template <class T, class U>
 vector_iterator<U> operator+(T left, const const_vector_iterator<U>& right) { 
-	// vector_iterator<U> it = right;
-	// for(T i = 0; i < left; i++)
-	// 	it++;
-	// return it;
 	return (right + left);
 }
 template <class T, class U>
@@ -351,8 +292,6 @@ public:
 	typedef typename Alloc::const_pointer		const_pointer;
 	typedef typename Alloc::difference_type 	difference_type;
     typedef typename Alloc::size_type 			size_type;
-	//typedef std::ptrdiff_t						difference_type;
-	//typedef size_t								size_type;
 
 	typedef vector_iterator<T>				iterator;
 	typedef const_vector_iterator<T>			const_iterator;
@@ -391,7 +330,6 @@ public:
 			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
 			_alloc(alloc)
 	{
-		//_size = last - first /*/ sizeof(inputType)*/;
 		size_t i = 0;
 		for(inputType it = first; it != last; it++)
 			i++;
@@ -412,7 +350,6 @@ public:
 		*this = x;
 	};
 	~vector() {
-		//_alloc.deallocate(_vector, _capacity);
 	};
 
 	// iterators
@@ -485,20 +422,6 @@ public:
 			_capacity = n;
 		}
 	};
-/*
-	void shrink_to_fit(){
-		if(_capacity > _size)
-		{
-			pointer tmp = _alloc.allocate(_size);
-			for(int i = 0; i < _size; i++)
-				tmp[i] = _vector[i];
-			_alloc.deallocate(_vector);
-			_vector = tmp;
-			_capacity = _size;
-
-		}
-	};
-*/
 	// access
 
 	reference at(size_type index) {
@@ -548,12 +471,6 @@ public:
 	};
 	
 	// modifiers
-	/*
-	template <class InputIterator>
-        void assign(InputIterator first, InputIterator last);
-    void assign(size_type n, const value_type& u);
-    void assign(initializer_list<value_type> il);
-	*/
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 		clear();

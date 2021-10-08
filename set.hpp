@@ -34,27 +34,11 @@ public:
 	typedef typename Allocator::const_pointer	const_pointer;
 	typedef Node<value_type>					node_type;
 	typedef Compare value_compare;
-	
-	// class value_compare: public ft::binary_function<value_type, value_type, bool>
-	// {
-	// 	friend class set;
-	// protected:
-	// 	key_compare comp;
-	// public:
-	// 	value_compare(): comp() {}
-	// 	value_compare(key_compare c): comp(c) {}
-	// 	bool operator()(value_type& lhs, value_type& rhs) {
-	// 		return comp(lhs.first, rhs.first);
-	// 	}
-	// 	bool operator()(const value_type& lhs, const value_type& rhs) const {
-	// 		return comp(lhs.first, rhs.first);
-	// 	}
-	// };
-
 	typedef set_rbt_iterator<value_type, value_compare>			iterator;
 	typedef set_rbt_iterator<value_type, value_compare> 		const_iterator;
 	typedef const_reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef const_reverse_iterator			reverse_iterator;
+
 	// (con|de)structor
 	explicit set(const Compare& comp = Compare(), const Allocator& alloc = Allocator()):_comp(comp), _alloc(alloc),  _size() {
 		_tree = new RBTree<value_type, value_compare>();
@@ -193,7 +177,7 @@ public:
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
-		if (/*found.base() &&*/ found != end()) {
+		if (found != end()) {
 			_tree->deleteNode(found.base());
 			_size--;
 			return 1;
