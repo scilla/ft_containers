@@ -325,7 +325,7 @@ public:
 	template <class inputType>
 	vector (inputType first, inputType last,
 			const allocator_type& alloc = allocator_type(),
-			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ): // change to FT
+			typename ft::enable_if<!ft::is_integral<inputType>::value, inputType >::type* = 0 ):
 			_alloc(alloc)
 	{
 		size_t i = 0;
@@ -341,6 +341,7 @@ public:
 		}
 	};
 	vector (const vector& x):
+		_alloc(),
 		_vector(NULL),
 		_size(0),
 		_capacity(0)
@@ -440,7 +441,9 @@ public:
 		_alloc.deallocate(_vector, _capacity);
 		_size = alt.size();
 		_capacity = _size;
-		_vector = _alloc.allocate(_capacity);
+		_alloc = alt._alloc;
+		if (_capacity)
+			_vector = _alloc.allocate(_capacity);
 		for (size_t i = 0; i < _size; i++)
 			_vector[i] = alt[i];
 		return *this;
