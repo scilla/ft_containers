@@ -473,14 +473,19 @@ public:
 	// modifiers
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-		clear();
 		size_t i = 0;
 		InputIterator tmp = first;
 		for(; tmp != last; tmp++)
 			i++;
 		_size = i;
-		_vector = _alloc.allocate(_size);
-		_capacity = _size;
+		if (_size > _capacity) {
+			clear();
+			_size = i;
+			if (_capacity)
+				_alloc.deallocate(_vector, _capacity);
+			_vector = _alloc.allocate(_size);
+			_capacity = _size;
+		}
 		InputIterator tmp2 = first;
 		for(size_t j = 0; tmp2 != last; tmp2++, j++)
 			_vector[j] = *tmp2;
@@ -488,6 +493,8 @@ public:
 	
 	void assign (size_type n, const value_type& val) {
 		clear();
+		if (_capacity)
+			_alloc.deallocate(_vector, _capacity);
 		_size = n;
 		_capacity = n;
 		_vector = _alloc.allocate(n);
@@ -503,7 +510,8 @@ public:
 			pointer tmp = _alloc.allocate(_capacity);
 			for (size_t i = 0; i < _size; i++)
 				tmp[i] = _vector[i];
-			_alloc.deallocate(_vector, _capacity);
+			if (_size)
+				_alloc.deallocate(_vector, _capacity);
 			_vector = tmp;
 		}
 		_vector[_size] = val;
@@ -596,9 +604,9 @@ public:
 
 	void clear() {
 		_size = 0;
-		_alloc.deallocate(_vector, _capacity);
-		_capacity = 0;
-		_vector = _alloc.allocate(_capacity);
+		// _alloc.deallocate(_vector, _capacity);
+		// _capacity = 0;
+		//_vector = _alloc.allocate(_capacity);
 	};
 
 	// allocator
