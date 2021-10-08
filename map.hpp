@@ -122,6 +122,7 @@ public:
 		node_type *res = _tree->find(ft::make_pair(key, *nt));
 		if (res == end().base())
 			return insert(ft::make_pair(key, *nt)).first->second;
+		delete nt;
 		return res->data.second;
 	};
 
