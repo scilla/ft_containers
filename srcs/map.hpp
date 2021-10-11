@@ -120,11 +120,13 @@ public:
 	}
 
 	T& operator[]( const Key& key ) {
-		T* nt = new T;
-		node_type *res = _tree->find(ft::make_pair(key, *nt));
-		if (res == end().base())
-			return insert(ft::make_pair(key, *nt)).first->second;
+		T* nt = new T();
+		value_type pp = ft::make_pair(key, *nt);
 		delete nt;
+		node_type *res = _tree->find(pp);
+		if (res == end().base()) {
+			return insert(pp).first->second;
+		}
 		return res->data.second;
 	};
 
