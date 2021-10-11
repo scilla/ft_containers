@@ -7,6 +7,7 @@
 #include <limits>
 #include <memory>
 #include <string>
+#include <string.h>
 #include <algorithm>
 #include "utils.hpp"
 #include "enable_if.hpp"
@@ -182,8 +183,10 @@ public:
 		_alloc = alt._alloc;
 		if (_capacity)
 			_vector = _alloc.allocate(_capacity);
-		for (size_t i = 0; i < _size; i++)
-			_vector[i] = alt[i];
+		//for (size_t i = 0; i < _size; i++)
+		//	_vector[i] = alt[i];
+		if(_size)
+			memmove(_vector, alt, sizeof(value_type) * _size);
 		return *this;
 	}
 
@@ -287,7 +290,7 @@ public:
 		return(first);
 	}
 
-	void swap (vector& x) { // cambiare a ft::swap
+	void swap (vector& x) {
 		std::swap(_vector, x._vector);
 		std::swap(_size, x._size);
 		std::swap(_capacity, x._capacity);
@@ -345,12 +348,8 @@ public:
 
 	void clear() {
 		_size = 0;
-		// _alloc.deallocate(_vector, _capacity);
-		// _capacity = 0;
-		//_vector = _alloc.allocate(_capacity);
 	};
 
-	// allocator
 
 	allocator_type get_allocator() const {
 		return(_alloc);
