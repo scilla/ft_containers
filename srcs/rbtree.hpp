@@ -321,7 +321,9 @@ public:
 	}
 
 	node* newNode(T& newdata) {
-		node* newNode = new node;
+		//node* newNode = new node;
+		node *newNode = _alloc.allocate(1);
+		_alloc.construct(newNode);
 		newNode->color = RED;
 		newNode->data = newdata;
 		newNode->left = NULL;

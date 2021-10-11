@@ -13,6 +13,7 @@ struct Node {
 	T				data;
 
 	typedef T		value_type;
+	Node(T data): data(data), color(BLACK), parent(NULL), left(NULL), right(NULL) {};
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }
 	struct Node<T>* sibling() {

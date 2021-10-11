@@ -20,7 +20,7 @@ OBJS_SET = $(SRCS_SET:.cpp=.o)
 
 CPP = clang++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
 NAME = ft_containers_tests
 
