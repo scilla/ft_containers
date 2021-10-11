@@ -183,10 +183,8 @@ public:
 		_alloc = alt._alloc;
 		if (_capacity)
 			_vector = _alloc.allocate(_capacity);
-		//for (size_t i = 0; i < _size; i++)
-		//	_vector[i] = alt[i];
 		if(_size)
-			memmove(_vector, alt, sizeof(value_type) * _size);
+			memmove(_vector, alt.begin().base(), sizeof(value_type) * _size);
 		return *this;
 	}
 

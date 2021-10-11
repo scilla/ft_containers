@@ -1,0 +1,149 @@
+
+Code executed:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+const int range_int[] = {-1489, -98, -9, -46, -256};
+const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
+ft::map<int, std::string> ft_map;
+for (int i = 0; i < SIZE; i++)
+    ft_map.insert(ft::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
+Sending output...
+ft_map[-9] = "Changed";
+
+Compared with:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+const int range_int[] = {-1489, -98, -9, -46, -256};
+const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
+std::map<int, std::string> stl_map;
+for (int i = 0; i < SIZE; i++)
+    stl_map.insert(std::make_pair(i < 5 ? range_int[i] : i, range_str[i % 5]));
+Sending output...
+stl_map[-9] = "Changed";
+
+══════════════════════════════════════════════════════════════
+maps attributes : 
+STL : 
+Empty       : false
+Size        : 100000
+Max size    : 288230376151711743
+Content     : [
+	[-1489, One], [-256, Five], [-98, Two], [-46, Four], [-9, Three], 
+	[5, One], [6, Two], [7, Three], [8, Four], [9, Five], 
+	[10, One], [11, Two], [12, Three], [13, Four], [14, Five], 
+	[15, One], [16, Two], [17, Three], [18, Four], [19, Five], 
+	[20, One], [21, Two], [22, Three], [23, Four], [24, Five], 
+	[25, One], [26, Two], [27, Three], [28, Four], [29, Five], 
+	[30, One], [31, Two], [32, Three], [33, Four], [34, Five], 
+	[35, One], [36, Two], [37, Three], [38, Four], [39, Five], 
+	[40, One], [41, Two], [42, Three], [43, Four], [44, Five], 
+	[45, One], [46, Two], [47, Three], [48, Four], [49, Five], 
+	[50, One], [51, Two], [52, Three], [53, Four], [54, Five], 
+	[55, One], [56, Two], [57, Three], [58, Four], [59, Five], 
+	[60, One], [61, Two], [62, Three], [63, Four], [64, Five], 
+	[65, One], [66, Two], [67, Three], [68, Four], [69, Five], 
+	[70, One], [71, Two], [72, Three], [73, Four], [74, Five], 
+	[75, One], [76, Two], [77, Three], [78, Four], [79, Five], 
+	[80, One], [81, Two], [82, Three], [83, Four], [84, Five], 
+	[85, One], [86, Two], [87, Three], [88, Four], [89, Five], 
+	[90, One], [91, Two], [92, Three], [93, Four], [94, Five], 
+	[95, One], [96, Two], [97, Three], [98, Four], [99, Five], 
+	[100, One], [101, Two], [102, Three], [103, Four], [104, Five], 
+	[105, One], [106, Two], [107, Three], [108, Four], [109, Five], 
+	[110, One], [111, Two], [112, Three], [113, Four], [114, Five], 
+	[115, One], [116, Two], [117, Three], [118, Four], [119, Five], 
+	[120, One], [121, Two], [122, Three], [123, Four], [124, Five], 
+	[125, One], [126, Two], [127, Three], [128, Four], [129, Five], 
+	[130, One], [131, Two], [132, Three], [133, Four], [134, Five], 
+	[135, One], [136, Two], [137, Three], [138, Four], [139, Five], 
+	[140, One], [141, Two], [142, Three], [143, Four], [144, Five], 
+	[145, One], [146, Two], [147, Three], [148, Four], [149, Five], 
+	[150, One], [151, Two], [152, Three], [153, Four], [154, Five], 
+	[155, One], [156, Two], [157, Three], [158, Four], [159, Five], 
+	[160, One], [161, Two], [162, Three], [163, Four], [164, Five], 
+	[165, One], [166, Two], [167, Three], [168, Four], [169, Five], 
+	[170, One], [171, Two], [172, Three], [173, Four], [174, Five], 
+	[175, One], [176, Two], [177, Three], [178, Four], [179, Five], 
+	[180, One], [181, Two], [182, Three], [183, Four], [184, Five], 
+	[185, One], [186, Two], [187, Three], [188, Four], [189, Five], 
+	[190, One], [191, Two], [192, Three], [193, Four], [194, Five], 
+	[195, One], [196, Two], [197, Three], [198, Four], [199, Five], 
+
+]
+
+FT : 
+Empty    [✔]: false
+Size     [✔]: 100000
+Max size [✔]: 288230376151711743
+Content  [✔]: [
+	[-1489, One], [-256, Five], [-98, Two], [-46, Four], [-9, Three], 
+	[5, One], [6, Two], [7, Three], [8, Four], [9, Five], 
+	[10, One], [11, Two], [12, Three], [13, Four], [14, Five], 
+	[15, One], [16, Two], [17, Three], [18, Four], [19, Five], 
+	[20, One], [21, Two], [22, Three], [23, Four], [24, Five], 
+	[25, One], [26, Two], [27, Three], [28, Four], [29, Five], 
+	[30, One], [31, Two], [32, Three], [33, Four], [34, Five], 
+	[35, One], [36, Two], [37, Three], [38, Four], [39, Five], 
+	[40, One], [41, Two], [42, Three], [43, Four], [44, Five], 
+	[45, One], [46, Two], [47, Three], [48, Four], [49, Five], 
+	[50, One], [51, Two], [52, Three], [53, Four], [54, Five], 
+	[55, One], [56, Two], [57, Three], [58, Four], [59, Five], 
+	[60, One], [61, Two], [62, Three], [63, Four], [64, Five], 
+	[65, One], [66, Two], [67, Three], [68, Four], [69, Five], 
+	[70, One], [71, Two], [72, Three], [73, Four], [74, Five], 
+	[75, One], [76, Two], [77, Three], [78, Four], [79, Five], 
+	[80, One], [81, Two], [82, Three], [83, Four], [84, Five], 
+	[85, One], [86, Two], [87, Three], [88, Four], [89, Five], 
+	[90, One], [91, Two], [92, Three], [93, Four], [94, Five], 
+	[95, One], [96, Two], [97, Three], [98, Four], [99, Five], 
+	[100, One], [101, Two], [102, Three], [103, Four], [104, Five], 
+	[105, One], [106, Two], [107, Three], [108, Four], [109, Five], 
+	[110, One], [111, Two], [112, Three], [113, Four], [114, Five], 
+	[115, One], [116, Two], [117, Three], [118, Four], [119, Five], 
+	[120, One], [121, Two], [122, Three], [123, Four], [124, Five], 
+	[125, One], [126, Two], [127, Three], [128, Four], [129, Five], 
+	[130, One], [131, Two], [132, Three], [133, Four], [134, Five], 
+	[135, One], [136, Two], [137, Three], [138, Four], [139, Five], 
+	[140, One], [141, Two], [142, Three], [143, Four], [144, Five], 
+	[145, One], [146, Two], [147, Three], [148, Four], [149, Five], 
+	[150, One], [151, Two], [152, Three], [153, Four], [154, Five], 
+	[155, One], [156, Two], [157, Three], [158, Four], [159, Five], 
+	[160, One], [161, Two], [162, Three], [163, Four], [164, Five], 
+	[165, One], [166, Two], [167, Three], [168, Four], [169, Five], 
+	[170, One], [171, Two], [172, Three], [173, Four], [174, Five], 
+	[175, One], [176, Two], [177, Three], [178, Four], [179, Five], 
+	[180, One], [181, Two], [182, Three], [183, Four], [184, Five], 
+	[185, One], [186, Two], [187, Three], [188, Four], [189, Five], 
+	[190, One], [191, Two], [192, Three], [193, Four], [194, Five], 
+	[195, One], [196, Two], [197, Three], [198, Four], [199, Five], 
+
+]
+══════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : Three
+FT  [✔]: Three
+══════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════
+Value from :
+STL    : Changed
+FT  [✔]: Changed
+══════════════════════════════════════════════════════════════
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[33mSpeed Evaluation: [0m
+start  stl  =>                1633966382219935
+end    stl  =>                1633966382219940
+time   stl  =>                [5]
+
+start  ft   =>                1633966382219940
+end    ft   =>                1633966382219941
+time   ft   =>                [1]
+percentage: 
+ft : stl 	=>	[20%] [[32m✔[0m]
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+**************************************************************
+
+
+
