@@ -18,7 +18,7 @@
 namespace ft {
 
 
-template< class T, class Compare = ft::less<T>, class Allocator = std::allocator<T> >
+template< class T, class Compare = ft::less<T>, class Allocator = std::allocator< RBTree< T, Compare> > >
 class set {
 public:
 	typedef T									key_type;
@@ -39,14 +39,19 @@ public:
 	typedef const_reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef const_reverse_iterator			reverse_iterator;
 
+
 	// (con|de)structor
 	explicit set(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc),  _size() {
-		_tree = new RBTree<value_type, value_compare>();
+		//_tree = new RBTree<value_type, value_compare>();
+		_tree = _alloc.allocate(1);
+		_alloc.construct(_tree);
 	}
 
 	template< class InputIt >
 	set(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc), _size(0) {
-		_tree = new RBTree<value_type, value_compare>();
+		//_tree = new RBTree<value_type, value_compare>();
+		_tree = _alloc.allocate(1);
+		_alloc.construct(_tree);
 		for (; first != last; first++) {
 			insert(*first);
 		}
@@ -55,7 +60,9 @@ public:
 	set(set& new_map)
 	: _tree(NULL), _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
 	{
-		_tree = new RBTree<value_type, value_compare>();
+		//_tree = new RBTree<value_type, value_compare>();
+		_tree = _alloc.allocate(1);
+		_alloc.construct(_tree);
 		*_tree = *new_map._tree;
 	}
 
@@ -72,7 +79,9 @@ public:
 	set& operator=( set& other ) {
 		clear();
 		delete _tree;
-		_tree = new RBTree<value_type, value_compare>();
+		//_tree = new RBTree<value_type, value_compare>();
+		_tree = _alloc.allocate(1);
+		_alloc.construct(_tree);
 		*_tree = *other._tree;
 		_comp = other._comp;
 		_alloc = other._alloc;
@@ -90,27 +99,19 @@ public:
 	};
 	
 	// access
-	T& at( const T& key ) {
-		node_type *res = _tree->find(key);
-		if (res == end().base())
-			throw outOfBoundException();
-		return res->data->second;
-	}
+	// T& at( const T& key ) {
+	// 	node_type *res = _tree->find(key);
+	// 	if (res == end().base())
+	// 		throw outOfBoundException();
+	// 	return res->data->second;
+	// }
 
-	const T& at( const T& key ) const {
-		node_type *res = _tree->find(key);
-		if (res == end().base())
-			throw outOfBoundException();
-		return res->data->second;
-	}
-
-	T& operator[]( const T& key ) {
-		T* nt = new T;
-		node_type *res = _tree->find(ft::make_pair(key, *nt));
-		if (res == end().base())
-			return insert(ft::make_pair(key, *nt)).first->second;
-		return res->data.second;
-	};
+	// const T& at( const T& key ) const {
+	// 	node_type *res = _tree->find(key);
+	// 	if (res == end().base())
+	// 		throw outOfBoundException();
+	// 	return res->data->second;
+	// }
 
 	// iterators
 	iterator begin() {  //da controllare
