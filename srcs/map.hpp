@@ -37,7 +37,6 @@ public:
 	
 	class value_compare: public ft::binary_function<value_type, value_type, bool>
 	{
-		friend class map;
 	protected:
 		key_compare comp;
 	public:
@@ -229,8 +228,8 @@ public:
 
 	void swap( map& other ) {
 		std::swap(_tree, other._tree);
-		std::swap(_comp, other._comp);
-		std::swap(_alloc, other._alloc);
+		//std::swap(_comp, other._comp);
+		//std::swap(_alloc, other._alloc);
 		std::swap(_size, other._size);
 		// RBTree<value_type, value_compare> tmp(_tree);
 		// _tree = other._tree;
