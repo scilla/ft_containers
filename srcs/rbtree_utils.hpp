@@ -26,17 +26,17 @@ struct Node {
 	typedef T		value_type;
 	bool isLeft() { return (parent && parent->left == this); }
 	bool isRight() { return (parent && parent->right == this); }
-	struct Node<T>* sibling() {
+	Node* sibling() {
 		if (isLeft())
 			return parent->right;
 		return parent->left;
 	}
-	struct Node<T>* uncle() {
+	Node* uncle() {
 		if (parent)
 			return parent->sibling();
 		return NULL;
 	}
-	struct Node<T>* grandparent() {
+	Node* grandparent() {
 		if (parent)
 			return parent->parent;
 		return NULL;

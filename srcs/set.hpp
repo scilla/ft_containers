@@ -42,14 +42,12 @@ public:
 
 	// (con|de)structor
 	explicit set(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc),  _size() {
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = _alloc.allocate(1);
 		_alloc.construct(_tree);
 	}
 
 	template< class InputIt >
 	set(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc), _size(0) {
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = _alloc.allocate(1);
 		_alloc.construct(_tree);
 		for (; first != last; first++) {
@@ -60,7 +58,6 @@ public:
 	set(set& new_map)
 	: _tree(NULL), _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
 	{
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = _alloc.allocate(1);
 		_alloc.construct(_tree);
 		*_tree = *new_map._tree;
@@ -79,7 +76,6 @@ public:
 	set& operator=( set& other ) {
 		clear();
 		delete _tree;
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = _alloc.allocate(1);
 		_alloc.construct(_tree);
 		*_tree = *other._tree;
@@ -98,23 +94,9 @@ public:
 		}
 	};
 	
-	// access
-	// T& at( const T& key ) {
-	// 	node_type *res = _tree->find(key);
-	// 	if (res == end().base())
-	// 		throw outOfBoundException();
-	// 	return res->data->second;
-	// }
-
-	// const T& at( const T& key ) const {
-	// 	node_type *res = _tree->find(key);
-	// 	if (res == end().base())
-	// 		throw outOfBoundException();
-	// 	return res->data->second;
-	// }
 
 	// iterators
-	iterator begin() {  //da controllare
+	iterator begin() {
 		if (!_tree->_root)
 			return end();
 		iterator pt = iterator(*_tree->_root);
@@ -139,7 +121,7 @@ public:
 	const_iterator end() const { return const_iterator(_tree->getEnd()); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
 	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
-	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
+	reverse_iterator rend() { return reverse_iterator(begin()); }
 	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	// capacity

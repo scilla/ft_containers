@@ -32,10 +32,10 @@ public:
 	typedef typename Alloc::difference_type 	difference_type;
     typedef typename Alloc::size_type 			size_type;
 
-	typedef vector_iterator<T>				iterator;
-	typedef const_vector_iterator<T>			const_iterator;
+	typedef vector_iterator<T>							iterator;
+	typedef const_vector_iterator<T>					const_iterator;
 	typedef const_reverse_iterator<const_iterator>		const_reverse_iterator;
-	typedef reverse_iterator<iterator>				reverse_iterator;
+	typedef reverse_iterator<iterator>					reverse_iterator;
 
 	class out_of_range: public std::out_of_range {
 	public:
@@ -358,6 +358,7 @@ protected:
 	pointer			_vector;
 	size_type		_size;
 	size_type		_capacity;
+	
 	void recapacity (size_type n) {
 		if (n > _capacity)
 		{

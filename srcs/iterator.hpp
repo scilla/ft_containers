@@ -29,7 +29,7 @@ struct iterator_traits<T*> {
 	typedef T 							value_type;
 	typedef T* 							pointer;
 	typedef T& 							reference;
-	typedef std::ptrdiff_t 				difference_type; // check
+	typedef std::ptrdiff_t 				difference_type;
 	typedef random_access_iterator_tag	iterator_category;
 };
 
@@ -60,10 +60,10 @@ public:
 	typedef typename iterator_traits<Iterator>::reference		reference;
 	typedef typename iterator_traits<Iterator>::pointer			pointer;
 
-	//
+
 	reverse_iterator(): _current() {};
 	reverse_iterator(value_type* p) { _current = Iterator(p); }
-	reverse_iterator(const Iterator& x) { _current = x; /* --_current */; }
+	reverse_iterator(const Iterator& x) { _current = x; }
 
 	Iterator base() const {return Iterator(_current);}
 	Iterator getCurrent() const {return _current;}
@@ -76,7 +76,7 @@ public:
 		_current = other.getCurrent();
 		return *this;
 	}
-	// value_type& operator*() { return *(_current); }
+
 	value_type& operator*() {
 		Iterator tmp = _current;
 		return *--tmp;
@@ -151,10 +151,10 @@ public:
 	typedef typename iterator_traits<Iterator>::reference		reference;
 	typedef typename iterator_traits<Iterator>::pointer			pointer;
 
-	//
+
 	const_reverse_iterator(): _current() {};
 	const_reverse_iterator(value_type* p) { _current = Iterator(p); }
-	const_reverse_iterator(const Iterator& x) { _current = x; /*--_current;*/ }
+	const_reverse_iterator(const Iterator& x) { _current = x; }
 
 	Iterator base() const {return Iterator(_current);}
 	Iterator getCurrent() const {return _current;}

@@ -55,17 +55,14 @@ public:
 	typedef const_reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef reverse_iterator<iterator>			reverse_iterator;
 
-	std::allocator<RBTree<value_type, value_compare> > tree_alloc;
 
 	// (con|de)structor
 	explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc),  _size(0) {
 		_tree = tree_alloc.allocate(1);
 		tree_alloc.construct(_tree);
-		//_tree = new RBTree<value_type, value_compare>();
 	}
 	template< class InputIt >
 	map(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _tree(NULL), _comp(comp), _alloc(alloc), _size(0) {
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = tree_alloc.allocate(1);
 		tree_alloc.construct(_tree);
 		for (; first != last; first++) {
@@ -76,7 +73,6 @@ public:
 	map(map& new_map)
 	: _tree(NULL), _comp(new_map._comp), _alloc(new_map._alloc), _size(new_map.size())
 	{
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = tree_alloc.allocate(1);
 		tree_alloc.construct(_tree);
 		*_tree = *new_map._tree;
@@ -95,7 +91,6 @@ public:
 	map& operator=( map& other ) {
 		clear();
 		delete _tree;
-		//_tree = new RBTree<value_type, value_compare>();
 		_tree = tree_alloc.allocate(1);
 		tree_alloc.construct(_tree);
 		*_tree = *other._tree;
@@ -141,7 +136,7 @@ public:
 	};
 
 	// iterators
-	iterator begin() {  //da controllare
+	iterator begin() {
 		if (!_tree->_root)
 			return end();
 		node_type* pt = _tree->_root;
@@ -164,7 +159,7 @@ public:
 	const_iterator end() const { return const_iterator(_tree->getEnd()); }
 	reverse_iterator rbegin() { return reverse_iterator(end()); }
 	const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
-	reverse_iterator rend() { return reverse_iterator(begin()); } // why not getStart()?
+	reverse_iterator rend() { return reverse_iterator(begin()); }
 	const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	// capacity
@@ -208,7 +203,7 @@ public:
 
 	size_type erase (const key_type& k) {
 		iterator found = find(k);
-		if (/*found.base() &&*/ found != end()) {
+		if (found != end()) {
 			_tree->deleteNode(found.base());
 			_size--;
 			return 1;
@@ -228,13 +223,7 @@ public:
 
 	void swap( map& other ) {
 		std::swap(_tree, other._tree);
-		//std::swap(_comp, other._comp);
-		//std::swap(_alloc, other._alloc);
 		std::swap(_size, other._size);
-		// RBTree<value_type, value_compare> tmp(_tree);
-		// _tree = other._tree;
-		// other._tree = tmp;
-		// std::swap(_tree, other._tree);
 	}
 
 	// lookup
@@ -369,10 +358,12 @@ public:
 	value_compare value_comp() const { return value_compare(); }
 private:
 
-	RBTree<value_type, value_compare>*	_tree;
-	key_compare					_comp;
-	allocator_type				_alloc;
-	size_type					_size;
+	RBTree<value_type, value_compare>*					_tree;
+	key_compare											_comp;
+	allocator_type										_alloc;
+	size_type											_size;
+	std::allocator<RBTree<value_type, value_compare> >	tree_alloc;
+
 };
 
 template< class Key, class T, class Compare, class Alloc >

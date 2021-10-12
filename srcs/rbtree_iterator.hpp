@@ -10,7 +10,7 @@
 
 namespace ft
 {
-template <class T, class Comparare = ft::less<T>, bool enableConstConstructor = false >
+template <class T, class Compare = ft::less<T>, bool enableConstConstructor = false >
 class rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -19,8 +19,6 @@ public:
 	typedef T&							reference;
 	typedef const T&							const_reference;
 	typedef T*							pointer;
-
-	//typedef bidirectional_iterator_tag						iterator_category;
 
 	explicit rbt_iterator(): _ptr(NULL) {}
 	explicit rbt_iterator(struct Node<T>& newnode): _ptr(&newnode) {}
@@ -110,11 +108,11 @@ public:
 	bool operator!=(const rbt_iterator &other) { return _ptr != other.base(); }
 private:
 	struct Node<T>*	_ptr;
-	Comparare		_comp;
+	Compare		_comp;
 };
 
 
-template <class T, class Comparare = ft::less<T>, bool enableConstConstructor = false >
+template <class T, class Compare = ft::less<T>, bool enableConstConstructor = false >
 class set_rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -217,10 +215,10 @@ public:
 	bool operator!=(const set_rbt_iterator &other) { return _ptr != other.base(); }
 private:
 	struct Node<T>*	_ptr;
-	Comparare		_comp;
+	Compare		_comp;
 };
 
-template <class T, class Comparare = ft::less<T> >
+template <class T, class Compare = ft::less<T> >
 class const_rbt_iterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
 public:
@@ -317,7 +315,7 @@ public:
 	bool operator!=(const const_rbt_iterator &other) { return !(_ptr->color == FLUO && other._ptr->color == FLUO) && _ptr != other.base(); }
 private:
 	const struct Node<T>*	_ptr;
-	Comparare				_comp;
+	Compare				_comp;
 };
 
 } // namespace ft

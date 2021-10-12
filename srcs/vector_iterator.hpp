@@ -19,16 +19,15 @@ template <class T>
 class vector_iterator
 {
 	public:
-		typedef T							iterator_type;
-		typedef T							value_type;
-		typedef T*							iterator_value;
-		typedef T&							reference;
-		typedef T*							pointer;
-		typedef std::ptrdiff_t				difference_type; // std:: cause linux
-		typedef random_access_iterator_tag						iterator_category;
+		typedef T								iterator_type;
+		typedef T								value_type;
+		typedef T*								iterator_value;
+		typedef T&								reference;
+		typedef T*								pointer;
+		typedef std::ptrdiff_t					difference_type; // std:: cause linux
+		typedef random_access_iterator_tag		iterator_category;
 
 		explicit	vector_iterator(): _ptr(NULL) {};
-		// explicit	vector_iterator(iterator_type ptr): _ptr(ptr) {};
 		explicit vector_iterator(T& newnode): _ptr(newnode) {}
 		explicit vector_iterator(const T& newnode): _ptr(newnode) {}
 		explicit vector_iterator(const pointer newnode): _ptr(newnode) {}
@@ -127,15 +126,15 @@ template <class T>
 class const_vector_iterator
 {
 	public:
-		typedef const T							iterator_type;
+		typedef const T								iterator_type;
 		typedef const T*							iterator_value;
-		typedef T							value_type;
-		typedef T&							reference;
+		typedef T									value_type;
+		typedef T&									reference;
 		typedef const T&							const_reference;
-		typedef T*							pointer;
+		typedef T*									pointer;
 		typedef const T*							const_pointer;
-		typedef std::ptrdiff_t				difference_type; // std:: cause linux
-		typedef random_access_iterator_tag						iterator_category;
+		typedef std::ptrdiff_t						difference_type; // std:: cause linux
+		typedef random_access_iterator_tag			iterator_category;
 
 		explicit	const_vector_iterator(): _ptr(NULL) {};
 		explicit const_vector_iterator(T& newnode): _ptr(newnode) {}

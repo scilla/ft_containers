@@ -15,12 +15,6 @@ namespace ft
 
 	typedef integral_constant<bool, false>	false_type;
 
-	// template <bool is_integral, typename T>
-	// struct _is_integral_helper {
-	// 	typedef T type;
-	// 	static const bool value = is_integral;
-	// };
-
 	template <typename>
 	struct __is_integral_helper : public false_type {};
 
@@ -64,19 +58,8 @@ namespace ft
 		struct __is_integral_helper<unsigned long>
 		: public true_type { };
 
-	// template<>
-	// 	struct __is_integral_helper<long long>
-	// 	: public true_type { };
-
-	// template<>
-	// 	struct __is_integral_helper<unsigned long long>
-	// 	: public true_type { };
-
 	template <typename T>
 		struct is_integral : public __is_integral_helper<T> { };
-
-	// template <typename T>
-	// 	const bool is_integral_v = is_integral<T>::value;
 
 	template<bool Cond, class T = void> struct enable_if {};
 	template<class T> struct enable_if<true, T> { typedef T type; };
